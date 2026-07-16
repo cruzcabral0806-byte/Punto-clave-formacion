@@ -91,17 +91,44 @@
         .btn-carpeta { background: white; border: 1px solid #cbd5e1; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; color: var(--secondary); display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn-carpeta:hover, .btn-carpeta.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Grid de Ofertas */
-        .ofertas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-        .oferta-card { background: white; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
-        .oferta-img { width: 100%; height: 180px; object-fit: cover; background-color: #e2e8f0; }
-        .oferta-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .oferta-content h3 { margin-bottom: 0.5rem; color: var(--texto-titulos); }
-        .oferta-content p { color: var(--texto-parrafos); font-size: 0.95rem; margin-bottom: 1rem; }
-        .oferta-badge { display: inline-block; background: #e2e8f0; color: var(--texto-parrafos); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-bottom: 0.5rem; font-weight: bold; }
-        .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; align-self: flex-end; }
+        /* Grid de Ofertas - Con Imagen y Título únicamente */
+        .ofertas-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 1.5rem; 
+            margin-bottom: 3rem; 
+        }
+        .oferta-card { 
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .oferta-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        .oferta-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+        .oferta-content { 
+            padding: 1.2rem; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
         
-        /* Ocultar botones de borrar si no somos admin */
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
         /* Contactos */
@@ -115,7 +142,7 @@
         .btn-wsp { background-color: var(--success); }
         .btn-dinamico { background-color: #475569; }
 
-        /* Panel Admin - Oculto por defecto */
+        /* Panel Admin */
         .admin-panel { display: none; background: #f1f5f9; padding: 2rem; border-radius: 8px; margin-bottom: 3rem; border: 2px dashed #cbd5e1; color: #1e293b; }
         .admin-panel h2 { margin-bottom: 1rem; font-size: 1.4rem; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
@@ -136,7 +163,6 @@
         .footer-box i { color: var(--primary); margin-right: 8px; }
         .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #334155; font-size: 0.85rem; color: #64748b; }
         
-        /* Estado de Carga de datos */
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
     </style>
 </head>
@@ -163,7 +189,6 @@
         <div class="carpetas-container" id="carpetasBarra"></div>
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
-        <!-- CONTACTO -->
         <div class="info-grid">
             <div class="info-card">
                 <h2><i class="fa-solid fa-comments"></i> ¡Contáctanos hoy!</h2>
@@ -180,7 +205,6 @@
             </div>
         </div>
 
-        <!-- PANEL DE CONFIGURACIÓN -->
         <div class="admin-panel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
             <div class="admin-grid">
@@ -214,7 +238,7 @@
                     <form id="ofertaForm">
                         <h3>4. Publicar Oferta</h3>
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
-                        <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción" required></textarea></div>
+                        <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta / Resumen" required></textarea></div>
                         <div class="form-group"><label>Carpeta:</label><select id="ofertaCarpetaSelect"></select></div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
                         <button type="submit" class="btn-panel">Publicar</button>
@@ -271,46 +295,39 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
+            <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- Firebase SDK Módulos Necesarios -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ==========================================
-        // CONFIGURACIÓN DE FIREBASE (PEGA TU OBJETO AQUÍ)
-        // ==========================================
         const firebaseConfig = {
-  	apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
- 	 authDomain: "punto-clave-formacion.firebaseapp.com",
- 	 projectId: "punto-clave-formacion",
-  	storageBucket: "punto-clave-formacion.firebasestorage.app",
-  	messagingSenderId: "469116413284",
-  	appId: "1:469116413284:web:55552558b94235f62e4671"
+            apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
+            authDomain: "punto-clave-formacion.firebaseapp.com",
+            projectId: "punto-clave-formacion",
+            storageBucket: "punto-clave-formacion.firebasestorage.app",
+            messagingSenderId: "469116413284",
+            appId: "1:469116413284:web:55552558b94235f62e4671"
         };
 
-        // Inicializar Firebase y Firestore
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
-        // Estructura por defecto en caso de que la BD esté vacía
         const defectoDB = {
             nombre: "Punto Clave Formación", eslogan: "Tu futuro profesional empieza aquí", logo: "",
             email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030",
             carpetas: ["Cursos", "Servicios"],
-            ofertas: [{ id: 1, titulo: "Curso de Gestión Empresarial", descripcion: "Aprende administración.", carpeta: "Cursos", img: "" }],
+            ofertas: [{ id: 1, titulo: "Curso de Gestión Empresarial", descripcion: "Aprende administración de forma profesional.", detalleCompleto: "", carpeta: "Cursos", img: "" }],
             enlacesVecinos: [], carrusel: []
         };
 
-        window.db = defectoDB; // Global para mantener la compatibilidad con tus funciones inline
+        window.db = defectoDB;
         let carpetaActual = "Todas";
         let slideIndex = 0;
         let carruselInterval;
 
-        // Validar si entramos con la URL secreta: ej: tuweb.com/?modo=editar
         const urlParams = new URLSearchParams(window.location.search);
         const esAdmin = urlParams.get('modo') === 'editar';
         
@@ -319,7 +336,6 @@
             document.querySelector('.admin-panel').style.display = 'block';
         }
 
-        // Descargar datos desde la nube al cargar
         async function cargarDatosFirebase() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
@@ -327,20 +343,17 @@
 
                 if (docSnap.exists()) {
                     window.db = docSnap.data();
-                    // Asegurar que las colecciones requeridas no se rompan si se guardaron parciales
                     if(!window.db.carpetas) window.db.carpetas = defectoDB.carpetas;
                     if(!window.db.ofertas) window.db.ofertas = defectoDB.ofertas;
                     if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
                     if(!window.db.carrusel) window.db.carrusel = [];
                 } else {
-                    // Si no hay datos en la nube, creamos el primer registro con lo que hay por defecto
                     await setDoc(docRef, defectoDB);
                     window.db = defectoDB;
                 }
             } catch (error) {
-                console.error("Error cargando desde Firebase, usando locales:", error);
+                console.error("Error cargando desde Firebase:", error);
             } finally {
-                // Quitar pantalla de carga
                 document.getElementById('loadingOverlay').style.display = 'none';
                 inicializarInputs();
                 actualizarWeb();
@@ -355,7 +368,6 @@
             document.getElementById('inputWsp').value = window.db.wsp || '';
         }
 
-        // Guardar permanentemente en la nube de Firebase
         async function guardarDatos() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
@@ -366,7 +378,7 @@
         }
 
         function actualizarWeb() {
-            guardarDatos(); // Llama a guardar de forma asíncrona en segundo plano
+            guardarDatos();
             
             document.getElementById('nombreEmpresaView').innerText = window.db.nombre;
             document.getElementById('footerNombre').innerText = window.db.nombre;
@@ -397,7 +409,6 @@
                     adminCarruselLista.innerHTML += `<div class="admin-link-item"><span>🖼️ Foto ${index + 1}</span><button class="btn-mini-borrar" data-index="${index}">x</button></div>`;
                 });
                 
-                // Eventos dinámicos para borrar fotos del carrusel
                 adminCarruselLista.querySelectorAll('.btn-mini-borrar').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const idx = e.target.getAttribute('data-index');
@@ -439,29 +450,36 @@
                 }
             });
 
-           const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
-        const ofertasFiltradas = carpetaActual === "Todas" ? window.db.ofertas : window.db.ofertas.filter(o => o.carpeta === carpetaActual);
-        ofertasFiltradas.forEach(o => {
-            const card = document.createElement('div'); card.className = 'oferta-card';
-            // HACEMOS LA TARJETA HACIBLE (Estilo cursor pointer)
-            card.style.cursor = 'pointer'; 
+            // RENDER CON IMAGEN Y TÍTULO ÚNICAMENTE
+            const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
+            const ofertasFiltradas = carpetaActual === "Todas" ? window.db.ofertas : window.db.ofertas.filter(o => o.carpeta === carpetaActual);
             
-            const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23e2e8f0"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Foto</text></svg>';
-            card.innerHTML = `<img class="oferta-img" src="${imgSrc}"><div class="oferta-content"><div><span class="oferta-badge">📁 ${o.carpeta || 'Cursos'}</span><h3>${o.titulo}</h3><p>${o.descripcion}</p></div><button class="btn-eliminar">Borrar</button></div>`;
-            
-            // REDIRECCIÓN DINÁMICA al hacer click en la tarjeta
-            card.addEventListener('click', (e) => {
-                // Evitamos redirigir si el usuario hace click específicamente en el botón borrar
-                if(e.target.classList.contains('btn-eliminar')) return;
+            ofertasFiltradas.forEach(o => {
+                const card = document.createElement('div'); 
+                card.className = 'oferta-card';
+                card.style.cursor = 'pointer'; 
                 
-                // Mantiene el modo editar si ya estás logueado como administrador
-                const paramAdmin = esAdmin ? '&modo=editar' : '';
-                window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
-            });
+                const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
 
-            card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
-            ofertasContainer.appendChild(card);
-        });
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${o.titulo}">
+                    <div class="oferta-content">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--texto-titulos); font-weight: 600;">
+                            ${o.titulo}
+                        </h3>
+                        <button class="btn-eliminar">Borrar</button>
+                    </div>
+                `;
+                
+                card.addEventListener('click', (e) => {
+                    if(e.target.classList.contains('btn-eliminar')) return;
+                    const paramAdmin = esAdmin ? '&modo=editar' : '';
+                    window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                });
+
+                card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
+                ofertasContainer.appendChild(card);
+            });
 
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); const adminEnlacesLista = document.getElementById('adminEnlacesLista');
             enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
@@ -497,47 +515,47 @@
         document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; document.getElementById('btnWspView').href = `https://wa.me/${window.db.wsp}?text=Hola`; guardarDatos(); });
 
         document.getElementById('inputLogo').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                canvas.width = 300; // El logo no necesita ser gigante
-                canvas.height = (img.height * 300) / img.width;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                window.db.logo = canvas.toDataURL('image/jpeg', 0.7);
-                actualizarWeb();
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 300; 
+                        canvas.height = (img.height * 300) / img.width;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        window.db.logo = canvas.toDataURL('image/jpeg', 0.7);
+                        actualizarWeb();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.getElementById('inputCarrusel').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                canvas.width = 800; // Ancho máximo para el banner del carrusel
-                canvas.height = (img.height * 800) / img.width;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                if(!window.db.carrusel) window.db.carrusel = [];
-                window.db.carrusel.push(canvas.toDataURL('image/jpeg', 0.6));
-                actualizarWeb();
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 800; 
+                        canvas.height = (img.height * 800) / img.width;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        if(!window.db.carrusel) window.db.carrusel = [];
+                        window.db.carrusel.push(canvas.toDataURL('image/jpeg', 0.6));
+                        actualizarWeb();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.getElementById('carpetaForm').addEventListener('submit', (e) => {
             e.preventDefault(); const nom = document.getElementById('carpetaNombre').value.trim();
@@ -546,41 +564,45 @@
         });
 
         let ofertaImgBase64 = "";
-document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                // Redimensionamos a un tamaño web estándar máximo (ej: 600px de ancho)
-                const MAX_WIDTH = 600;
-                let width = img.width;
-                let height = img.height;
+        document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 600;
+                        let width = img.width;
+                        let height = img.height;
 
-                if (width > MAX_WIDTH) {
-                    height *= MAX_WIDTH / width;
-                    width = MAX_WIDTH;
-                }
-                canvas.width = width;
-                canvas.height = height;
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
 
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                
-                // Comprimimos la imagen al 60% de calidad en formato JPEG
-                ofertaImgBase64 = canvas.toDataURL('image/jpeg', 0.6);
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        ofertaImgBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.getElementById('ofertaForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            window.db.ofertas.push({ id: Date.now(), titulo: document.getElementById('ofertaTitulo').value, descripcion: document.getElementById('ofertaDesc').value, carpeta: document.getElementById('ofertaCarpetaSelect').value, img: ofertaImgBase64 });
+            window.db.ofertas.push({ 
+                id: Date.now(), 
+                titulo: document.getElementById('ofertaTitulo').value, 
+                descripcion: document.getElementById('ofertaDesc').value, 
+                detalleCompleto: "", 
+                carpeta: document.getElementById('ofertaCarpetaSelect').value, 
+                img: ofertaImgBase64 
+            });
             ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
         });
 
@@ -594,7 +616,6 @@ document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
         function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
         function eliminarCarpeta(nombre) { if(confirm('¿Eliminar carpeta?')) { window.db.carpetas = window.db.carpetas.filter(c => c !== nombre); window.db.ofertas.forEach(o => { if(o.carpeta === nombre) o.carpeta = "Cursos"; }); actualizarWeb(); } }
 
-        // Inicializar app descargando desde la nube
         cargarDatosFirebase();
     </script>
 </body>
