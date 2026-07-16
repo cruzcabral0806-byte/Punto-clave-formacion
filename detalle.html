@@ -79,7 +79,7 @@
 
         .oferta-img { 
             width: 100%; 
-            max-height: 300px; 
+            max-height: 380px; 
             object-fit: cover; 
             border-radius: 8px; 
             margin-bottom: 2rem; 
@@ -92,7 +92,7 @@
         
         .desc { font-size: 1.1rem; color: var(--texto-parrafos); line-height: 1.8; margin-bottom: 2.5rem; white-space: pre-line; }
 
-        /* MODIFICACIÓN: Estilos de Contactos sincronizados EXACTAMENTE con el index.html */
+        /* Estilos de Contactos */
         .info-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); 
@@ -158,17 +158,14 @@
 
     <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando información...</div>
 
-    <!-- ENCABEZADO -->
     <header>
         <h1 id="nombreEmpresaView">Punto Clave Formación</h1>
         <p id="esloganView">Tu futuro profesional empieza aquí</p>
     </header>
 
     <div class="container">
-        <!-- LOGO DINÁMICO -->
         <div class="logo-container-body" id="logoView"></div>
 
-        <!-- TARJETA DE DETALLES -->
         <div class="detalle-card">
             <a href="index.html" id="btnBackLink" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver a inicio</a>
             
@@ -179,16 +176,15 @@
                 <p id="detDesc" class="desc">Cargando descripción...</p>
             </div>
 
-            <!-- FORMULARIO DE EDICIÓN -->
             <div id="panelEditar" class="edit-panel">
                 <h2><i class="fa-solid fa-pen-to-square"></i> Modificar Información de la Oferta</h2>
                 <form id="editForm">
                     <div class="form-group">
-                        <label for="editTitulo">Título:</label>
+                        <label for="editTitulo">Título de la oferta:</label>
                         <input type="text" id="editTitulo" required>
                     </div>
                     <div class="form-group">
-                        <label for="editDesc">Descripción Detallada:</label>
+                        <label for="editDesc">Descripción Detallada (Solo se verá aquí dentro):</label>
                         <textarea id="editDesc" rows="6" required></textarea>
                     </div>
                     
@@ -198,7 +194,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="editImgInput">Cambiar Imagen de la Oferta (Se reducirán los píxeles para optimizar carga):</label>
+                        <label for="editImgInput">Cambiar Imagen de la Oferta:</label>
                         <input type="file" id="editImgInput" accept="image/*">
                     </div>
                     <button type="submit" class="btn-save">Guardar Cambios</button>
@@ -206,7 +202,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN DE CONTACTOS Y SITIOS DE INTERÉS (MARGENES IDÉNTICOS AL INDEX.HTML) -->
         <div class="info-grid">
             <div class="info-card">
                 <h2><i class="fa-solid fa-comments"></i> ¡Contáctanos hoy!</h2>
@@ -224,7 +219,6 @@
         </div>
     </div>
 
-    <!-- PIE DE PÁGINA -->
     <footer>
         <div class="footer-content">
             <div class="footer-box">
@@ -249,7 +243,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
+            <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
         </div>
     </footer>
 
@@ -257,7 +251,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
             authDomain: "punto-clave-formacion.firebaseapp.com",
@@ -342,7 +335,7 @@
 
         function renderizarDetallesOferta() {
             document.getElementById('detTitulo').innerText = ofertaActual.titulo;
-            document.getElementById('detDesc').innerText = ofertaActual.descripcion;
+            document.getElementById('detDesc').innerText = ofertaActual.detalleCompleto || ofertaActual.descripcion || 'Sin descripción detallada disponible.';
             document.getElementById('detCarpeta').innerText = `📁 ${ofertaActual.carpeta || 'Cursos'}`;
             document.getElementById('detImg').src = ofertaActual.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23e2e8f0"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Foto</text></svg>';
         }
@@ -350,7 +343,7 @@
         function activarModoEdicion() {
             document.getElementById('panelEditar').style.display = 'block';
             document.getElementById('editTitulo').value = ofertaActual.titulo;
-            document.getElementById('editDesc').value = ofertaActual.descripcion;
+            document.getElementById('editDesc').value = ofertaActual.detalleCompleto || ofertaActual.descripcion || '';
 
             const select = document.getElementById('editCarpeta');
             select.innerHTML = '';
@@ -373,7 +366,7 @@
                     const img = new Image();
                     img.onload = function () {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 400;
+                        const MAX_WIDTH = 600;
                         let width = img.width;
                         let height = img.height;
 
@@ -401,7 +394,7 @@
             document.getElementById('loadingOverlay').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Actualizando oferta en Firebase...';
 
             ofertaActual.titulo = document.getElementById('editTitulo').value;
-            ofertaActual.descripcion = document.getElementById('editDesc').value;
+            ofertaActual.detalleCompleto = document.getElementById('editDesc').value;
             ofertaActual.carpeta = document.getElementById('editCarpeta').value;
             
             if (nuevaImgBase64) {
