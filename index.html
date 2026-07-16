@@ -439,15 +439,29 @@
                 }
             });
 
-            const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
-            const ofertasFiltradas = carpetaActual === "Todas" ? window.db.ofertas : window.db.ofertas.filter(o => o.carpeta === carpetaActual);
-            ofertasFiltradas.forEach(o => {
-                const card = document.createElement('div'); card.className = 'oferta-card';
-                const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23e2e8f0"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Foto</text></svg>';
-                card.innerHTML = `<img class="oferta-img" src="${imgSrc}"><div class="oferta-content"><div><span class="oferta-badge">📁 ${o.carpeta || 'Cursos'}</span><h3>${o.titulo}</h3><p>${o.descripcion}</p></div><button class="btn-eliminar">Borrar</button></div>`;
-                card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
-                ofertasContainer.appendChild(card);
+           const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
+        const ofertasFiltradas = carpetaActual === "Todas" ? window.db.ofertas : window.db.ofertas.filter(o => o.carpeta === carpetaActual);
+        ofertasFiltradas.forEach(o => {
+            const card = document.createElement('div'); card.className = 'oferta-card';
+            // HACEMOS LA TARJETA HACIBLE (Estilo cursor pointer)
+            card.style.cursor = 'pointer'; 
+            
+            const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23e2e8f0"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Foto</text></svg>';
+            card.innerHTML = `<img class="oferta-img" src="${imgSrc}"><div class="oferta-content"><div><span class="oferta-badge">📁 ${o.carpeta || 'Cursos'}</span><h3>${o.titulo}</h3><p>${o.descripcion}</p></div><button class="btn-eliminar">Borrar</button></div>`;
+            
+            // REDIRECCIÓN DINÁMICA al hacer click en la tarjeta
+            card.addEventListener('click', (e) => {
+                // Evitamos redirigir si el usuario hace click específicamente en el botón borrar
+                if(e.target.classList.contains('btn-eliminar')) return;
+                
+                // Mantiene el modo editar si ya estás logueado como administrador
+                const paramAdmin = esAdmin ? '&modo=editar' : '';
+                window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
             });
+
+            card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
+            ofertasContainer.appendChild(card);
+        });
 
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); const adminEnlacesLista = document.getElementById('adminEnlacesLista');
             enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
@@ -585,3 +599,4 @@ document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
     </script>
 </body>
 </html>
+Actualizar index.html
