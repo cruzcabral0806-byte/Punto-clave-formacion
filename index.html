@@ -66,18 +66,16 @@
         .container { max-width: 1100px; margin: .05rem auto 2rem auto; padding: 0 1rem; }
         .section-title { font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 5px solid var(--primary); padding-left: 10px; color: var(--texto-titulos); }
 
-        /* CARRUSEL */
+        /* CARRUSEL AJUSTADO AL 90% Y CENTRADO */
         .carrusel-container {
-            position: relative;
-            max-width: 800px; 
-            height: 250px;    
-            margin: 0 auto 3rem auto; 
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            background: #e2e8f0;
-            display: none;
-        }
+    position: relative;
+    width: 100%;       /* Cambiado de 800px a 100% */
+    max-width: 100%;   /* Cambiado para ocupar todo el ancho */
+    height: 400px;     /* Puedes ajustar la altura a tu gusto */
+    margin: 0 auto 3rem auto; 
+    border-radius: 0;  /* Quitamos bordes redondeados para un look más profesional */
+    overflow: hidden;
+    }
         .carrusel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
         .carrusel-slide { min-width: 100%; height: 100%; position: relative; }
         .carrusel-slide img { width: 100%; height: 100%; object-fit: cover; }
@@ -91,7 +89,7 @@
         .btn-carpeta { background: white; border: 1px solid #cbd5e1; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; color: var(--secondary); display: inline-flex; align-items: center; gap: 0.5rem; }
         .btn-carpeta:hover, .btn-carpeta.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Grid de Ofertas - Con Imagen y Título únicamente */
+        /* Grid de Ofertas */
         .ofertas-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -131,15 +129,8 @@
         
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
-        /* Contactos */
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
-        @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
-        .info-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); text-align: center; }
         .buttons-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
         .btn-contacto { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
-        .btn-email { background-color: #ea4335; }
-        .btn-tel { background-color: var(--primary); }
-        .btn-wsp { background-color: var(--success); }
         .btn-dinamico { background-color: #475569; }
 
         /* Panel Admin */
@@ -188,22 +179,6 @@
         <h2 class="section-title">Nuestras Ofertas</h2>
         <div class="carpetas-container" id="carpetasBarra"></div>
         <div class="ofertas-grid" id="ofertasContainer"></div>
-
-        <div class="info-grid">
-            <div class="info-card">
-                <h2><i class="fa-solid fa-comments"></i> ¡Contáctanos hoy!</h2>
-                <div class="contacto-buttons">
-                    <a href="#" id="btnEmailView" class="btn-contacto btn-email"><i class="fa-solid fa-envelope"></i> Correo</a>
-                    <a href="#" id="btnTelView" class="btn-contacto btn-tel"><i class="fa-solid fa-phone"></i> Llamar</a>
-                    <a href="#" id="btnWspView" class="btn-contacto btn-wsp" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h2><i class="fa-solid fa-network-wired"></i> Sitios de Interés</h2>
-                <div class="buttons-list" id="enlacesDinamicosContainer"></div>
-            </div>
-        </div>
 
         <div class="admin-panel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
@@ -286,14 +261,26 @@
                 <h4>📍 Dónde Estamos</h4>
                 <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, 45080</p>
                 <p style="margin-bottom: 10px;">Zapopan, Jal.</p>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10463.634299083964!2d-103.41990379999994!3d20.619324799999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af59d114bd4d%3A0xe5e1900985aad461!2sCasa%20Monochrome!5e1!3m2!1ses-419!2smx!4v1783747707397!5m2!1ses-419!2smx" width="100%" height="150" style="border:0; border-radius: 8px;" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10463.634299083964!2d-103.41990379999994!3d20.619324799999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af59d114bd4d%3A0xe5e1900985aad461!2sCasa%20Monochrome%20!5e1!3m2!1ses-419!2smx!4v1783747707397!5m2!1ses-419!2smx" width="100%" height="150" style="border:0; border-radius: 8px;" loading="lazy"></iframe>
             </div>
 
             <div class="footer-box">
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
+		<p><i class=" "></i></p>
+		<h4> contactos</h4>
+    		<p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
+    		<p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
+    		<p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
             </div>
         </div>
+
+        <!-- SITIOS DE INTERÉS TRASLADADOS AL FOOTER -->
+        <div style="max-width: 1100px; margin: 2rem auto 0 auto; padding: 1.5rem 1rem 0 1rem; border-top: 1px solid #334155; text-align: center;">
+            <h4 style="color: white; font-size: 1.2rem; margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Redes</h4>
+            <div class="buttons-list" id="enlacesDinamicosContainer"></div>
+        </div>
+
         <div class="footer-bottom">
             <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
         </div>
@@ -324,7 +311,7 @@
         };
 
         window.db = defectoDB;
-        let carpetaActual = "Todas";
+        let carpetaActual = "Inicio"; 
         let slideIndex = 0;
         let carruselInterval;
 
@@ -393,9 +380,7 @@
                 logoContainer.classList.remove('has-logo');
             }
 
-            document.getElementById('btnEmailView').href = `mailto:${window.db.email}`;
-            document.getElementById('btnTelView').href = `tel:${window.db.tel}`;
-            document.getElementById('btnWspView').href = `https://wa.me/${window.db.wsp}?text=Hola`;
+            // SE QUITARON LAS LÍNEAS QUE BUSCABAN LOS COMPONENTES DE CONTACTO ELIMINADOS PARA EVITAR CRASHES
 
             const contenedor = document.getElementById('carruselContenedor');
             const track = document.getElementById('carruselTrack');
@@ -425,13 +410,26 @@
             }
 
             const barra = document.getElementById('carpetasBarra');
-            barra.innerHTML = `<button class="btn-carpeta ${carpetaActual === 'Todas' ? 'active' : ''}" id="btnFiltroTodas"><i class="fa-solid fa-folder-open"></i> Ver Todas</button>`;
-            document.getElementById('btnFiltroTodas').addEventListener('click', () => filtrarCarpeta('Todas'));
+            barra.innerHTML = '';
+
+            const btnTodas = document.createElement('button');
+            btnTodas.className = `btn-carpeta ${carpetaActual === 'Todas' ? 'active' : ''}`;
+            btnTodas.innerHTML = `⊞ Ver todo`;
+            btnTodas.addEventListener('click', () => filtrarCarpeta('Todas'));
+            barra.appendChild(btnTodas);
 
             window.db.carpetas.forEach(c => { 
                 const btnC = document.createElement('button');
                 btnC.className = `btn-carpeta ${carpetaActual === c ? 'active' : ''}`;
-                btnC.innerHTML = `<i class="fa-solid fa-folder"></i> ${c}`;
+                
+                if (c === "Cursos") {
+                    btnC.innerHTML = `🎓 Cursos`;
+                } else if (c === "Servicios") {
+                    btnC.innerHTML = `💼 Servicios`;
+                } else {
+                    btnC.innerHTML = `📁 ${c}`;
+                }
+                
                 btnC.addEventListener('click', () => filtrarCarpeta(c));
                 barra.appendChild(btnC);
             });
@@ -441,7 +439,7 @@
 
             const adminCarpetasLista = document.getElementById('adminCarpetasLista'); adminCarpetasLista.innerHTML = '';
             window.db.carpetas.forEach(c => { 
-                if(c !== "Cursos") {
+                if(c !== "Cursos" && c !== "Servicios") {
                     const itemC = document.createElement('div');
                     itemC.className = "admin-link-item";
                     itemC.innerHTML = `<span>📁 ${c}</span><button class="btn-mini-borrar">x</button>`;
@@ -450,9 +448,16 @@
                 }
             });
 
-            // RENDER CON IMAGEN Y TÍTULO ÚNICAMENTE
             const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
-            const ofertasFiltradas = carpetaActual === "Todas" ? window.db.ofertas : window.db.ofertas.filter(o => o.carpeta === carpetaActual);
+            let ofertasFiltradas = [];
+
+            if (carpetaActual === "Inicio") {
+                ofertasFiltradas = window.db.ofertas.slice(0, 3);
+            } else if (carpetaActual === "Todas") {
+                ofertasFiltradas = window.db.ofertas;
+            } else {
+                ofertasFiltradas = window.db.ofertas.filter(o => o.carpeta === carpetaActual);
+            }
             
             ofertasFiltradas.forEach(o => {
                 const card = document.createElement('div'); 
@@ -510,9 +515,11 @@
 
         document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; document.getElementById('nombreEmpresaView').innerText = window.db.nombre; document.getElementById('footerNombre').innerText = window.db.nombre; guardarDatos(); });
         document.getElementById('inputEslogan').addEventListener('input', (e) => { window.db.eslogan = e.target.value; document.getElementById('esloganView').innerText = window.db.eslogan; guardarDatos(); });
-        document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; document.getElementById('btnEmailView').href = `mailto:${window.db.email}`; guardarDatos(); });
-        document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; document.getElementById('btnTelView').href = `tel:${window.db.tel}`; guardarDatos(); });
-        document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; document.getElementById('btnWspView').href = `https://wa.me/${window.db.wsp}?text=Hola`; guardarDatos(); });
+        
+        // MODIFICADOS PARA QUE SIGAN GUARDANDO LA BASE DE DATOS SIN INTENTAR REDIRECCIONAR BOTONES BORRADOS
+        document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; guardarDatos(); });
+        document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; guardarDatos(); });
+        document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
 
         document.getElementById('inputLogo').addEventListener('change', (e) => {
             const file = e.target.files[0];
