@@ -93,7 +93,7 @@
         .carrusel-btn.prev { left: 10px; }
         .carrusel-btn.next { right: 10px; }
 
-        /* SECCIÓN SERVICIOS Y CARPETAS */
+        /* SECCIÓN SERVICIOS */
         .section-title-center { 
             text-align: center;
             font-size: 2rem; 
@@ -114,49 +114,9 @@
             border-radius: 2px;
         }
 
-        .carpeta-mensaje {
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 1.5rem;
-            background-color: #e0f2fe;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            display: inline-block;
-        }
-
-        .mensaje-wrapper { text-align: center; margin-bottom: 1rem; }
-
-        /* ESTILOS DE LOS BOTONES DE CARPETA (ACCESIBLES Y CLICKEABLES) */
         .carpetas-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-        .btn-carpeta { 
-            background: white; 
-            border: 2px solid #cbd5e1; 
-            padding: 0.7rem 1.5rem; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            color: var(--secondary); 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 0.5rem; 
-            transition: all 0.2s ease-in-out; 
-            font-size: 1rem; 
-            user-select: none;
-            outline: none;
-        }
-        .btn-carpeta:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-        .btn-carpeta.active { 
-            background: var(--secondary); 
-            color: white !important; 
-            border-color: var(--secondary); 
-            box-shadow: 0 4px 10px rgba(18, 39, 80, 0.2);
-        }
+        .btn-carpeta { background: white; border: 1px solid #cbd5e1; padding: 0.6rem 1.4rem; border-radius: 50px; cursor: pointer; font-weight: 600; color: var(--secondary); display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; font-size: 0.95rem; }
+        .btn-carpeta:hover, .btn-carpeta.active { background: var(--secondary); color: white; border-color: var(--secondary); }
 
         /* GRID DE OFERTAS */
         .ofertas-grid { 
@@ -258,20 +218,11 @@
             </div>
         </div>
 
-        <!-- EXPLORA NUESTROS SERVICIOS -->
+        <!-- SECCIÓN DE SERVICIOS -->
         <h2 class="section-title-center" id="secServicios">Explora nuestros servicios</h2>
-        
-        <div class="mensaje-wrapper">
-            <span class="carpeta-mensaje" id="mensajeCarpeta">nuestras áreas de capacitación</span>
-        </div>
 
-        <!-- CONTENEDOR FIJO DE BOTONES -->
-        <div class="carpetas-container" id="carpetasBarra">
-            <button class="btn-carpeta active" data-id="area">🎓 Área de capacitación</button>
-            <button class="btn-carpeta" data-id="proximos">📅 Próximos cursos</button>
-            <button class="btn-carpeta" data-id="servicios">💼 Servicios</button>
-        </div>
-
+        <!-- CARPETA ÚNICA -->
+        <div class="carpetas-container" id="carpetasBarra"></div>
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
         <!-- PANEL DE ADMINISTRACIÓN -->
@@ -303,11 +254,7 @@
                         <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
                         <div class="form-group">
                             <label>Carpeta destino:</label>
-                            <select id="ofertaCarpetaSelect">
-                                <option value="area">Área de capacitación</option>
-                                <option value="proximos">Próximos cursos</option>
-                                <option value="servicios">Servicios</option>
-                            </select>
+                            <select id="ofertaCarpetaSelect"></select>
                         </div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
                         <button type="submit" class="btn-panel">Publicar</button>
@@ -396,11 +343,10 @@
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
-        const CONFIG_CARPETAS = {
-            "area": { nombre: "Área de capacitación", mensaje: "nuestras áreas de capacitación", keys: ["area", "capacita"] },
-            "proximos": { nombre: "Próximos cursos", mensaje: "próximas fechas de apertura", keys: ["proxim", "apertura", "fecha"] },
-            "servicios": { nombre: "Servicios", mensaje: "servicios", keys: ["servic"] }
-        };
+        // SOLO ÁREA DE CAPACITACIÓN COMO CARPETA ÚNICA	
+        const CARPETAS_DEFINIDAS = [
+            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
+        ];
 
         const defectoDB = {
             nombre: "Punto Clave Formación", 
@@ -413,7 +359,7 @@
         };
 
         window.db = defectoDB;
-        let idCarpetaActual = "area";
+        let carpetaSeleccionada = CARPETAS_DEFINIDAS[0]; 
         let slideIndex = 0;
         let carruselInterval;
 
@@ -423,11 +369,6 @@
         if (esAdmin) {
             document.body.classList.add('es-admin');
             document.querySelector('.admin-panel').style.display = 'block';
-        }
-
-        function normalizar(str) {
-            if(!str) return '';
-            return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
         }
 
         async function cargarDatosFirebase() {
@@ -440,16 +381,17 @@
                     if(!window.db.ofertas) window.db.ofertas = [];
                     if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
                     if(!window.db.carrusel) window.db.carrusel = [];
+                    if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
+                    if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
                 } else {
                     await setDoc(docRef, defectoDB);
                     window.db = defectoDB;
                 }
             } catch (error) {
-                console.error("Error cargando Firebase:", error);
+                console.error("Error cargando desde Firebase:", error);
             } finally {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 inicializarInputs();
-                activarEventosBotonesCarpetas();
                 actualizarWeb();
             }
         }
@@ -468,35 +410,8 @@
                 const docRef = doc(dbFirestore, "configuracion", "general");
                 await setDoc(docRef, window.db);
             } catch (e) {
-                console.error("Error guardando:", e);
+                console.error("Error al guardar en Firebase: ", e);
             }
-        }
-
-        // VINCULACIÓN DIRECTA DE EVENTOS CLIC EN LAS CARPETAS
-        function activarEventosBotonesCarpetas() {
-            const botones = document.querySelectorAll('#carpetasBarra .btn-carpeta');
-            botones.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    idCarpetaActual = btn.getAttribute('data-id');
-                    
-                    // Actualizar estados visuales de los botones
-                    botones.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    // Refrescar contenido
-                    actualizarWeb();
-                });
-            });
-        }
-
-        function ofertaPerteneceACarpeta(oferta, idCarpeta) {
-            if (!oferta.carpeta) return idCarpeta === 'area';
-            const carpOferta = normalizar(oferta.carpeta);
-            const conf = CONFIG_CARPETAS[idCarpeta];
-            
-            if (carpOferta === idCarpeta || carpOferta === normalizar(conf.nombre)) return true;
-            return conf.keys.some(k => carpOferta.includes(k));
         }
 
         function actualizarWeb() {
@@ -542,15 +457,33 @@
                 clearInterval(carruselInterval);
             }
 
-            // MENSAJE DINÁMICO DE CARPETA
-            const infoCarpeta = CONFIG_CARPETAS[idCarpetaActual];
-            document.getElementById('mensajeCarpeta').innerText = infoCarpeta.mensaje;
+            // CARPETAS
+            const barra = document.getElementById('carpetasBarra');
+            barra.innerHTML = '';
 
-            // RENDERIZADO DE OFERTAS SEGÚN LA CARPETA SELECCIONADA
+            CARPETAS_DEFINIDAS.forEach(c => {
+                const btnC = document.createElement('button');
+                btnC.className = `btn-carpeta ${carpetaSeleccionada.id === c.id ? 'active' : ''}`;
+                btnC.innerHTML = `${c.icono} ${c.nombre}`;
+                btnC.addEventListener('click', () => {
+                    carpetaSeleccionada = c;
+                    actualizarWeb();
+                });
+                barra.appendChild(btnC);
+            });
+
+            // Llenar selector del panel admin
+            const select = document.getElementById('ofertaCarpetaSelect'); 
+            select.innerHTML = '';
+            CARPETAS_DEFINIDAS.forEach(c => { 
+                select.innerHTML += `<option value="${c.id}">${c.nombre}</option>`; 
+            });
+
+            // RENDERIZAR OFERTAS DE LA CARPETA SELECCIONADA
             const ofertasContainer = document.getElementById('ofertasContainer'); 
             ofertasContainer.innerHTML = '';
             
-            const ofertasFiltradas = window.db.ofertas.filter(o => ofertaPerteneceACarpeta(o, idCarpetaActual));
+            const ofertasFiltradas = window.db.ofertas.filter(o => o.carpeta === carpetaSeleccionada.id || !o.carpeta);
 
             if (ofertasFiltradas.length === 0) {
                 ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
@@ -583,7 +516,7 @@
                 });
             }
 
-            // ENLACES VECINOS
+            // Enlaces adicionales
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
             const adminEnlacesLista = document.getElementById('adminEnlacesLista');
             enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
@@ -601,6 +534,7 @@
             mostrarSlide(slideIndex);
         }
 
+        // REDIRECCIÓN Y DESPLAZAMIENTO SUAVE
         function irAExploraServicios() {
             document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
         }
@@ -706,57 +640,25 @@
             e.preventDefault();
             const descCorta = document.getElementById('ofertaDesc').value;
             const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
-            const carpetaElegida = document.getElementById('ofertaCarpetaSelect').value;
             
             window.db.ofertas.push({ 
                 id: Date.now(), 
                 titulo: document.getElementById('ofertaTitulo').value, 
                 descripcion: descCorta, 
                 detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
-                carpeta: carpetaElegida, 
+                carpeta: document.getElementById('ofertaCarpetaSelect').value, 
                 img: ofertaImgBase64 
             });
-            
-            ofertaImgBase64 = ""; 
-            document.getElementById('ofertaForm').reset(); 
-            
-            // Cambiar a la carpeta elegida inmediatamente después de publicar
-            idCarpetaActual = carpetaElegida;
-            const botones = document.querySelectorAll('#carpetasBarra .btn-carpeta');
-            botones.forEach(b => {
-                if(b.getAttribute('data-id') === carpetaElegida) {
-                    b.classList.add('active');
-                } else {
-                    b.classList.remove('active');
-                }
-            });
-
-            actualizarWeb();
+            ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
         });
 
         document.getElementById('enlaceForm').addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            window.db.enlacesVecinos.push({ 
-                id: Date.now(), 
-                nombre: document.getElementById('enlaceNombre').value, 
-                url: document.getElementById('enlaceUrl').value, 
-                icono: document.getElementById('enlaceIcono').value 
-            });
-            document.getElementById('enlaceForm').reset(); 
-            actualizarWeb();
+            e.preventDefault(); window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
+            document.getElementById('enlaceForm').reset(); actualizarWeb();
         });
 
-        function eliminarOferta(id) { 
-            if(confirm('¿Eliminar oferta?')) { 
-                window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); 
-                actualizarWeb(); 
-            } 
-        }
-        
-        function eliminarEnlace(id) { 
-            window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); 
-            actualizarWeb(); 
-        }
+        function eliminarOferta(id) { if(confirm('¿Eliminar oferta?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
+        function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
 
         cargarDatosFirebase();
     </script>
