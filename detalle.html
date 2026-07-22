@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle - Punto Clave Formación</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --accent-orange: #f97316;
+            --secondary: #0f172a;
+            --light: #f8fafc; 
+            --texto-titulos: #0f172a;
+            --texto-parrafos: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--light); color: var(--texto-titulos); line-height: 1.6; }
+
+        /* HEADER */
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-logo { display: flex; align-items: center; max-height: 50px; }
+        .header-logo img { max-height: 45px; object-fit: contain; }
+        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; }
+
+        .header-nav { display: flex; gap: 2rem; align-items: center; }
+        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; }
+        .header-nav a:hover { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
+
+        .btn-cotizar {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+        .btn-cotizar:hover { background-color: #ea580c; }
+
+        .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 1.5rem; }
+
+        /* BOTÓN VOLVER */
+        .btn-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+        .btn-volver:hover { color: var(--primary); }
+
+        /* CARD DETALLE */
+        .detalle-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .detalle-img-container {
+            width: 100%;
+            height: 380px;
+            background-color: #cbd5e1;
+            position: relative;
+        }
+
+        .detalle-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detalle-body {
+            padding: 2.5rem;
+        }
+
+        .badge-carpeta {
+            display: inline-block;
+            background: #e0f2fe;
+            color: var(--primary-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .detalle-titulo {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .detalle-descripcion {
+            font-size: 1.15rem;
+            color: var(--texto-parrafos);
+            margin-bottom: 2rem;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+
+        .contacto-box {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .contacto-box p {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        /* EDITOR ADMIN */
+        .editor-admin-box {
+            display: none;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 2px dashed var(--primary);
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.3rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; }
+        .btn-guardar { background: var(--primary); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* FOOTER */
+        footer { background-color: var(--secondary); color: #cbd5e1; padding: 3rem 1rem 1.5rem 1rem; margin-top: 4rem; border-top: 4px solid var(--primary); }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left; font-size: 0.95rem; }
+        .footer-box h4 { color: white; font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; }
+        .footer-box p { margin-bottom: 0.5rem; color: #94a3b8; }
+        .footer-box i { color: var(--primary); margin-right: 8px; }
+        .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #334155; font-size: 0.85rem; color: #64748b; }
+
+        #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando información...</div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-logo" id="headerLogoView">
+            <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html">Inicio</a>
+            <a href="index.html">Cursos</a>
+        </nav>
+        <a href="#contacto" class="btn-cotizar">Solicitar cotización</a>
+    </header>
+
+    <div class="container">
+        <a id="btnVolver" href="index.html" class="btn-volver">
+            <i class="fa-solid fa-arrow-left"></i> Volver a inicio
+        </a>
+
+        <div class="detalle-card" id="detalleCard">
+            <div class="detalle-img-container">
+                <img id="detalleImg" src="" alt="Imagen de la capacitación">
+            </div>
+            <div class="detalle-body">
+                <span class="badge-carpeta" id="detalleCarpeta">Categoría</span>
+                <h1 class="detalle-titulo" id="detalleTitulo">Título de la oferta</h1>
+                <p class="detalle-descripcion" id="detalleTexto">Descripción completa...</p>
+
+                <div class="contacto-box">
+                    <p>¿Te interesa esta capacitación para ti o tu empresa?</p>
+                    <a id="btnWspContacto" href="#" target="_blank" class="btn-cotizar">
+                        <i class="fa-brands fa-whatsapp"></i> Preguntar por WhatsApp
+                    </a>
+                </div>
+
+                <!-- FORMULARIO DE EDICIÓN RÁPIDA (SOLO ADMIN) -->
+                <div class="editor-admin-box" id="editorAdmin">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary-dark);"><i class="fa-solid fa-pen-to-square"></i> Editar esta Oferta</h3>
+                    <div class="form-group">
+                        <label>Título:</label>
+                        <input type="text" id="editTitulo">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría / Carpeta:</label>
+                        <select id="editCarpeta"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Detalle Extendido / Información:</label>
+                        <textarea id="editDetalle" rows="6"></textarea>
+                    </div>
+                    <button class="btn-guardar" id="btnGuardarCambios">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-box">
+                <h4>Sobre Nosotros</h4>
+                <p>Centro especializado en formación profesional y capacitación continua.</p>
+                <p><strong>Misión</strong></p>
+                <p>Brindar soluciones de formación y capacitación empresarial de alta calidad, desarrollando las competencias de personas y organizaciones para impulsar su crecimiento y productividad.</p>
+                <p><strong>Visión</strong></p>
+                <p>Ser el aliado estratégico en el desarrollo del talento, impulsando el crecimiento de personas y empresas mediante capacitación e innovación.</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>📍 Dónde Estamos</h4>
+                <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, Zapopan, Jal.</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>⏰ Contacto</h4>
+                <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
+            authDomain: "punto-clave-formacion.firebaseapp.com",
+            projectId: "punto-clave-formacion",
+            storageBucket: "punto-clave-formacion.firebasestorage.app",
+            messagingSenderId: "469116413284",
+            appId: "1:469116413284:web:55552558b94235f62e4671"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const dbFirestore = getFirestore(app);
+
+        // MAPEO CON SOLO ÁREA DE CAPACITACIÓN
+        const CARPETAS_DEFINIDAS = [
+            { id: "Área de capacitación", nombre: "Área de capacitación" }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const idOferta = parseInt(urlParams.get('id'));
+        const esAdmin = urlParams.get('modo') === 'editar';
+
+        let datosDB = {};
+        let ofertaActual = null;
+
+        if (esAdmin) {
+            document.getElementById('editorAdmin').style.display = 'block';
+            document.getElementById('btnVolver').href = `index.html?modo=editar`;
+        }
+
+        async function cargarDetalle() {
+            try {
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    datosDB = docSnap.data();
+                    ofertaActual = datosDB.ofertas.find(o => o.id === idOferta);
+
+                    if (ofertaActual) {
+                        renderizarDetalle();
+                    } else {
+                        document.getElementById('detalleCard').innerHTML = `<div style="padding: 3rem; text-align: center;"><h2>Oferta no encontrada</h2><a href="index.html" class="btn-volver">Volver</a></div>`;
+                    }
+                }
+            } catch (e) {
+                console.error("Error al obtener detalle:", e);
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        }
+
+        function renderizarDetalle() {
+            // Header & Nombre Marca
+            document.getElementById('nombreEmpresaView').innerText = datosDB.nombre || 'Punto Clave Formación';
+            document.getElementById('footerNombre').innerText = datosDB.nombre || 'Punto Clave Formación';
+
+            if(datosDB.logo) {
+                document.getElementById('headerLogoView').innerHTML = `<a href="index.html"><img src="${datosDB.logo}" alt="Logo"></a>`;
+            }
+
+            // Datos Oferta
+            document.getElementById('detalleTitulo').innerText = ofertaActual.titulo;
+            
+            // Obtener el nombre legible de la carpeta
+            const carpetaObj = CARPETAS_DEFINIDAS.find(c => c.id === ofertaActual.carpeta);
+            document.getElementById('detalleCarpeta').innerText = carpetaObj ? carpetaObj.nombre : (ofertaActual.carpeta || 'Área de capacitación');
+            
+            document.getElementById('detalleTexto').innerText = ofertaActual.detalleCompleto || ofertaActual.descripcion;
+
+            if (ofertaActual.img) {
+                document.getElementById('detalleImg').src = ofertaActual.img;
+            } else {
+                document.getElementById('detalleImg').style.display = 'none';
+            }
+
+            // Botón WhatsApp
+            const numWsp = datosDB.wsp || '3313657617';
+            const mensaje = encodeURIComponent(`Hola, me interesa obtener información sobre la capacitación: ${ofertaActual.titulo}`);
+            document.getElementById('btnWspContacto').href = `https://wa.me/${numWsp}?text=${mensaje}`;
+
+            // Si es Admin, rellenar selector de carpetas
+            if (esAdmin) {
+                document.getElementById('editTitulo').value = ofertaActual.titulo;
+                document.getElementById('editDetalle').value = ofertaActual.detalleCompleto || ofertaActual.descripcion;
+
+                const selectCarpeta = document.getElementById('editCarpeta');
+                selectCarpeta.innerHTML = '';
+                CARPETAS_DEFINIDAS.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.innerText = c.nombre;
+                    if(c.id === ofertaActual.carpeta) opt.selected = true;
+                    selectCarpeta.appendChild(opt);
+                });
+            }
+        }
+
+        // Evento Guardar Cambios para el Administrador
+        document.getElementById('btnGuardarCambios').addEventListener('click', async () => {
+            if(!ofertaActual) return;
+
+            ofertaActual.titulo = document.getElementById('editTitulo').value;
+            ofertaActual.carpeta = document.getElementById('editCarpeta').value;
+            ofertaActual.detalleCompleto = document.getElementById('editDetalle').value;
+
+            // Actualizar arreglo global de ofertas
+            const index = datosDB.ofertas.findIndex(o => o.id === idOferta);
+            if(index !== -1) {
+                datosDB.ofertas[index] = ofertaActual;
+            }
+
+            try {
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                await setDoc(docRef, datosDB);
+                alert('¡Detalle actualizado correctamente!');
+                renderizarDetalle();
+            } catch (e) {
+                console.error("Error al guardar:", e);
+                alert("Hubo un error al guardar los cambios.");
+            }
+        });
+
+        cargarDetalle();
+    </script>
+</body>
+</html>
