@@ -268,6 +268,8 @@
         <!-- CONTENEDOR FIJO DE BOTONES -->
         <div class="carpetas-container" id="carpetasBarra">
             <button class="btn-carpeta active" data-id="area">🎓 Área de capacitación</button>
+            <button class="btn-carpeta" data-id="proximos">📅 Próximos cursos</button>
+            <button class="btn-carpeta" data-id="servicios">💼 Servicios</button>
         </div>
 
         <div class="ofertas-grid" id="ofertasContainer"></div>
@@ -303,6 +305,8 @@
                             <label>Carpeta destino:</label>
                             <select id="ofertaCarpetaSelect">
                                 <option value="area">Área de capacitación</option>
+                                <option value="proximos">Próximos cursos</option>
+                                <option value="servicios">Servicios</option>
                             </select>
                         </div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
@@ -393,7 +397,9 @@
         const dbFirestore = getFirestore(app);
 
         const CONFIG_CARPETAS = {
-            "area": { nombre: "Área de capacitación", mensaje: "nuestras áreas de capacitación", keys: ["area", "capacita"] }
+            "area": { nombre: "Área de capacitación", mensaje: "nuestras áreas de capacitación", keys: ["area", "capacita"] },
+            "proximos": { nombre: "Próximos cursos", mensaje: "próximas fechas de apertura", keys: ["proxim", "apertura", "fecha"] },
+            "servicios": { nombre: "Servicios", mensaje: "servicios", keys: ["servic"] }
         };
 
         const defectoDB = {
@@ -488,7 +494,6 @@
             if (!oferta.carpeta) return idCarpeta === 'area';
             const carpOferta = normalizar(oferta.carpeta);
             const conf = CONFIG_CARPETAS[idCarpeta];
-            if (!conf) return true;
             
             if (carpOferta === idCarpeta || carpOferta === normalizar(conf.nombre)) return true;
             return conf.keys.some(k => carpOferta.includes(k));
@@ -538,7 +543,7 @@
             }
 
             // MENSAJE DINÁMICO DE CARPETA
-            const infoCarpeta = CONFIG_CARPETAS[idCarpetaActual] || CONFIG_CARPETAS["area"];
+            const infoCarpeta = CONFIG_CARPETAS[idCarpetaActual];
             document.getElementById('mensajeCarpeta').innerText = infoCarpeta.mensaje;
 
             // RENDERIZADO DE OFERTAS SEGÚN LA CARPETA SELECCIONADA
@@ -715,6 +720,7 @@
             ofertaImgBase64 = ""; 
             document.getElementById('ofertaForm').reset(); 
             
+            // Cambiar a la carpeta elegida inmediatamente después de publicar
             idCarpetaActual = carpetaElegida;
             const botones = document.querySelectorAll('#carpetasBarra .btn-carpeta');
             botones.forEach(b => {
