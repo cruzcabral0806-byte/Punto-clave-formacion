@@ -9,135 +9,184 @@
         :root {
             --primary: #0284c7;
             --primary-dark: #0369a1;
-            --secondary: #0f172a;
+            --accent-orange: #f97316;
+            --secondary: #122750;
             --light: #f8fafc; 
-            --success: #22c55e;
             --texto-titulos: #0f172a;
             --texto-parrafos: #475569;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--light); color: var(--texto-titulos); line-height: 1.6; }
 
+        /* HEADER */
         header {
             background-color: var(--secondary);
             color: white;
-            padding: 1rem 0rem;
-            text-align: center;
-            border-bottom: 4px solid var(--primary);
-        }
-
-        header #esloganView { 
-            font-size: 1.2rem; 
-            margin: 0; 
-            font-weight: 250;
-            color: white;
-        }
-
-        #nombreEmpresaView {
-            display: none;
-        }
-
-        .logo-container-body {
-            max-width: 350px;
-            margin: 0 auto;
-            display: flex; 
-            justify-content: center; 
+            padding: 0.8rem 2rem;
+            display: flex;
             align-items: center;
-        }
-        
-        .logo-container-body.has-logo {
-            margin: 1.5rem auto 3rem auto;
-        }
-
-       .logo-container-body img { 
-            max-width: 100%; 
-            max-height: 250px; 
-            object-fit: contain; 
-            border-radius: 4px; 
-            animation: flotarContinuo 6s ease-in-out infinite alternate;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        @keyframes flotarContinuo {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
+        .header-logo { display: flex; align-items: center; max-height: 50px; }
+        .header-logo img { max-height: 45px; object-fit: contain; }
+        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; }
+
+        .header-nav { display: flex; gap: 2rem; align-items: center; }
+        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; }
+        .header-nav a:hover, .header-nav a.active { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
+
+        .btn-cotizar {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+        .btn-cotizar:hover { background-color: #ea580c; }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        /* HERO SECTION */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+            margin-bottom: 4rem;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
-        .container { max-width: 1100px; margin: .05rem auto 2rem auto; padding: 0 1rem; }
-        .section-title { font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 5px solid var(--primary); padding-left: 10px; color: var(--texto-titulos); }
+        @media (max-width: 868px) {
+            .hero-section { grid-template-columns: 1fr; padding: 1.5rem; }
+        }
 
-        /* CARRUSEL AJUSTADO AL 90% Y CENTRADO */
-        .carrusel-container {
-    position: relative;
-    width: 100%;       /* Cambiado de 800px a 100% */
-    max-width: 100%;   /* Cambiado para ocupar todo el ancho */
-    height: 400px;     /* Puedes ajustar la altura a tu gusto */
-    margin: 0 auto 3rem auto; 
-    border-radius: 0;  /* Quitamos bordes redondeados para un look más profesional */
-    overflow: hidden;
-    }
+        .hero-content h1 { font-size: 2.5rem; color: var(--secondary); line-height: 1.2; margin-bottom: 1rem; font-weight: 800; }
+        .hero-content p { font-size: 1.15rem; color: var(--texto-parrafos); margin-bottom: 2rem; }
+
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .btn-hero-primary { background-color: var(--accent-orange); color: white; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; cursor: pointer; }
+        .btn-hero-secondary { border: 2px solid var(--secondary); color: var(--secondary); padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; }
+
+        .hero-features { display: flex; gap: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; font-size: 0.85rem; color: var(--texto-parrafos); font-weight: 600; }
+        .hero-feature-item { display: flex; align-items: center; gap: 0.5rem; }
+        .hero-feature-item i { color: var(--primary); font-size: 1.2rem; }
+
+        /* CARRUSEL */
+        .carrusel-container { position: relative; width: 100%; height: 380px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
         .carrusel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
         .carrusel-slide { min-width: 100%; height: 100%; position: relative; }
         .carrusel-slide img { width: 100%; height: 100%; object-fit: cover; }
-        .carrusel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.6); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .carrusel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.6); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .carrusel-btn:hover { background: var(--primary); }
-        .carrusel-btn.prev { left: 15px; }
-        .carrusel-btn.next { right: 15px; }
+        .carrusel-btn.prev { left: 10px; }
+        .carrusel-btn.next { right: 10px; }
 
-        /* Carpetas */
-        .carpetas-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; background: #e2e8f0; padding: 0.75rem; border-radius: 8px; }
-        .btn-carpeta { background: white; border: 1px solid #cbd5e1; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; color: var(--secondary); display: inline-flex; align-items: center; gap: 0.5rem; }
-        .btn-carpeta:hover, .btn-carpeta.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* SECCIÓN SERVICIOS Y CARPETAS */
+        .section-title-center { 
+            text-align: center;
+            font-size: 2rem; 
+            margin-bottom: 1.5rem; 
+            color: var(--texto-titulos); 
+            position: relative;
+            font-weight: 700;
+            scroll-margin-top: 100px;
+        }
 
-        /* Grid de Ofertas */
+        .section-title-center::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-orange);
+            margin: 0.5rem auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .carpeta-mensaje {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            background-color: #e0f2fe;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .mensaje-wrapper { text-align: center; margin-bottom: 1rem; }
+
+        /* ESTILOS DE LOS BOTONES DE CARPETA (ACCESIBLES Y CLICKEABLES) */
+        .carpetas-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .btn-carpeta { 
+            background: white; 
+            border: 2px solid #cbd5e1; 
+            padding: 0.7rem 1.5rem; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: var(--secondary); 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.5rem; 
+            transition: all 0.2s ease-in-out; 
+            font-size: 1rem; 
+            user-select: none;
+            outline: none;
+        }
+        .btn-carpeta:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .btn-carpeta.active { 
+            background: var(--secondary); 
+            color: white !important; 
+            border-color: var(--secondary); 
+            box-shadow: 0 4px 10px rgba(18, 39, 80, 0.2);
+        }
+
+        /* GRID DE OFERTAS */
         .ofertas-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
             gap: 1.5rem; 
             margin-bottom: 3rem; 
+            min-height: 120px;
         }
         .oferta-card { 
             background: white; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
             border: 1px solid #e2e8f0;
             transition: transform 0.2s, box-shadow 0.2s;
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
         }
-        .oferta-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            border-color: var(--primary);
-        }
-        .oferta-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #cbd5e1;
-        }
-        .oferta-content { 
-            padding: 1.2rem; 
-            display: flex; 
-            flex-direction: column; 
-            flex-grow: 1;
-            justify-content: space-between;
-            text-align: center;
-        }
+        .oferta-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
+        .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
-        
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
-        .buttons-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
-        .btn-contacto { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
-        .btn-dinamico { background-color: #475569; }
-
-        /* Panel Admin */
-        .admin-panel { display: none; background: #f1f5f9; padding: 2rem; border-radius: 8px; margin-bottom: 3rem; border: 2px dashed #cbd5e1; color: #1e293b; }
+        /* PANEL ADMIN */
+        .admin-panel { display: none; background: #f1f5f9; padding: 2rem; border-radius: 12px; margin-bottom: 3rem; border: 2px dashed #cbd5e1; color: #1e293b; }
         .admin-panel h2 { margin-bottom: 1rem; font-size: 1.4rem; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-        .admin-box { background: white; padding: 1.2rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+        .admin-box { background: white; padding: 1.2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
         .admin-box h3 { font-size: 1rem; margin-bottom: 0.8rem; color: var(--primary-dark); border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
         .form-group { margin-bottom: 0.8rem; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.2rem; }
@@ -146,14 +195,17 @@
         .admin-link-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.4rem; margin-top: 0.4rem; border-radius: 4px; border: 1px solid #e2e8f0; font-size: 0.8rem;}
         .btn-mini-borrar { background: #ef4444; color: white; border: none; padding: 0.1rem 0.4rem; border-radius: 3px; cursor: pointer;}
 
-        /* Pie de página */
+        /* FOOTER */
         footer { background-color: var(--secondary); color: #cbd5e1; padding: 3rem 1rem 1.5rem 1rem; margin-top: 4rem; border-top: 4px solid var(--primary); }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left; font-size: 0.95rem; }
         .footer-box h4 { color: white; font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; }
         .footer-box p { margin-bottom: 0.5rem; color: #94a3b8; }
         .footer-box i { color: var(--primary); margin-right: 8px; }
         .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #334155; font-size: 0.85rem; color: #64748b; }
-        
+        .buttons-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+        .btn-contacto { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        .btn-dinamico { background-color: #475569; }
+
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
     </style>
 </head>
@@ -161,25 +213,66 @@
 
     <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando sitio...</div>
 
+    <!-- HEADER -->
     <header>
-        <h1 id="nombreEmpresaView">Punto Clave Formación</h1>
-        <p id="esloganView">Tu futuro profesional empieza aquí</p>
+        <div class="header-logo" id="headerLogoView">
+            <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html" class="active">Inicio</a>
+            <a id="btnNavCursos">Cursos</a>
+        </nav>
+        <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
     </header>
 
     <div class="container">
         
-        <div class="logo-container-body" id="logoView"></div>
-        
-        <div class="carrusel-container" id="carruselContenedor">
-            <button class="carrusel-btn prev" onclick="cambiarSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-            <div class="carrusel-track" id="carruselTrack"></div>
-            <button class="carrusel-btn next" onclick="cambiarSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 id="heroTituloView">Impulsamos tu crecimiento profesional</h1>
+                <p id="heroSubtituloView">Capacitación práctica, actualizada y de calidad para personas y empresas.</p>
+                
+                <div class="hero-buttons">
+                    <a id="btnExplorarCursos" class="btn-hero-primary">Ver cursos</a>
+                    <a href="#contacto" class="btn-hero-secondary">Capacitación para empresas</a>
+                </div>
+
+                <div class="hero-features">
+                    <div class="hero-feature-item">
+                        <i class="fa-solid fa-user-tie"></i> Instructores especializados
+                    </div>
+                    <div class="hero-feature-item">
+                        <i class="fa-solid fa-shield-halved"></i> Cursos actualizados y prácticos
+                    </div>
+                    <div class="hero-feature-item">
+                        <i class="fa-solid fa-file-certificate"></i> Constancia de participación
+                    </div>
+                </div>
+            </div>
+
+            <div class="carrusel-container" id="carruselContenedor">
+                <button class="carrusel-btn prev" onclick="cambiarSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="carrusel-track" id="carruselTrack"></div>
+                <button class="carrusel-btn next" onclick="cambiarSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
 
-        <h2 class="section-title">Nuestras Ofertas</h2>
-        <div class="carpetas-container" id="carpetasBarra"></div>
+        <!-- EXPLORA NUESTROS SERVICIOS -->
+        <h2 class="section-title-center" id="secServicios">Explora nuestros servicios</h2>
+        
+        <div class="mensaje-wrapper">
+            <span class="carpeta-mensaje" id="mensajeCarpeta">nuestras áreas de capacitación</span>
+        </div>
+
+        <!-- CONTENEDOR FIJO DE BOTONES -->
+        <div class="carpetas-container" id="carpetasBarra">
+            <button class="btn-carpeta active" data-id="area">🎓 Área de capacitación</button>
+        </div>
+
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
+        <!-- PANEL DE ADMINISTRACIÓN -->
         <div class="admin-panel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
             <div class="admin-grid">
@@ -187,7 +280,8 @@
                     <div>
                         <h3>1. Identidad</h3>
                         <div class="form-group"><label>Nombre:</label><input type="text" id="inputNombre"></div>
-                        <div class="form-group"><label>Eslogan:</label><input type="text" id="inputEslogan"></div>
+                        <div class="form-group"><label>Título Hero:</label><input type="text" id="inputHeroTitulo"></div>
+                        <div class="form-group"><label>Subtítulo Hero:</label><input type="text" id="inputHeroSubtitulo"></div>
                         <div class="form-group"><label>Subir Logo:</label><input type="file" id="inputLogo" accept="image/*"></div>
                     </div>
                 </div>
@@ -200,28 +294,24 @@
                     </div>
                 </div>
                 <div class="admin-box">
-                    <div>
-                        <h3>3. Carpetas</h3>
-                        <form id="carpetaForm">
-                            <div class="form-group"><input type="text" id="carpetaNombre" placeholder="Ej: Online" required></div>
-                            <button type="submit" class="btn-panel">Crear Carpeta</button>
-                        </form>
-                        <div id="adminCarpetasLista"></div>
-                    </div>
-                </div>
-                <div class="admin-box">
                     <form id="ofertaForm">
-                        <h3>4. Publicar Oferta</h3>
+                        <h3>3. Publicar Oferta</h3>
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
-                        <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta / Resumen" required></textarea></div>
-                        <div class="form-group"><label>Carpeta:</label><select id="ofertaCarpetaSelect"></select></div>
+                        <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
+                        <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
+                        <div class="form-group">
+                            <label>Carpeta destino:</label>
+                            <select id="ofertaCarpetaSelect">
+                                <option value="area">Área de capacitación</option>
+                            </select>
+                        </div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
                         <button type="submit" class="btn-panel">Publicar</button>
                     </form>
                 </div>
                 <div class="admin-box">
                     <form id="enlaceForm">
-                        <h3>5. Enlaces Vecinos</h3>
+                        <h3>4. Enlaces Vecinos</h3>
                         <div class="form-group"><input type="text" id="enlaceNombre" placeholder="Nombre" required></div>
                         <div class="form-group"><input type="url" id="enlaceUrl" placeholder="https://..." required></div>
                         <div class="form-group">
@@ -237,7 +327,7 @@
                 </div>
                 <div class="admin-box">
                     <div>
-                        <h3>6. Carrusel de Fotos</h3>
+                        <h3>5. Carrusel de Fotos</h3>
                         <div class="form-group"><label>Añadir Foto al Banner:</label><input type="file" id="inputCarrusel" accept="image/*"></div>
                         <div id="adminCarruselLista"></div>
                     </div>
@@ -246,7 +336,8 @@
         </div>
     </div>
 
-    <footer>
+    <!-- FOOTER -->
+    <footer id="contacto">
         <div class="footer-content">
             <div class="footer-box">
                 <h4>Sobre Nosotros</h4>
@@ -267,15 +358,14 @@
             <div class="footer-box">
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
-		<p><i class=" "></i></p>
-		<h4> contactos</h4>
-    		<p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
-    		<p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
-    		<p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
+                <p><i class=" "></i></p>
+                <h4> Contactos</h4>
+                <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
             </div>
         </div>
 
-        <!-- SITIOS DE INTERÉS TRASLADADOS AL FOOTER -->
         <div style="max-width: 1100px; margin: 2rem auto 0 auto; padding: 1.5rem 1rem 0 1rem; border-top: 1px solid #334155; text-align: center;">
             <h4 style="color: white; font-size: 1.2rem; margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Redes</h4>
             <div class="buttons-list" id="enlacesDinamicosContainer"></div>
@@ -302,16 +392,22 @@
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
+        const CONFIG_CARPETAS = {
+            "area": { nombre: "Área de capacitación", mensaje: "nuestras áreas de capacitación", keys: ["area", "capacita"] }
+        };
+
         const defectoDB = {
-            nombre: "Punto Clave Formación", eslogan: "Tu futuro profesional empieza aquí", logo: "",
+            nombre: "Punto Clave Formación", 
+            heroTitulo: "Impulsamos tu crecimiento profesional",
+            heroSubtitulo: "Capacitación práctica, actualizada y de calidad para personas y empresas.",
+            logo: "",
             email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030",
-            carpetas: ["Cursos", "Servicios"],
-            ofertas: [{ id: 1, titulo: "Curso de Gestión Empresarial", descripcion: "Aprende administración de forma profesional.", detalleCompleto: "", carpeta: "Cursos", img: "" }],
+            ofertas: [],
             enlacesVecinos: [], carrusel: []
         };
 
         window.db = defectoDB;
-        let carpetaActual = "Inicio"; 
+        let idCarpetaActual = "area";
         let slideIndex = 0;
         let carruselInterval;
 
@@ -323,6 +419,11 @@
             document.querySelector('.admin-panel').style.display = 'block';
         }
 
+        function normalizar(str) {
+            if(!str) return '';
+            return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+        }
+
         async function cargarDatosFirebase() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
@@ -330,8 +431,7 @@
 
                 if (docSnap.exists()) {
                     window.db = docSnap.data();
-                    if(!window.db.carpetas) window.db.carpetas = defectoDB.carpetas;
-                    if(!window.db.ofertas) window.db.ofertas = defectoDB.ofertas;
+                    if(!window.db.ofertas) window.db.ofertas = [];
                     if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
                     if(!window.db.carrusel) window.db.carrusel = [];
                 } else {
@@ -339,17 +439,19 @@
                     window.db = defectoDB;
                 }
             } catch (error) {
-                console.error("Error cargando desde Firebase:", error);
+                console.error("Error cargando Firebase:", error);
             } finally {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 inicializarInputs();
+                activarEventosBotonesCarpetas();
                 actualizarWeb();
             }
         }
 
         function inicializarInputs() {
             document.getElementById('inputNombre').value = window.db.nombre || '';
-            document.getElementById('inputEslogan').value = window.db.eslogan || '';
+            document.getElementById('inputHeroTitulo').value = window.db.heroTitulo || '';
+            document.getElementById('inputHeroSubtitulo').value = window.db.heroSubtitulo || '';
             document.getElementById('inputEmail').value = window.db.email || '';
             document.getElementById('inputTel').value = window.db.tel || '';
             document.getElementById('inputWsp').value = window.db.wsp || '';
@@ -360,8 +462,36 @@
                 const docRef = doc(dbFirestore, "configuracion", "general");
                 await setDoc(docRef, window.db);
             } catch (e) {
-                console.error("Error al guardar en Firebase: ", e);
+                console.error("Error guardando:", e);
             }
+        }
+
+        // VINCULACIÓN DIRECTA DE EVENTOS CLIC EN LAS CARPETAS
+        function activarEventosBotonesCarpetas() {
+            const botones = document.querySelectorAll('#carpetasBarra .btn-carpeta');
+            botones.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    idCarpetaActual = btn.getAttribute('data-id');
+                    
+                    // Actualizar estados visuales de los botones
+                    botones.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Refrescar contenido
+                    actualizarWeb();
+                });
+            });
+        }
+
+        function ofertaPerteneceACarpeta(oferta, idCarpeta) {
+            if (!oferta.carpeta) return idCarpeta === 'area';
+            const carpOferta = normalizar(oferta.carpeta);
+            const conf = CONFIG_CARPETAS[idCarpeta];
+            if (!conf) return true;
+            
+            if (carpOferta === idCarpeta || carpOferta === normalizar(conf.nombre)) return true;
+            return conf.keys.some(k => carpOferta.includes(k));
         }
 
         function actualizarWeb() {
@@ -369,19 +499,17 @@
             
             document.getElementById('nombreEmpresaView').innerText = window.db.nombre;
             document.getElementById('footerNombre').innerText = window.db.nombre;
-            document.getElementById('esloganView').innerText = window.db.eslogan;
+            document.getElementById('heroTituloView').innerText = window.db.heroTitulo;
+            document.getElementById('heroSubtituloView').innerText = window.db.heroSubtitulo;
             
-            const logoContainer = document.getElementById('logoView');
+            const logoContainer = document.getElementById('headerLogoView');
             if(window.db.logo) {
-                logoContainer.innerHTML = `<img src="${window.db.logo}">`;
-                logoContainer.classList.add('has-logo');
+                logoContainer.innerHTML = `<a href="index.html"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
             } else {
-                logoContainer.innerHTML = '';
-                logoContainer.classList.remove('has-logo');
+                logoContainer.innerHTML = `<a href="index.html" class="header-logo-text">${window.db.nombre}</a>`;
             }
 
-            // SE QUITARON LAS LÍNEAS QUE BUSCABAN LOS COMPONENTES DE CONTACTO ELIMINADOS PARA EVITAR CRASHES
-
+            // Carrusel
             const contenedor = document.getElementById('carruselContenedor');
             const track = document.getElementById('carruselTrack');
             const adminCarruselLista = document.getElementById('adminCarruselLista');
@@ -409,85 +537,52 @@
                 clearInterval(carruselInterval);
             }
 
-            const barra = document.getElementById('carpetasBarra');
-            barra.innerHTML = '';
+            // MENSAJE DINÁMICO DE CARPETA
+            const infoCarpeta = CONFIG_CARPETAS[idCarpetaActual] || CONFIG_CARPETAS["area"];
+            document.getElementById('mensajeCarpeta').innerText = infoCarpeta.mensaje;
 
-            const btnTodas = document.createElement('button');
-            btnTodas.className = `btn-carpeta ${carpetaActual === 'Todas' ? 'active' : ''}`;
-            btnTodas.innerHTML = `⊞ Ver todo`;
-            btnTodas.addEventListener('click', () => filtrarCarpeta('Todas'));
-            barra.appendChild(btnTodas);
-
-            window.db.carpetas.forEach(c => { 
-                const btnC = document.createElement('button');
-                btnC.className = `btn-carpeta ${carpetaActual === c ? 'active' : ''}`;
-                
-                if (c === "Cursos") {
-                    btnC.innerHTML = `🎓 Cursos`;
-                } else if (c === "Servicios") {
-                    btnC.innerHTML = `💼 Servicios`;
-                } else {
-                    btnC.innerHTML = `📁 ${c}`;
-                }
-                
-                btnC.addEventListener('click', () => filtrarCarpeta(c));
-                barra.appendChild(btnC);
-            });
-
-            const select = document.getElementById('ofertaCarpetaSelect'); select.innerHTML = '';
-            window.db.carpetas.forEach(c => { select.innerHTML += `<option value="${c}">${c}</option>`; });
-
-            const adminCarpetasLista = document.getElementById('adminCarpetasLista'); adminCarpetasLista.innerHTML = '';
-            window.db.carpetas.forEach(c => { 
-                if(c !== "Cursos" && c !== "Servicios") {
-                    const itemC = document.createElement('div');
-                    itemC.className = "admin-link-item";
-                    itemC.innerHTML = `<span>📁 ${c}</span><button class="btn-mini-borrar">x</button>`;
-                    itemC.querySelector('.btn-mini-borrar').addEventListener('click', () => eliminarCarpeta(c));
-                    adminCarpetasLista.appendChild(itemC);
-                }
-            });
-
-            const ofertasContainer = document.getElementById('ofertasContainer'); ofertasContainer.innerHTML = '';
-            let ofertasFiltradas = [];
-
-            if (carpetaActual === "Inicio") {
-                ofertasFiltradas = window.db.ofertas.slice(0, 3);
-            } else if (carpetaActual === "Todas") {
-                ofertasFiltradas = window.db.ofertas;
-            } else {
-                ofertasFiltradas = window.db.ofertas.filter(o => o.carpeta === carpetaActual);
-            }
+            // RENDERIZADO DE OFERTAS SEGÚN LA CARPETA SELECCIONADA
+            const ofertasContainer = document.getElementById('ofertasContainer'); 
+            ofertasContainer.innerHTML = '';
             
-            ofertasFiltradas.forEach(o => {
-                const card = document.createElement('div'); 
-                card.className = 'oferta-card';
-                card.style.cursor = 'pointer'; 
-                
-                const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
+            const ofertasFiltradas = window.db.ofertas.filter(o => ofertaPerteneceACarpeta(o, idCarpetaActual));
 
-                card.innerHTML = `
-                    <img src="${imgSrc}" alt="${o.titulo}">
-                    <div class="oferta-content">
-                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--texto-titulos); font-weight: 600;">
-                            ${o.titulo}
-                        </h3>
-                        <button class="btn-eliminar">Borrar</button>
-                    </div>
-                `;
-                
-                card.addEventListener('click', (e) => {
-                    if(e.target.classList.contains('btn-eliminar')) return;
-                    const paramAdmin = esAdmin ? '&modo=editar' : '';
-                    window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+            if (ofertasFiltradas.length === 0) {
+                ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
+            } else {
+                ofertasFiltradas.forEach(o => {
+                    const card = document.createElement('div'); 
+                    card.className = 'oferta-card';
+                    card.style.cursor = 'pointer'; 
+                    
+                    const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
+
+                    card.innerHTML = `
+                        <img src="${imgSrc}" alt="${o.titulo}">
+                        <div class="oferta-content">
+                            <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">
+                                ${o.titulo}
+                            </h3>
+                            <button class="btn-eliminar">Borrar</button>
+                        </div>
+                    `;
+                    
+                    card.addEventListener('click', (e) => {
+                        if(e.target.classList.contains('btn-eliminar')) return;
+                        const paramAdmin = esAdmin ? '&modo=editar' : '';
+                        window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                    });
+
+                    card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
+                    ofertasContainer.appendChild(card);
                 });
+            }
 
-                card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
-                ofertasContainer.appendChild(card);
-            });
-
-            const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); const adminEnlacesLista = document.getElementById('adminEnlacesLista');
+            // ENLACES VECINOS
+            const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
+            const adminEnlacesLista = document.getElementById('adminEnlacesLista');
             enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
+            
             window.db.enlacesVecinos.forEach(link => {
                 enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
                 
@@ -497,8 +592,16 @@
                 itemL.querySelector('.btn-mini-borrar').addEventListener('click', () => eliminarEnlace(link.id));
                 adminEnlacesLista.appendChild(itemL);
             });
+
             mostrarSlide(slideIndex);
         }
+
+        function irAExploraServicios() {
+            document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('btnNavCursos').addEventListener('click', irAExploraServicios);
+        document.getElementById('btnExplorarCursos').addEventListener('click', irAExploraServicios);
 
         function mostrarSlide(index) {
             const track = document.getElementById('carruselTrack');
@@ -513,10 +616,10 @@
         
         function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
 
-        document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; document.getElementById('nombreEmpresaView').innerText = window.db.nombre; document.getElementById('footerNombre').innerText = window.db.nombre; guardarDatos(); });
-        document.getElementById('inputEslogan').addEventListener('input', (e) => { window.db.eslogan = e.target.value; document.getElementById('esloganView').innerText = window.db.eslogan; guardarDatos(); });
+        document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
+        document.getElementById('inputHeroTitulo').addEventListener('input', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
+        document.getElementById('inputHeroSubtitulo').addEventListener('input', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
         
-        // MODIFICADOS PARA QUE SIGAN GUARDANDO LA BASE DE DATOS SIN INTENTAR REDIRECCIONAR BOTONES BORRADOS
         document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; guardarDatos(); });
         document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; guardarDatos(); });
         document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
@@ -564,12 +667,6 @@
             }
         });
 
-        document.getElementById('carpetaForm').addEventListener('submit', (e) => {
-            e.preventDefault(); const nom = document.getElementById('carpetaNombre').value.trim();
-            if(!window.db.carpetas.includes(nom)) window.db.carpetas.push(nom);
-            document.getElementById('carpetaForm').reset(); actualizarWeb();
-        });
-
         let ofertaImgBase64 = "";
         document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -602,29 +699,60 @@
 
         document.getElementById('ofertaForm').addEventListener('submit', (e) => {
             e.preventDefault();
+            const descCorta = document.getElementById('ofertaDesc').value;
+            const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
+            const carpetaElegida = document.getElementById('ofertaCarpetaSelect').value;
+            
             window.db.ofertas.push({ 
                 id: Date.now(), 
                 titulo: document.getElementById('ofertaTitulo').value, 
-                descripcion: document.getElementById('ofertaDesc').value, 
-                detalleCompleto: "", 
-                carpeta: document.getElementById('ofertaCarpetaSelect').value, 
+                descripcion: descCorta, 
+                detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
+                carpeta: carpetaElegida, 
                 img: ofertaImgBase64 
             });
-            ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
+            
+            ofertaImgBase64 = ""; 
+            document.getElementById('ofertaForm').reset(); 
+            
+            idCarpetaActual = carpetaElegida;
+            const botones = document.querySelectorAll('#carpetasBarra .btn-carpeta');
+            botones.forEach(b => {
+                if(b.getAttribute('data-id') === carpetaElegida) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+
+            actualizarWeb();
         });
 
         document.getElementById('enlaceForm').addEventListener('submit', (e) => {
-            e.preventDefault(); window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
-            document.getElementById('enlaceForm').reset(); actualizarWeb();
+            e.preventDefault(); 
+            window.db.enlacesVecinos.push({ 
+                id: Date.now(), 
+                nombre: document.getElementById('enlaceNombre').value, 
+                url: document.getElementById('enlaceUrl').value, 
+                icono: document.getElementById('enlaceIcono').value 
+            });
+            document.getElementById('enlaceForm').reset(); 
+            actualizarWeb();
         });
 
-        function filtrarCarpeta(nombre) { carpetaActual = nombre; actualizarWeb(); }
-        function eliminarOferta(id) { if(confirm('¿Eliminar oferta?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
-        function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
-        function eliminarCarpeta(nombre) { if(confirm('¿Eliminar carpeta?')) { window.db.carpetas = window.db.carpetas.filter(c => c !== nombre); window.db.ofertas.forEach(o => { if(o.carpeta === nombre) o.carpeta = "Cursos"; }); actualizarWeb(); } }
+        function eliminarOferta(id) { 
+            if(confirm('¿Eliminar oferta?')) { 
+                window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); 
+                actualizarWeb(); 
+            } 
+        }
+        
+        function eliminarEnlace(id) { 
+            window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); 
+            actualizarWeb(); 
+        }
 
         cargarDatosFirebase();
     </script>
 </body>
 </html>
-Actualizar index.html
