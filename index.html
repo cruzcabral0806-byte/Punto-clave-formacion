@@ -343,9 +343,10 @@
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
-        // SOLO ÁREA DE CAPACITACIÓN COMO CARPETA ÚNICA	
+        // CARPETAS DISPONIBLES EN EL SITIO
         const CARPETAS_DEFINIDAS = [
-            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
+            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" },
+            { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }
         ];
 
         const defectoDB = {
@@ -461,13 +462,21 @@
             const barra = document.getElementById('carpetasBarra');
             barra.innerHTML = '';
 
+		if (!carpetaSeleccionada) {
+                carpetaSeleccionada = CARPETAS_DEFINIDAS[0];
+}
+
             CARPETAS_DEFINIDAS.forEach(c => {
                 const btnC = document.createElement('button');
-                btnC.className = `btn-carpeta ${carpetaSeleccionada.id === c.id ? 'active' : ''}`;
+                // Comparamos de forma estricta asegurando que no falle por mayúsculas o espacios
+                const esActiva = (carpetaSeleccionada.id === c.id);
+                btnC.className = `btn-carpeta ${esActiva ? 'active' : ''}`;
                 btnC.innerHTML = `${c.icono} ${c.nombre}`;
-                btnC.addEventListener('click', () => {
-                    carpetaSeleccionada = c;
-                    actualizarWeb();
+                
+                btnC.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    carpetaSeleccionada = c; // Guardamos la carpeta activa
+                    actualizarWeb();         // Actualizamos la vista
                 });
                 barra.appendChild(btnC);
             });
@@ -483,7 +492,12 @@
             const ofertasContainer = document.getElementById('ofertasContainer'); 
             ofertasContainer.innerHTML = '';
             
-            const ofertasFiltradas = window.db.ofertas.filter(o => o.carpeta === carpetaSeleccionada.id || !o.carpeta);
+            const carpetaActualId = carpetaSeleccionada ? carpetaSeleccionada.id : CARPETAS_DEFINIDAS[0].id;
+
+            const ofertasFiltradas = window.db.ofertas.filter(o => {
+                const carpetaOferta = o.carpeta ? o.carpeta : "Área de capacitación";
+                return carpetaOferta === carpetaActualId;
+            });
 
             if (ofertasFiltradas.length === 0) {
                 ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
