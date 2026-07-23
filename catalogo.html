@@ -255,9 +255,10 @@
             const contenedor = document.getElementById('ofertasCatalogoContainer');
             contenedor.innerHTML = '';
 
+            // Muestra lo etiquetado como catalogo o perteneciente a "Área de capacitación"
             const ofertasFiltradas = window.db.ofertas.filter(o => {
                 const seccion = o.seccion ? o.seccion : "servicios";
-                return seccion === "catalogo";
+                return seccion === "catalogo" || o.carpeta === "Área de capacitación";
             });
 
             if (ofertasFiltradas.length === 0) {
