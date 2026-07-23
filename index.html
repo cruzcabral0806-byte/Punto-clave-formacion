@@ -254,15 +254,15 @@
                         <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
                         <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
                         <div class="form-group">
+                            <label>Categoría / Carpeta:</label>
+                            <select id="ofertaCarpetaSelect"></select>
+                        </div>
+                        <div class="form-group">
                             <label>Sección de destino:</label>
                             <select id="ofertaSeccionSelect">
                                 <option value="servicios">Explora nuestros servicios (Inicio)</option>
                                 <option value="catalogo">Catálogo de Cursos</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Categoría / Carpeta:</label>
-                            <select id="ofertaCarpetaSelect"></select>
                         </div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
                         <button type="submit" class="btn-panel">Publicar</button>
@@ -428,6 +428,16 @@
             });
         }
 
+        // Sincronizar dinámicamente selector de carpeta con la sección de destino
+        document.getElementById('ofertaCarpetaSelect').addEventListener('change', (e) => {
+            const seccionSelect = document.getElementById('ofertaSeccionSelect');
+            if (e.target.value === "Área de capacitación") {
+                seccionSelect.value = "catalogo";
+            } else {
+                seccionSelect.value = "servicios";
+            }
+        });
+
         async function guardarDatos() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
@@ -497,11 +507,10 @@
                 
                 btnC.addEventListener('click', (e) => {
                     e.preventDefault();
-			if (c.id === "Área de capacitación") {
+                    if (c.id === "Área de capacitación") {
                         window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
                         return;
                     }
-                    // -----------------------------
 
                     carpetaSeleccionada = c; 
                     actualizarWeb();         
@@ -544,12 +553,8 @@
                     card.addEventListener('click', (e) => {
                         if(e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
-			if (o.carpeta === "Área de capacitación") {
-        		window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
-    			} else {
-       			 window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
-    			}
-		});
+                        window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                    });
 
                     card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
                     ofertasContainer.appendChild(card);
@@ -665,12 +670,18 @@
             const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
             const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
             
+            // Asignación automática de sección en función de la carpeta
+            let seccionDestino = document.getElementById('ofertaSeccionSelect').value;
+            if (carpetaSelec === "Área de capacitación") {
+                seccionDestino = "catalogo";
+            }
+
             window.db.ofertas.push({ 
                 id: Date.now(), 
                 titulo: document.getElementById('ofertaTitulo').value, 
                 descripcion: descCorta, 
                 detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
-                seccion: document.getElementById('ofertaSeccionSelect').value,
+                seccion: seccionDestino,
                 carpeta: carpetaSelec, 
                 img: ofertaImgBase64 
             });
