@@ -179,8 +179,9 @@
             <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
         </div>
         <nav class="header-nav">
-            <a href="index.html" class="active">Inicio</a>
+            <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
             <a id="btnNavCursos">Cursos</a>
+            <a id="btnNavCatalogo" href="catalogo.html">Catálogo de Cursos</a>
         </nav>
         <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
     </header>
@@ -221,7 +222,7 @@
         <!-- SECCIÓN DE SERVICIOS -->
         <h2 class="section-title-center" id="secServicios">Explora nuestros servicios</h2>
 
-        <!-- CARPETA ÚNICA -->
+        <!-- CARPETA ÚNICA Y CATEGORÍAS -->
         <div class="carpetas-container" id="carpetasBarra"></div>
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
@@ -248,12 +249,19 @@
                 </div>
                 <div class="admin-box">
                     <form id="ofertaForm">
-                        <h3>3. Publicar Oferta</h3>
+                        <h3>3. Publicar Elemento</h3>
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
                         <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
                         <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
                         <div class="form-group">
-                            <label>Carpeta destino:</label>
+                            <label>Sección de destino:</label>
+                            <select id="ofertaSeccionSelect">
+                                <option value="servicios">Explora nuestros servicios (Inicio)</option>
+                                <option value="catalogo">Catálogo de Cursos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoría / Carpeta:</label>
                             <select id="ofertaCarpetaSelect"></select>
                         </div>
                         <div class="form-group"><input type="file" id="ofertaImgInput" accept="image/*"></div>
@@ -343,10 +351,10 @@
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
-        // CARPETAS DISPONIBLES EN EL SITIO
+        // MAPEO ESTÁNDAR DE CARPETAS DISPONIBLES
         const CARPETAS_DEFINIDAS = [
-            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" },
-            { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }
+            { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
+            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
         ];
 
         const defectoDB = {
@@ -366,11 +374,16 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const esAdmin = urlParams.get('modo') === 'editar';
+        const urlAdminParam = esAdmin ? '?modo=editar' : '';
         
         if (esAdmin) {
             document.body.classList.add('es-admin');
             document.querySelector('.admin-panel').style.display = 'block';
         }
+
+        // Mantener el estado de admin en las navegaciones principales
+        document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+        document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
 
         async function cargarDatosFirebase() {
             try {
@@ -404,6 +417,15 @@
             document.getElementById('inputEmail').value = window.db.email || '';
             document.getElementById('inputTel').value = window.db.tel || '';
             document.getElementById('inputWsp').value = window.db.wsp || '';
+
+            const selectCarpeta = document.getElementById('ofertaCarpetaSelect');
+            selectCarpeta.innerHTML = '';
+            CARPETAS_DEFINIDAS.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = c.nombre;
+                selectCarpeta.appendChild(opt);
+            });
         }
 
         async function guardarDatos() {
@@ -424,10 +446,11 @@
             document.getElementById('heroSubtituloView').innerText = window.db.heroSubtitulo;
             
             const logoContainer = document.getElementById('headerLogoView');
+            const logoHomeUrl = `index.html${urlAdminParam}`;
             if(window.db.logo) {
-                logoContainer.innerHTML = `<a href="index.html"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
+                logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
             } else {
-                logoContainer.innerHTML = `<a href="index.html" class="header-logo-text">${window.db.nombre}</a>`;
+                logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre}</a>`;
             }
 
             // Carrusel
@@ -462,41 +485,40 @@
             const barra = document.getElementById('carpetasBarra');
             barra.innerHTML = '';
 
-		if (!carpetaSeleccionada) {
+            if (!carpetaSeleccionada) {
                 carpetaSeleccionada = CARPETAS_DEFINIDAS[0];
-}
+            }
 
             CARPETAS_DEFINIDAS.forEach(c => {
                 const btnC = document.createElement('button');
-                // Comparamos de forma estricta asegurando que no falle por mayúsculas o espacios
                 const esActiva = (carpetaSeleccionada.id === c.id);
                 btnC.className = `btn-carpeta ${esActiva ? 'active' : ''}`;
                 btnC.innerHTML = `${c.icono} ${c.nombre}`;
                 
                 btnC.addEventListener('click', (e) => {
                     e.preventDefault();
-                    carpetaSeleccionada = c; // Guardamos la carpeta activa
-                    actualizarWeb();         // Actualizamos la vista
+			if (c.id === "Área de capacitación") {
+                        window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
+                        return;
+                    }
+                    // -----------------------------
+
+                    carpetaSeleccionada = c; 
+                    actualizarWeb();         
                 });
                 barra.appendChild(btnC);
             });
 
-            // Llenar selector del panel admin
-            const select = document.getElementById('ofertaCarpetaSelect'); 
-            select.innerHTML = '';
-            CARPETAS_DEFINIDAS.forEach(c => { 
-                select.innerHTML += `<option value="${c.id}">${c.nombre}</option>`; 
-            });
-
-            // RENDERIZAR OFERTAS DE LA CARPETA SELECCIONADA
+            // RENDERIZAR OFERTAS
             const ofertasContainer = document.getElementById('ofertasContainer'); 
             ofertasContainer.innerHTML = '';
             
             const carpetaActualId = carpetaSeleccionada ? carpetaSeleccionada.id : CARPETAS_DEFINIDAS[0].id;
 
             const ofertasFiltradas = window.db.ofertas.filter(o => {
-                const carpetaOferta = o.carpeta ? o.carpeta : "Área de capacitación";
-                return carpetaOferta === carpetaActualId;
+                const seccion = o.seccion ? o.seccion : "servicios";
+                const carpetaOferta = o.carpeta ? o.carpeta : CARPETAS_DEFINIDAS[0].id;
+                return seccion === "servicios" && carpetaOferta === carpetaActualId;
             });
 
             if (ofertasFiltradas.length === 0) {
@@ -522,8 +544,12 @@
                     card.addEventListener('click', (e) => {
                         if(e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
-                        window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
-                    });
+			if (o.carpeta === "Área de capacitación") {
+        		window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
+    			} else {
+       			 window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+    			}
+		});
 
                     card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
                     ofertasContainer.appendChild(card);
@@ -548,7 +574,6 @@
             mostrarSlide(slideIndex);
         }
 
-        // REDIRECCIÓN Y DESPLAZAMIENTO SUAVE
         function irAExploraServicios() {
             document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
         }
@@ -569,6 +594,32 @@
         
         function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
 
+        // HELPER PARA COMPRIMIR IMÁGENES Y PREVENIR EXCEDER LÍMITE DE FIRESTORE (1MB)
+        function comprimirImagen(file, maxWidth, quality, callback) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    callback(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
         document.getElementById('inputHeroTitulo').addEventListener('input', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
         document.getElementById('inputHeroSubtitulo').addEventListener('input', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
@@ -580,43 +631,21 @@
         document.getElementById('inputLogo').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if(file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 300; 
-                        canvas.height = (img.height * 300) / img.width;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        window.db.logo = canvas.toDataURL('image/jpeg', 0.7);
-                        actualizarWeb();
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                comprimirImagen(file, 250, 0.6, (base64) => {
+                    window.db.logo = base64;
+                    actualizarWeb();
+                });
             }
         });
 
         document.getElementById('inputCarrusel').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if(file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 800; 
-                        canvas.height = (img.height * 800) / img.width;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        if(!window.db.carrusel) window.db.carrusel = [];
-                        window.db.carrusel.push(canvas.toDataURL('image/jpeg', 0.6));
-                        actualizarWeb();
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                comprimirImagen(file, 600, 0.5, (base64) => {
+                    if(!window.db.carrusel) window.db.carrusel = [];
+                    window.db.carrusel.push(base64);
+                    actualizarWeb();
+                });
             }
         });
 
@@ -624,29 +653,9 @@
         document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 600;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        ofertaImgBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                comprimirImagen(file, 500, 0.5, (base64) => {
+                    ofertaImgBase64 = base64;
+                });
             }
         });
 
@@ -654,24 +663,27 @@
             e.preventDefault();
             const descCorta = document.getElementById('ofertaDesc').value;
             const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
+            const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
             
             window.db.ofertas.push({ 
                 id: Date.now(), 
                 titulo: document.getElementById('ofertaTitulo').value, 
                 descripcion: descCorta, 
                 detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
-                carpeta: document.getElementById('ofertaCarpetaSelect').value, 
+                seccion: document.getElementById('ofertaSeccionSelect').value,
+                carpeta: carpetaSelec, 
                 img: ofertaImgBase64 
             });
             ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
         });
 
         document.getElementById('enlaceForm').addEventListener('submit', (e) => {
-            e.preventDefault(); window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
+            e.preventDefault(); 
+            window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
             document.getElementById('enlaceForm').reset(); actualizarWeb();
         });
 
-        function eliminarOferta(id) { if(confirm('¿Eliminar oferta?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
+        function eliminarOferta(id) { if(confirm('¿Eliminar elemento?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
         function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
 
         cargarDatosFirebase();
