@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
             --primary: #0284c7;
             --primary-dark: #0369a1;
             --accent-orange: #f97316;
-            --secondary: #0f172a;
+            --secondary: #122750;
             --light: #f8fafc; 
             --texto-titulos: #0f172a;
             --texto-parrafos: #475569;
@@ -160,6 +160,9 @@
         .footer-box p { margin-bottom: 0.5rem; color: #94a3b8; }
         .footer-box i { color: var(--primary); margin-right: 8px; }
         .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #334155; font-size: 0.85rem; color: #64748b; }
+        .buttons-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+        .btn-contacto { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        .btn-dinamico { background-color: #475569; }
 
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
     </style>
@@ -174,8 +177,8 @@
             <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
         </div>
         <nav class="header-nav">
-            <a href="index.html">Inicio</a>
-            <a href="index.html">Cursos</a>
+            <a id="btnNavInicio" href="index.html">Inicio</a>
+            <a id="btnNavCatalogo" href="catalogo.html">Catálogo de Cursos</a>
         </nav>
         <a href="#contacto" class="btn-cotizar">Solicitar cotización</a>
     </header>
@@ -236,15 +239,25 @@
 
             <div class="footer-box">
                 <h4>📍 Dónde Estamos</h4>
-                <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, Zapopan, Jal.</p>
+                <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, 45080</p>
+                <p style="margin-bottom: 10px;">Zapopan, Jal.</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10463.634299083964!2d-103.41990379999994!3d20.619324799999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af59d114bd4d%3A0xe5e1900985aad461!2sCasa%20Monochrome%20!5e1!3m2!1ses-419!2smx!4v1783747707397!5m2!1ses-419!2smx" width="100%" height="150" style="border:0; border-radius: 8px;" loading="lazy"></iframe>
             </div>
 
             <div class="footer-box">
-                <h4>⏰ Contacto</h4>
+                <h4>⏰ Horario de Atención</h4>
+                <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
+                <p><i class=" "></i></p>
+                <h4> Contactos</h4>
                 <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
             </div>
+        </div>
+
+        <div style="max-width: 1100px; margin: 2rem auto 0 auto; padding: 1.5rem 1rem 0 1rem; border-top: 1px solid #334155; text-align: center;">
+            <h4 style="color: white; font-size: 1.2rem; margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Redes</h4>
+            <div class="buttons-list" id="enlacesDinamicosContainer"></div>
         </div>
 
         <div class="footer-bottom">
@@ -268,23 +281,28 @@
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
 
-       // MAPEO DE CARPETAS DISPONIBLES
+        // MAPEO ESTÁNDAR DE CARPETAS DISPONIBLES
         const CARPETAS_DEFINIDAS = [
-            { id: "Área de capacitación", nombre: "Área de capacitación" },
-            { id: "Próximos Cursos", nombre: "Próximos Cursos" }
+            { id: "Próximos Cursos", nombre: "Próximos Cursos" },
+            { id: "Área de capacitación", nombre: "Área de capacitación" }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
         const idOferta = parseInt(urlParams.get('id'));
         const esAdmin = urlParams.get('modo') === 'editar';
+        const urlAdminParam = esAdmin ? '?modo=editar' : '';
 
         let datosDB = {};
         let ofertaActual = null;
 
         if (esAdmin) {
             document.getElementById('editorAdmin').style.display = 'block';
-            document.getElementById('btnVolver').href = `index.html?modo=editar`;
         }
+
+        // Aplicar estado admin en enlaces superiores y botón volver
+        document.getElementById('btnVolver').href = `index.html${urlAdminParam}`;
+        document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+        document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
 
         async function cargarDetalle() {
             try {
@@ -298,7 +316,7 @@
                     if (ofertaActual) {
                         renderizarDetalle();
                     } else {
-                        document.getElementById('detalleCard').innerHTML = `<div style="padding: 3rem; text-align: center;"><h2>Oferta no encontrada</h2><a href="index.html" class="btn-volver">Volver</a></div>`;
+                        document.getElementById('detalleCard').innerHTML = `<div style="padding: 3rem; text-align: center;"><h2>Oferta no encontrada</h2><a href="index.html${urlAdminParam}" class="btn-volver">Volver</a></div>`;
                     }
                 }
             } catch (e) {
@@ -309,20 +327,22 @@
         }
 
         function renderizarDetalle() {
-            // Header & Nombre Marca
             document.getElementById('nombreEmpresaView').innerText = datosDB.nombre || 'Punto Clave Formación';
             document.getElementById('footerNombre').innerText = datosDB.nombre || 'Punto Clave Formación';
 
+            const logoContainer = document.getElementById('headerLogoView');
+            const logoHomeUrl = `index.html${urlAdminParam}`;
             if(datosDB.logo) {
-                document.getElementById('headerLogoView').innerHTML = `<a href="index.html"><img src="${datosDB.logo}" alt="Logo"></a>`;
+                logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${datosDB.logo}" alt="${datosDB.nombre}"></a>`;
+            } else {
+                logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${datosDB.nombre || 'Punto Clave Formación'}</a>`;
             }
 
             // Datos Oferta
             document.getElementById('detalleTitulo').innerText = ofertaActual.titulo;
             
-            // Obtener el nombre legible de la carpeta
             const carpetaObj = CARPETAS_DEFINIDAS.find(c => c.id === ofertaActual.carpeta);
-            document.getElementById('detalleCarpeta').innerText = carpetaObj ? carpetaObj.nombre : (ofertaActual.carpeta || 'Área de capacitación');
+            document.getElementById('detalleCarpeta').innerText = carpetaObj ? carpetaObj.nombre : (ofertaActual.carpeta || 'Próximos Cursos');
             
             document.getElementById('detalleTexto').innerText = ofertaActual.detalleCompleto || ofertaActual.descripcion;
 
@@ -337,7 +357,15 @@
             const mensaje = encodeURIComponent(`Hola, me interesa obtener información sobre la capacitación: ${ofertaActual.titulo}`);
             document.getElementById('btnWspContacto').href = `https://wa.me/${numWsp}?text=${mensaje}`;
 
-            // Si es Admin, rellenar selector de carpetas
+            // Enlaces adicionales del footer
+            const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
+            enlacesContainer.innerHTML = '';
+            if (datosDB.enlacesVecinos) {
+                datosDB.enlacesVecinos.forEach(link => {
+                    enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
+                });
+            }
+
             if (esAdmin) {
                 document.getElementById('editTitulo').value = ofertaActual.titulo;
                 document.getElementById('editDetalle').value = ofertaActual.detalleCompleto || ofertaActual.descripcion;
@@ -354,15 +382,19 @@
             }
         }
 
-        // Evento Guardar Cambios para el Administrador
         document.getElementById('btnGuardarCambios').addEventListener('click', async () => {
             if(!ofertaActual) return;
 
+            const nuevoDetalle = document.getElementById('editDetalle').value;
             ofertaActual.titulo = document.getElementById('editTitulo').value;
             ofertaActual.carpeta = document.getElementById('editCarpeta').value;
-            ofertaActual.detalleCompleto = document.getElementById('editDetalle').value;
+            ofertaActual.detalleCompleto = nuevoDetalle;
+            
+            // Garantizar actualización sincronizada en descripción corta
+            if (!ofertaActual.descripcion || ofertaActual.descripcion.trim() === "") {
+                ofertaActual.descripcion = nuevoDetalle;
+            }
 
-            // Actualizar arreglo global de ofertas
             const index = datosDB.ofertas.findIndex(o => o.id === idOferta);
             if(index !== -1) {
                 datosDB.ofertas[index] = ofertaActual;
