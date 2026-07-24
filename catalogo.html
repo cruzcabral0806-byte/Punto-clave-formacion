@@ -222,12 +222,14 @@
             }
         }
 
+        // CORRECCIÓN CLAVE: Se removió { merge: true } para sobrescribir la lista con el elemento borrado
         async function guardarDatos() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
-                await setDoc(docRef, window.db, { merge: true });
+                await setDoc(docRef, window.db);
             } catch (e) {
                 console.error("Error al actualizar datos:", e);
+                alert("Error guardando en Firebase: " + e.message);
             }
         }
 
@@ -288,15 +290,20 @@
                         window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
                     });
 
-                    // Eliminación correcta deteniendo la propagación del evento y esperando a Firebase
+                    // Eliminación asegurando la actualización completa en Firebase
                     const btnBorrar = card.querySelector('.btn-eliminar');
                     btnBorrar.addEventListener('click', async (e) => {
                         e.stopPropagation();
                         e.preventDefault();
 
                         if (confirm('¿Eliminar curso del catálogo?')) {
-                            window.db.ofertas = window.db.ofertas.filter(item => item.id !== o.id);
+                            // Filtra la oferta por su ID
+                            window.db.ofertas = window.db.ofertas.filter(item => Number(item.id) !== Number(o.id));
+                            
+                            // Guarda la base de datos actualizada en Firebase
                             await guardarDatos();
+                            
+                            // Re-renderiza la lista de cursos
                             renderizarCatalogo();
                         }
                     });
