@@ -19,7 +19,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--light); color: var(--texto-titulos); line-height: 1.6; }
 
-        /* HEADER */
         header {
             background-color: var(--secondary);
             color: white;
@@ -55,7 +54,6 @@
 
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
 
-        /* SECCIÓN TÍTULO */
         .section-title-center { 
             text-align: center;
             font-size: 2.2rem; 
@@ -75,7 +73,6 @@
             border-radius: 2px;
         }
 
-        /* GRID DE OFERTAS */
         .ofertas-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
@@ -99,7 +96,6 @@
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
-        /* FOOTER */
         footer { background-color: var(--secondary); color: #cbd5e1; padding: 3rem 1rem 1.5rem 1rem; margin-top: 4rem; border-top: 4px solid var(--primary); }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left; font-size: 0.95rem; }
         .footer-box h4 { color: white; font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; }
@@ -117,12 +113,10 @@
 
     <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando catálogo...</div>
 
-    <!-- HEADER -->
     <header>
-        <!-- Cambia esto en el HEADER -->
-<div class="header-logo" id="headerLogoView">
-    <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
-</div>
+        <div class="header-logo" id="headerLogoView">
+            <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
+        </div>
         <nav class="header-nav">
             <a id="btnNavInicio" href="index.html">Inicio</a>
             <a id="btnNavCatalogo" href="catalogo.html" class="active">Catálogo de Cursos</a>
@@ -136,7 +130,6 @@
         <div class="ofertas-grid" id="ofertasCatalogoContainer"></div>
     </div>
 
-    <!-- FOOTER -->
     <footer id="contacto">
         <div class="footer-content">
             <div class="footer-box">
@@ -178,8 +171,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -190,20 +183,16 @@
             appId: "1:469116413284:web:55552558b94235f62e4671"
         };
 
-        // 1. Inicialización de Firebase
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
         const auth = getAuth(app);
 
-        // 2. Control del Estado de la Sesión
         let usuarioAutenticado = null;
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 usuarioAutenticado = user;
-                console.log("Sesión activa de administrador:", user.email);
             } else {
                 usuarioAutenticado = null;
-                console.warn("No hay sesión de administrador activa.");
             }
         });
 
@@ -217,7 +206,6 @@
             document.body.classList.add('es-admin');
         }
 
-        // Aplicar estado admin a enlaces de navegación
         document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
         document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
         document.getElementById('btnCotizarFooter').href = `index.html${urlAdminParam}#contacto`;
@@ -251,27 +239,26 @@
         }
 
         function renderizarCatalogo() {
-    const elNombreEmpresa = document.getElementById('nombreEmpresaView');
-    if (elNombreEmpresa) {
-        elNombreEmpresa.innerText = window.db.nombre || "Punto Clave Formación";
-    }
+            const elNombreEmpresa = document.getElementById('nombreEmpresaView');
+            if (elNombreEmpresa) {
+                elNombreEmpresa.innerText = window.db.nombre || "Punto Clave Formación";
+            }
 
-    const elFooterNombre = document.getElementById('footerNombre');
-    if (elFooterNombre) {
-        elFooterNombre.innerText = window.db.nombre || "Punto Clave Formación";
-    }
+            const elFooterNombre = document.getElementById('footerNombre');
+            if (elFooterNombre) {
+                elFooterNombre.innerText = window.db.nombre || "Punto Clave Formación";
+            }
 
-    const logoContainer = document.getElementById('headerLogoView');
-    if (logoContainer) {
-        const logoHomeUrl = `index.html${urlAdminParam}`;
-        if (window.db.logo) {
-            logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
-        } else {
-            logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text" id="nombreEmpresaView">${window.db.nombre || 'Punto Clave Formación'}</a>`;
-        }
-    }
+            const logoContainer = document.getElementById('headerLogoView');
+            if (logoContainer) {
+                const logoHomeUrl = `index.html${urlAdminParam}`;
+                if (window.db.logo) {
+                    logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
+                } else {
+                    logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text" id="nombreEmpresaView">${window.db.nombre || 'Punto Clave Formación'}</a>`;
+                }
+            }
 
-            // Enlaces adicionales del footer
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
             enlacesContainer.innerHTML = '';
             if (window.db.enlacesVecinos) {
@@ -283,14 +270,13 @@
             const contenedor = document.getElementById('ofertasCatalogoContainer');
             contenedor.innerHTML = '';
 
-            // Filtrar cursos pertenecientes al catálogo
             const ofertasFiltradas = window.db.ofertas.filter(o => {
                 const seccion = o.seccion ? o.seccion : "servicios";
                 return seccion === "catalogo" || o.carpeta === "Área de capacitación";
             });
 
             if (ofertasFiltradas.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay cursos disponibles en el catálogo por el momento. (Entra en modo editor desde el inicio para agregar contenido).</div>`;
+                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay cursos disponibles en el catálogo por el momento.</div>`;
             } else {
                 ofertasFiltradas.forEach(o => {
                     const card = document.createElement('div');
@@ -309,21 +295,14 @@
                         </div>
                     `;
 
-                    // Redirección al detalle
                     card.addEventListener('click', (e) => {
                         if(e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
                         window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
                     });
 
-                    // Lógica para borrar curso
                     card.querySelector('.btn-eliminar').addEventListener('click', async (e) => {
                         e.stopPropagation();
-
-                        if (!auth.currentUser) {
-                            alert("Atención: No detectamos sesión de administrador. Inicia sesión en la página principal (index.html) primero.");
-                            return;
-                        }
 
                         if (confirm('¿Eliminar curso del catálogo?')) {
                             window.db.ofertas = window.db.ofertas.filter(item => item.id !== o.id);
@@ -340,7 +319,6 @@
             }
         }
 
-        // Cargar catálogo al iniciar la página
         cargarDatosCatalogo();
     </script>
 </body>
