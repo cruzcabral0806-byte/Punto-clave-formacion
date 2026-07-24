@@ -177,7 +177,31 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+async function borrarCurso(indexABorrar) {
+  if (!confirm("¿Estás seguro de que deseas eliminar este curso?")) return;
+
+  try {
+    // 1. Eliminar el curso del arreglo local por su índice
+    cursosArray.splice(indexABorrar, 1);
+
+    // 2. Guardar el arreglo actualizado en Firestore
+    const db = getFirestore();
+    const docRef = doc(db, "configuracion", "general");
+
+    await setDoc(docRef, { cursos: cursosArray }, { merge: true });
+
+    alert("Curso eliminado con éxito");
+    
+    // 3. Volver a renderizar la lista en pantalla
+    renderizarCatalogo();
+
+  } catch (error) {
+    console.error("Error al borrar el curso:", error);
+    alert("No se pudo borrar el curso. Error: " + error.message);
+  }
+}
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -187,6 +211,19 @@
             messagingSenderId: "469116413284",
             appId: "1:469116413284:web:55552558b94235f62e4671"
         };
+
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const auth = getAuth();
+
+// Verificar si hay sesión activa antes de borrar
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Usuario autenticado correctamente:", user.email);
+  } else {
+    console.warn("No hay usuario autenticado. Inicia sesión en index.html primero.");
+  }
+});
 
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
