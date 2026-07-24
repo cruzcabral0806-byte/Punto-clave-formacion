@@ -281,16 +281,22 @@
                         </div>
                     `;
 
+                    // Redirección al detalle al hacer clic en la tarjeta
                     card.addEventListener('click', (e) => {
-                        if(e.target.classList.contains('btn-eliminar')) return;
+                        if (e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
                         window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
                     });
 
-                    card.querySelector('.btn-eliminar').addEventListener('click', () => {
-                        if(confirm('¿Eliminar curso del catálogo?')) {
+                    // Eliminación correcta deteniendo la propagación del evento y esperando a Firebase
+                    const btnBorrar = card.querySelector('.btn-eliminar');
+                    btnBorrar.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        if (confirm('¿Eliminar curso del catálogo?')) {
                             window.db.ofertas = window.db.ofertas.filter(item => item.id !== o.id);
-                            guardarDatos();
+                            await guardarDatos();
                             renderizarCatalogo();
                         }
                     });
