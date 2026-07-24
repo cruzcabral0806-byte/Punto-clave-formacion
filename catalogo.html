@@ -177,31 +177,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-async function borrarCurso(indexABorrar) {
-  if (!confirm("¿Estás seguro de que deseas eliminar este curso?")) return;
-
-  try {
-    // 1. Eliminar el curso del arreglo local por su índice
-    cursosArray.splice(indexABorrar, 1);
-
-    // 2. Guardar el arreglo actualizado en Firestore
-    const db = getFirestore();
-    const docRef = doc(db, "configuracion", "general");
-
-    await setDoc(docRef, { cursos: cursosArray }, { merge: true });
-
-    alert("Curso eliminado con éxito");
-    
-    // 3. Volver a renderizar la lista en pantalla
-    renderizarCatalogo();
-
-  } catch (error) {
-    console.error("Error al borrar el curso:", error);
-    alert("No se pudo borrar el curso. Error: " + error.message);
-  }
-}
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -212,21 +189,22 @@ async function borrarCurso(indexABorrar) {
             appId: "1:469116413284:web:55552558b94235f62e4671"
         };
 
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-const auth = getAuth();
-
-// Verificar si hay sesión activa antes de borrar
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Usuario autenticado correctamente:", user.email);
-  } else {
-    console.warn("No hay usuario autenticado. Inicia sesión en index.html primero.");
-  }
-});
-
+        // 1. Inicialización de Firebase
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
+        const auth = getAuth(app);
+
+        // 2. Control del Estado de la Sesión
+        let usuarioAutenticado = null;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                usuarioAutenticado = user;
+                console.log("Sesión activa de administrador:", user.email);
+            } else {
+                usuarioAutenticado = null;
+                console.warn("No hay sesión de administrador activa.");
+            }
+        });
 
         window.db = { ofertas: [], nombre: "Punto Clave Formación" };
 
@@ -263,8 +241,11 @@ onAuthStateChanged(auth, (user) => {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
                 await setDoc(docRef, window.db, { merge: true });
+                return true;
             } catch (e) {
-                console.error("Error al actualizar datos:", e);
+                console.error("Error al actualizar datos en Firestore:", e);
+                alert("Error al guardar cambios: " + e.message);
+                return false;
             }
         }
 
@@ -292,7 +273,7 @@ onAuthStateChanged(auth, (user) => {
             const contenedor = document.getElementById('ofertasCatalogoContainer');
             contenedor.innerHTML = '';
 
-            // Muestra lo etiquetado como catalogo o perteneciente a "Área de capacitación"
+            // Filtrar cursos pertenecientes al catálogo
             const ofertasFiltradas = window.db.ofertas.filter(o => {
                 const seccion = o.seccion ? o.seccion : "servicios";
                 return seccion === "catalogo" || o.carpeta === "Área de capacitación";
@@ -318,17 +299,29 @@ onAuthStateChanged(auth, (user) => {
                         </div>
                     `;
 
+                    // Redirección al detalle
                     card.addEventListener('click', (e) => {
                         if(e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
                         window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
                     });
 
-                    card.querySelector('.btn-eliminar').addEventListener('click', () => {
-                        if(confirm('¿Eliminar curso del catálogo?')) {
+                    // Lógica para borrar curso
+                    card.querySelector('.btn-eliminar').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+
+                        if (!auth.currentUser) {
+                            alert("Atención: No detectamos sesión de administrador. Inicia sesión en la página principal (index.html) primero.");
+                            return;
+                        }
+
+                        if (confirm('¿Eliminar curso del catálogo?')) {
                             window.db.ofertas = window.db.ofertas.filter(item => item.id !== o.id);
-                            guardarDatos();
-                            renderizarCatalogo();
+                            const exito = await guardarDatos();
+                            if (exito) {
+                                alert("Curso eliminado con éxito.");
+                                renderizarCatalogo();
+                            }
                         }
                     });
 
@@ -337,6 +330,7 @@ onAuthStateChanged(auth, (user) => {
             }
         }
 
+        // Cargar catálogo al iniciar la página
         cargarDatosCatalogo();
     </script>
 </body>
