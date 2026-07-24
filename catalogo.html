@@ -97,6 +97,8 @@
         .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
         .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
+        
+        /* Oculta los botones de borrar por defecto si no es admin autenticado */
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
         /* FOOTER */
@@ -178,6 +180,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -190,21 +193,22 @@
 
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
+        const auth = getAuth(app);
 
         window.db = { ofertas: [], nombre: "Punto Clave Formación" };
+        let esAdminAutenticado = false;
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const esAdmin = urlParams.get('modo') === 'editar';
-        const urlAdminParam = esAdmin ? '?modo=editar' : '';
-
-        if (esAdmin) {
-            document.body.classList.add('es-admin');
-        }
-
-        // Aplicar estado admin a enlaces de navegación
-        document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
-        document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
-        document.getElementById('btnCotizarFooter').href = `index.html${urlAdminParam}#contacto`;
+        // Comprobación de autenticación de usuario en tiempo real
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                esAdminAutenticado = true;
+                document.body.classList.add('es-admin');
+            } else {
+                esAdminAutenticado = false;
+                document.body.classList.remove('es-admin');
+            }
+            renderizarCatalogo();
+        });
 
         async function cargarDatosCatalogo() {
             try {
@@ -222,7 +226,6 @@
             }
         }
 
-        // CORRECCIÓN CLAVE: Se removió { merge: true } para sobrescribir la lista con el elemento borrado
         async function guardarDatos() {
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
@@ -238,14 +241,13 @@
             document.getElementById('footerNombre').innerText = window.db.nombre || "Punto Clave Formación";
 
             const logoContainer = document.getElementById('headerLogoView');
-            const logoHomeUrl = `index.html${urlAdminParam}`;
+            const logoHomeUrl = `index.html`;
             if(window.db.logo) {
                 logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
             } else {
                 logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre || 'Punto Clave Formación'}</a>`;
             }
 
-            // Enlaces adicionales del footer
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
             enlacesContainer.innerHTML = '';
             if (window.db.enlacesVecinos) {
@@ -257,14 +259,13 @@
             const contenedor = document.getElementById('ofertasCatalogoContainer');
             contenedor.innerHTML = '';
 
-            // Muestra lo etiquetado como catalogo o perteneciente a "Área de capacitación"
             const ofertasFiltradas = window.db.ofertas.filter(o => {
                 const seccion = o.seccion ? o.seccion : "servicios";
                 return seccion === "catalogo" || o.carpeta === "Área de capacitación";
             });
 
             if (ofertasFiltradas.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay cursos disponibles en el catálogo por el momento. (Entra en modo editor desde el inicio para agregar contenido).</div>`;
+                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay cursos disponibles en el catálogo por el momento.</div>`;
             } else {
                 ofertasFiltradas.forEach(o => {
                     const card = document.createElement('div');
@@ -286,24 +287,23 @@
                     // Redirección al detalle al hacer clic en la tarjeta
                     card.addEventListener('click', (e) => {
                         if (e.target.classList.contains('btn-eliminar')) return;
-                        const paramAdmin = esAdmin ? '&modo=editar' : '';
-                        window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                        window.location.href = `detalle.html?id=${o.id}`;
                     });
 
-                    // Eliminación asegurando la actualización completa en Firebase
+                    // Eliminación con verificación de usuario autenticado
                     const btnBorrar = card.querySelector('.btn-eliminar');
                     btnBorrar.addEventListener('click', async (e) => {
                         e.stopPropagation();
                         e.preventDefault();
 
+                        if (!esAdminAutenticado) {
+                            alert("Acceso denegado: Debes iniciar sesión como administrador.");
+                            return;
+                        }
+
                         if (confirm('¿Eliminar curso del catálogo?')) {
-                            // Filtra la oferta por su ID
                             window.db.ofertas = window.db.ofertas.filter(item => Number(item.id) !== Number(o.id));
-                            
-                            // Guarda la base de datos actualizada en Firebase
                             await guardarDatos();
-                            
-                            // Re-renderiza la lista de cursos
                             renderizarCatalogo();
                         }
                     });
