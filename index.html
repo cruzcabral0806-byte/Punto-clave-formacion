@@ -385,23 +385,29 @@
         const auth = getAuth(app);
 
         // BOTÓN LOGIN
-        const btnLogin = document.getElementById('btnLogin');
-        if (btnLogin) {
-            btnLogin.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('emailInput').value;
-                const password = document.getElementById('passwordInput').value;
+        // BOTÓN LOGIN
+const btnLogin = document.getElementById('btnLogin');
+if (btnLogin) {
+    btnLogin.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('emailInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
 
-                try {
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    console.log("¡Sesión iniciada con éxito!", userCredential.user.email);
-                    alert("¡Bienvenido al panel!");
-                } catch (error) {
-                    console.error("Error al iniciar sesión:", error);
-                    alert("Correo o contraseña incorrectos");
-                }
-            });
+        if (!email || !password) {
+            alert("Ingresa correo y contraseña.");
+            return;
         }
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("¡Sesión iniciada con éxito!", userCredential.user.email);
+            alert("¡Bienvenido al panel!");
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error.code, error.message);
+            alert("Error de Firebase [" + error.code + "]: " + error.message);
+        }
+    });
+}
 
         // BOTÓN LOGOUT
         const btnLogout = document.getElementById('btnLogout');
