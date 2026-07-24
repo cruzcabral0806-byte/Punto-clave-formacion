@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -119,9 +119,10 @@
 
     <!-- HEADER -->
     <header>
-        <div class="header-logo" id="headerLogoView">
-            <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
-        </div>
+        <!-- Cambia esto en el HEADER -->
+<div class="header-logo" id="headerLogoView">
+    <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
+</div>
         <nav class="header-nav">
             <a id="btnNavInicio" href="index.html">Inicio</a>
             <a id="btnNavCatalogo" href="catalogo.html" class="active">Catálogo de Cursos</a>
@@ -177,7 +178,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -188,8 +190,22 @@
             appId: "1:469116413284:web:55552558b94235f62e4671"
         };
 
+        // 1. Inicialización de Firebase
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
+        const auth = getAuth(app);
+
+        // 2. Control del Estado de la Sesión
+        let usuarioAutenticado = null;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                usuarioAutenticado = user;
+                console.log("Sesión activa de administrador:", user.email);
+            } else {
+                usuarioAutenticado = null;
+                console.warn("No hay sesión de administrador activa.");
+            }
+        });
 
         window.db = { ofertas: [], nombre: "Punto Clave Formación" };
 
@@ -226,22 +242,34 @@
             try {
                 const docRef = doc(dbFirestore, "configuracion", "general");
                 await setDoc(docRef, window.db, { merge: true });
+                return true;
             } catch (e) {
-                console.error("Error al actualizar datos:", e);
+                console.error("Error al actualizar datos en Firestore:", e);
+                alert("Error al guardar cambios: " + e.message);
+                return false;
             }
         }
 
         function renderizarCatalogo() {
-            document.getElementById('nombreEmpresaView').innerText = window.db.nombre || "Punto Clave Formación";
-            document.getElementById('footerNombre').innerText = window.db.nombre || "Punto Clave Formación";
+    const elNombreEmpresa = document.getElementById('nombreEmpresaView');
+    if (elNombreEmpresa) {
+        elNombreEmpresa.innerText = window.db.nombre || "Punto Clave Formación";
+    }
 
-            const logoContainer = document.getElementById('headerLogoView');
-            const logoHomeUrl = `index.html${urlAdminParam}`;
-            if(window.db.logo) {
-                logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
-            } else {
-                logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre || 'Punto Clave Formación'}</a>`;
-            }
+    const elFooterNombre = document.getElementById('footerNombre');
+    if (elFooterNombre) {
+        elFooterNombre.innerText = window.db.nombre || "Punto Clave Formación";
+    }
+
+    const logoContainer = document.getElementById('headerLogoView');
+    if (logoContainer) {
+        const logoHomeUrl = `index.html${urlAdminParam}`;
+        if (window.db.logo) {
+            logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
+        } else {
+            logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text" id="nombreEmpresaView">${window.db.nombre || 'Punto Clave Formación'}</a>`;
+        }
+    }
 
             // Enlaces adicionales del footer
             const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
@@ -255,7 +283,7 @@
             const contenedor = document.getElementById('ofertasCatalogoContainer');
             contenedor.innerHTML = '';
 
-            // Muestra lo etiquetado como catalogo o perteneciente a "Área de capacitación"
+            // Filtrar cursos pertenecientes al catálogo
             const ofertasFiltradas = window.db.ofertas.filter(o => {
                 const seccion = o.seccion ? o.seccion : "servicios";
                 return seccion === "catalogo" || o.carpeta === "Área de capacitación";
@@ -281,17 +309,29 @@
                         </div>
                     `;
 
+                    // Redirección al detalle
                     card.addEventListener('click', (e) => {
                         if(e.target.classList.contains('btn-eliminar')) return;
                         const paramAdmin = esAdmin ? '&modo=editar' : '';
                         window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
                     });
 
-                    card.querySelector('.btn-eliminar').addEventListener('click', () => {
-                        if(confirm('¿Eliminar curso del catálogo?')) {
+                    // Lógica para borrar curso
+                    card.querySelector('.btn-eliminar').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+
+                        if (!auth.currentUser) {
+                            alert("Atención: No detectamos sesión de administrador. Inicia sesión en la página principal (index.html) primero.");
+                            return;
+                        }
+
+                        if (confirm('¿Eliminar curso del catálogo?')) {
                             window.db.ofertas = window.db.ofertas.filter(item => item.id !== o.id);
-                            guardarDatos();
-                            renderizarCatalogo();
+                            const exito = await guardarDatos();
+                            if (exito) {
+                                alert("Curso eliminado con éxito.");
+                                renderizarCatalogo();
+                            }
                         }
                     });
 
@@ -300,6 +340,7 @@
             }
         }
 
+        // Cargar catálogo al iniciar la página
         cargarDatosCatalogo();
     </script>
 </body>
