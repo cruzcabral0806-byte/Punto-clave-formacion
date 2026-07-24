@@ -152,6 +152,7 @@
         .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.2rem; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; }
         .btn-panel { background: var(--secondary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: auto; }
+        .btn-logout { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 0.5rem; }
         .admin-link-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.4rem; margin-top: 0.4rem; border-radius: 4px; border: 1px solid #e2e8f0; font-size: 0.8rem;}
         .btn-mini-borrar { background: #ef4444; color: white; border: none; padding: 0.1rem 0.4rem; border-radius: 3px; cursor: pointer;}
 
@@ -227,9 +228,34 @@
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
         <!-- PANEL DE ADMINISTRACIÓN -->
-        <div class="admin-panel">
+        <div class="admin-panel" id="adminPanel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
             <div class="admin-grid">
+
+                <!-- 0. LOGIN Y SESIÓN -->
+                <div class="admin-box">
+                    <div>
+                        <h3>0. Acceso Administrador</h3>
+                        <div id="loginSection">
+                            <div class="form-group">
+                                <label>Correo:</label>
+                                <input type="email" id="emailInput" placeholder="admin@ejemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Contraseña:</label>
+                                <input type="password" id="passwordInput" placeholder="••••••••">
+                            </div>
+                            <button id="btnLogin" class="btn-panel">Iniciar Sesión</button>
+                        </div>
+                        <div id="userSection" style="display: none;">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #16a34a; font-weight: bold;">
+                                <i class="fa-solid fa-circle-check"></i> Sesión activa: <span id="userEmailSpan"></span>
+                            </p>
+                            <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="admin-box">
                     <div>
                         <h3>1. Identidad</h3>
@@ -239,6 +265,7 @@
                         <div class="form-group"><label>Subir Logo:</label><input type="file" id="inputLogo" accept="image/*"></div>
                     </div>
                 </div>
+
                 <div class="admin-box">
                     <div>
                         <h3>2. Contactos Fijos</h3>
@@ -247,6 +274,7 @@
                         <div class="form-group"><label>WhatsApp:</label><input type="text" id="inputWsp"></div>
                     </div>
                 </div>
+
                 <div class="admin-box">
                     <form id="ofertaForm">
                         <h3>3. Publicar Elemento</h3>
@@ -268,6 +296,7 @@
                         <button type="submit" class="btn-panel">Publicar</button>
                     </form>
                 </div>
+
                 <div class="admin-box">
                     <form id="enlaceForm">
                         <h3>4. Enlaces Vecinos</h3>
@@ -284,6 +313,7 @@
                     </form>
                     <div id="adminEnlacesLista"></div>
                 </div>
+
                 <div class="admin-box">
                     <div>
                         <h3>5. Carrusel de Fotos</h3>
@@ -291,6 +321,7 @@
                         <div id="adminCarruselLista"></div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -338,6 +369,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -350,6 +382,52 @@
 
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
+        const auth = getAuth(app);
+
+        // BOTÓN LOGIN
+        const btnLogin = document.getElementById('btnLogin');
+        if (btnLogin) {
+            btnLogin.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('emailInput').value;
+                const password = document.getElementById('passwordInput').value;
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    console.log("¡Sesión iniciada con éxito!", userCredential.user.email);
+                    alert("¡Bienvenido al panel!");
+                } catch (error) {
+                    console.error("Error al iniciar sesión:", error);
+                    alert("Correo o contraseña incorrectos");
+                }
+            });
+        }
+
+        // BOTÓN LOGOUT
+        const btnLogout = document.getElementById('btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', () => {
+                signOut(auth).then(() => alert("Sesión cerrada"));
+            });
+        }
+
+        // OBSERVADOR DE AUTENTICACIÓN
+        onAuthStateChanged(auth, (user) => {
+            const loginSection = document.getElementById('loginSection');
+            const userSection = document.getElementById('userSection');
+            const userEmailSpan = document.getElementById('userEmailSpan');
+
+            if (user) {
+                // Usuario Autenticado
+                if (loginSection) loginSection.style.display = 'none';
+                if (userSection) userSection.style.display = 'block';
+                if (userEmailSpan) userEmailSpan.innerText = user.email;
+            } else {
+                // Visitante sin sesión
+                if (loginSection) loginSection.style.display = 'block';
+                if (userSection) userSection.style.display = 'none';
+            }
+        });
 
         // MAPEO ESTÁNDAR DE CARPETAS DISPONIBLES
         const CARPETAS_DEFINIDAS = [
@@ -378,7 +456,7 @@
         
         if (esAdmin) {
             document.body.classList.add('es-admin');
-            document.querySelector('.admin-panel').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'block';
         }
 
         // Mantener el estado de admin en las navegaciones principales
@@ -428,7 +506,6 @@
             });
         }
 
-        // Sincronizar dinámicamente selector de carpeta con la sección de destino
         document.getElementById('ofertaCarpetaSelect').addEventListener('change', (e) => {
             const seccionSelect = document.getElementById('ofertaSeccionSelect');
             if (e.target.value === "Área de capacitación") {
@@ -599,7 +676,6 @@
         
         function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
 
-        // HELPER PARA COMPRIMIR IMÁGENES Y PREVENIR EXCEDER LÍMITE DE FIRESTORE (1MB)
         function comprimirImagen(file, maxWidth, quality, callback) {
             const reader = new FileReader();
             reader.onload = function (event) {
@@ -670,7 +746,6 @@
             const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
             const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
             
-            // Asignación automática de sección en función de la carpeta
             let seccionDestino = document.getElementById('ofertaSeccionSelect').value;
             if (carpetaSelec === "Área de capacitación") {
                 seccionDestino = "catalogo";
