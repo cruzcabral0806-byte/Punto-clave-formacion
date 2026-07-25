@@ -691,7 +691,7 @@
         document.getElementById('inputLogo').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if(file) {
-                comprimirImagen(file, 250, 0.6, (base64) => {
+                comprimirImagen(file, 600, 0.9, (base64) => {
                     window.db.logo = base64;
                     actualizarWeb();
                 });
