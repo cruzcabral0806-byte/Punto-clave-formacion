@@ -107,6 +107,55 @@
         .btn-dinamico { background-color: #475569; }
 
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+
+        /* --- Estilos para la sección: ¿Por qué capacitarte con nosotros? --- */
+        .features-banner {
+            background-color: #f0f9ff; /* Fondo azul muy suave */
+            border: 1px solid #bae6fd; /* Borde sutil a juego */
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .features-title {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.05rem;
+            color: var(--texto-parrafos);
+            font-weight: 600;
+        }
+
+        .feature-item i {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        /* Ajuste para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .features-list {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -127,6 +176,26 @@
     <div class="container">
         <h2 class="section-title-center">Catálogo General de Cursos</h2>
         
+        <!-- INICIO: Sección ¿Por qué capacitarte con nosotros? -->
+        <div class="features-banner">
+            <h3 class="features-title">¿Por qué capacitarte con nosotros?</h3>
+            <div class="features-list">
+                <div class="feature-item">
+                    <i class="fa-solid fa-chalkboard-user"></i> Instructores con experiencia
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-laptop-file"></i> Cursos presenciales y en línea
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-certificate"></i> Constancias con validez
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-user-check"></i> Atención personalizada
+                </div>
+            </div>
+        </div>
+        <!-- FIN: Sección ¿Por qué capacitarte con nosotros? -->
+
         <div class="ofertas-grid" id="ofertasCatalogoContainer"></div>
     </div>
 
