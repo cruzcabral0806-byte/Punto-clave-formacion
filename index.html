@@ -32,15 +32,96 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 0.8rem;
         }
 
         .header-logo { display: flex; align-items: center; max-height: 50px; }
         .header-logo img { max-height: 45px; object-fit: contain; }
-        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; }
+        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; white-space: nowrap; }
 
-        .header-nav { display: flex; gap: 2rem; align-items: center; }
-        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; }
+        /* Botón Hamburguesa Móvil */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .header-nav { display: flex; gap: 1.5rem; align-items: center; transition: all 0.3s ease-in-out; }
+        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; white-space: nowrap; }
         .header-nav a:hover, .header-nav a.active { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
+
+        /* --- Barra y Lupa de Búsqueda --- */
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.4rem 0.8rem 0.4rem 2rem;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            font-size: 0.9rem;
+            width: 170px;
+            transition: width 0.3s ease;
+            background-color: #ffffff;
+            color: var(--texto-titulos);
+        }
+
+        .search-input:focus {
+            width: 220px;
+            border-color: var(--accent-orange);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        .search-results-dropdown {
+            position: absolute;
+            top: 115%;
+            right: 0;
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 2000;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--texto-titulos);
+            text-decoration: none;
+        }
+
+        .search-result-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .search-result-item img {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
 
         .btn-cotizar {
             background-color: var(--accent-orange);
@@ -51,6 +132,7 @@
             font-weight: bold;
             font-size: 0.95rem;
             transition: background 0.2s ease;
+            white-space: nowrap;
         }
         .btn-cotizar:hover { background-color: #ea580c; }
 
@@ -68,10 +150,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
-        @media (max-width: 868px) {
-            .hero-section { grid-template-columns: 1fr; padding: 1.5rem; }
-        }
-
         .hero-content h1 { font-size: 2.5rem; color: var(--secondary); line-height: 1.2; margin-bottom: 1rem; font-weight: 800; }
         .hero-content p { font-size: 1.15rem; color: var(--texto-parrafos); margin-bottom: 2rem; }
 
@@ -79,7 +157,7 @@
         .btn-hero-primary { background-color: var(--accent-orange); color: white; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; cursor: pointer; }
         .btn-hero-secondary { border: 2px solid var(--secondary); color: var(--secondary); padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; }
 
-        .hero-features { display: flex; gap: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; font-size: 0.85rem; color: var(--texto-parrafos); font-weight: 600; }
+        .hero-features { display: flex; gap: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; font-size: 0.85rem; color: var(--texto-parrafos); font-weight: 600; flex-wrap: wrap; }
         .hero-feature-item { display: flex; align-items: center; gap: 0.5rem; }
         .hero-feature-item i { color: var(--primary); font-size: 1.2rem; }
 
@@ -120,7 +198,7 @@
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
             gap: 1.5rem; 
-            margin-bottom: 3rem; 
+            margin-bottom: 1.5rem; 
             min-height: 120px;
         }
         .oferta-card { 
@@ -138,6 +216,33 @@
         .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
         body:not(.es-admin) .btn-eliminar { display: none !important; }
+
+        /* Botón Ver Más */
+        .ver-mas-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn-ver-mas {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-ver-mas:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
 
         .admin-panel { display: none; background: #f1f5f9; padding: 2rem; border-radius: 12px; margin-bottom: 3rem; border: 2px dashed #cbd5e1; color: #1e293b; }
         .admin-panel h2 { margin-bottom: 1rem; font-size: 1.4rem; }
@@ -163,6 +268,29 @@
         .btn-dinamico { background-color: #475569; }
 
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+
+        /* Media Queries Responsivos */
+        @media (max-width: 868px) {
+            .hero-section { grid-template-columns: 1fr; padding: 1.5rem; }
+            .menu-toggle { display: block; }
+
+            .header-nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary);
+                padding: 1rem 0;
+                border-top: 1px solid #334155;
+                gap: 1rem;
+            }
+
+            .header-nav.active { display: flex; }
+
+            .search-box { width: 100%; justify-content: center; }
+            .search-input { width: 90%; }
+            .search-input:focus { width: 95%; }
+            .search-results-dropdown { width: 90%; left: 5%; right: 5%; }
+        }
     </style>
 </head>
 <body>
@@ -173,12 +301,25 @@
         <div class="header-logo" id="headerLogoView">
             <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
         </div>
-        <nav class="header-nav">
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="header-nav" id="headerNav">
             <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
             <a id="btnNavCursos">Cursos</a>
             <a id="btnNavCatalogo" href="catalogo.html">Catálogo de Cursos</a>
+            
+            <!-- Buscador Lupa -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
+                <div id="searchResults" class="search-results-dropdown"></div>
+            </div>
+
+            <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
         </nav>
-        <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
     </header>
 
     <div class="container">
@@ -216,7 +357,15 @@
         <h2 class="section-title-center" id="secServicios">Explora nuestros servicios</h2>
 
         <div class="carpetas-container" id="carpetasBarra"></div>
+        
         <div class="ofertas-grid" id="ofertasContainer"></div>
+
+        <!-- Botón Ver Más -->
+        <div class="ver-mas-container" id="verMasContainer" style="display: none;">
+            <button id="btnVerMas" class="btn-ver-mas">
+                Ver más cursos <i class="fa-solid fa-chevron-down"></i>
+            </button>
+        </div>
 
         <div class="admin-panel" id="adminPanel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
@@ -355,405 +504,506 @@
     </footer>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
-            authDomain: "punto-clave-formacion.firebaseapp.com",
-            projectId: "punto-clave-formacion",
-            storageBucket: "punto-clave-formacion.firebasestorage.app",
-            messagingSenderId: "469116413284",
-            appId: "1:469116413284:web:55552558b94235f62e4671"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
+        authDomain: "punto-clave-formacion.firebaseapp.com",
+        projectId: "punto-clave-formacion",
+        storageBucket: "punto-clave-formacion.firebasestorage.app",
+        messagingSenderId: "469116413284",
+        appId: "1:469116413284:web:55552558b94235f62e4671"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const dbFirestore = getFirestore(app);
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const dbFirestore = getFirestore(app);
+    const auth = getAuth(app);
 
-        const btnLogin = document.getElementById('btnLogin');
-        if (btnLogin) {
-            btnLogin.addEventListener('click', async (e) => {
+    // Toggle Menú Hamburguesa
+    const menuToggle = document.getElementById('menuToggle');
+    const headerNav = document.getElementById('headerNav');
+
+    if (menuToggle && headerNav) {
+        menuToggle.addEventListener('click', () => {
+            headerNav.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-xmark');
+            }
+        });
+    }
+
+    const btnLogin = document.getElementById('btnLogin');
+    if (btnLogin) {
+        btnLogin.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+
+            if (!email || !password) {
+                alert("Ingresa correo y contraseña.");
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                alert("¡Bienvenido al panel!");
+            } catch (error) {
+                console.error("Error al iniciar sesión:", error.code, error.message);
+                alert("Error de Firebase [" + error.code + "]: " + error.message);
+            }
+        });
+    }
+
+    const btnLogout = document.getElementById('btnLogout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            signOut(auth).then(() => alert("Sesión cerrada"));
+        });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        const loginSection = document.getElementById('loginSection');
+        const userSection = document.getElementById('userSection');
+        const userEmailSpan = document.getElementById('userEmailSpan');
+
+        if (user) {
+            if (loginSection) loginSection.style.display = 'none';
+            if (userSection) userSection.style.display = 'block';
+            if (userEmailSpan) userEmailSpan.innerText = user.email;
+        } else {
+            if (loginSection) loginSection.style.display = 'block';
+            if (userSection) userSection.style.display = 'none';
+        }
+    });
+
+    const CARPETAS_DEFINIDAS = [
+        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
+        { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
+    ];
+
+    const defectoDB = {
+        nombre: "Punto Clave Formación", 
+        heroTitulo: "Impulsamos tu crecimiento profesional",
+        heroSubtitulo: "Capacitación práctica, actualizada y de calidad para personas y empresas.",
+        logo: "",
+        email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030",
+        ofertas: [],
+        enlacesVecinos: [], carrusel: []
+    };
+
+    window.db = defectoDB;
+    let carpetaSeleccionada = CARPETAS_DEFINIDAS[0]; 
+    let slideIndex = 0;
+    let carruselInterval;
+    let mostrarTodosLosCursos = false;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const esAdmin = urlParams.get('modo') === 'editar';
+    const urlAdminParam = esAdmin ? '?modo=editar' : '';
+    
+    if (esAdmin) {
+        document.body.classList.add('es-admin');
+        document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+    document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
+
+    const btnVerMas = document.getElementById('btnVerMas');
+    if (btnVerMas) {
+        btnVerMas.addEventListener('click', (e) => {
+            e.preventDefault();
+            mostrarTodosLosCursos = !mostrarTodosLosCursos;
+            renderizarOfertas();
+        });
+    }
+
+    async function cargarDatosFirebase() {
+        try {
+            const docRef = doc(dbFirestore, "configuracion", "general");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                window.db = docSnap.data();
+                if(!window.db.ofertas) window.db.ofertas = [];
+                if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
+                if(!window.db.carrusel) window.db.carrusel = [];
+                if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
+                if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
+            } else {
+                await setDoc(docRef, defectoDB);
+                window.db = defectoDB;
+            }
+        } catch (error) {
+            console.error("Error cargando desde Firebase:", error);
+        } finally {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            inicializarInputs();
+            actualizarWeb();
+            configurarBuscador();
+        }
+    }
+
+    function configurarBuscador() {
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        if (!searchInput || !searchResults) return;
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const resultados = (window.db.ofertas || []).filter(o => 
+                o.titulo.toLowerCase().includes(query) || 
+                (o.descripcion && o.descripcion.toLowerCase().includes(query))
+            );
+
+            searchResults.innerHTML = '';
+
+            if (resultados.length === 0) {
+                searchResults.innerHTML = `<div style="padding: 0.8rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No se encontraron cursos</div>`;
+            } else {
+                resultados.forEach(o => {
+                    const item = document.createElement('a');
+                    item.className = 'search-result-item';
+                    const paramAdmin = esAdmin ? '&modo=editar' : '';
+                    item.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                    
+                    const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
+
+                    item.innerHTML = `
+                        <img src="${imgSrc}" alt="${o.titulo}">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${o.titulo}</div>
+                            <span style="font-size: 0.75rem; color: #0284c7; font-weight: bold;">${o.carpeta || 'Próximos Cursos'}</span>
+                        </div>
+                    `;
+                    searchResults.appendChild(item);
+                });
+            }
+            searchResults.style.display = 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+    }
+
+    function inicializarInputs() {
+        document.getElementById('inputNombre').value = window.db.nombre || '';
+        document.getElementById('inputHeroTitulo').value = window.db.heroTitulo || '';
+        document.getElementById('inputHeroSubtitulo').value = window.db.heroSubtitulo || '';
+        document.getElementById('inputEmail').value = window.db.email || '';
+        document.getElementById('inputTel').value = window.db.tel || '';
+        document.getElementById('inputWsp').value = window.db.wsp || '';
+
+        const selectCarpeta = document.getElementById('ofertaCarpetaSelect');
+        selectCarpeta.innerHTML = '';
+        CARPETAS_DEFINIDAS.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.innerText = c.nombre;
+            selectCarpeta.appendChild(opt);
+        });
+    }
+
+    document.getElementById('ofertaCarpetaSelect').addEventListener('change', (e) => {
+        const seccionSelect = document.getElementById('ofertaSeccionSelect');
+        if (e.target.value === "Área de capacitación") {
+            seccionSelect.value = "catalogo";
+        } else {
+            seccionSelect.value = "servicios";
+        }
+    });
+
+    async function guardarDatos() {
+        try {
+            const docRef = doc(dbFirestore, "configuracion", "general");
+            await setDoc(docRef, window.db, { merge: true });
+        } catch (e) {
+            console.error("Error al guardar en Firebase: ", e);
+        }
+    }
+
+    function renderizarOfertas() {
+        const ofertasContainer = document.getElementById('ofertasContainer'); 
+        const verMasContainer = document.getElementById('verMasContainer');
+        ofertasContainer.innerHTML = '';
+
+        const carpetaActualId = carpetaSeleccionada ? carpetaSeleccionada.id : CARPETAS_DEFINIDAS[0].id;
+
+        const ofertasFiltradas = window.db.ofertas.filter(o => {
+            const seccion = o.seccion || "servicios";
+            const carpetaOferta = o.carpeta || CARPETAS_DEFINIDAS[0].id;
+            return seccion === "servicios" && carpetaOferta === carpetaActualId;
+        });
+
+        if (ofertasFiltradas.length === 0) {
+            ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
+            if (verMasContainer) verMasContainer.style.display = 'none';
+            return;
+        }
+
+        const ofertasAMostrar = (!mostrarTodosLosCursos) ? ofertasFiltradas.slice(0, 4) : ofertasFiltradas;
+
+        ofertasAMostrar.forEach(o => {
+            const card = document.createElement('div'); 
+            card.className = 'oferta-card';
+            card.style.cursor = 'pointer'; 
+            
+            const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
+
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="${o.titulo}">
+                <div class="oferta-content">
+                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">
+                        ${o.titulo}
+                    </h3>
+                    <button class="btn-eliminar">Borrar</button>
+                </div>
+            `;
+            
+            card.addEventListener('click', (e) => {
+                if(e.target.classList.contains('btn-eliminar')) return;
+                const paramAdmin = esAdmin ? '&modo=editar' : '';
+                window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
+            });
+
+            card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
+            ofertasContainer.appendChild(card);
+        });
+
+        if (verMasContainer) {
+            if (ofertasFiltradas.length > 4) {
+                verMasContainer.style.display = 'block';
+                const restantes = ofertasFiltradas.length - 4;
+                if (mostrarTodosLosCursos) {
+                    btnVerMas.innerHTML = 'Ver menos <i class="fa-solid fa-chevron-up"></i>';
+                } else {
+                    btnVerMas.innerHTML = `Ver más cursos (${restantes}) <i class="fa-solid fa-chevron-down"></i>`;
+                }
+            } else {
+                verMasContainer.style.display = 'none';
+            }
+        }
+    }
+
+    function actualizarWeb() {
+        guardarDatos();
+        
+        document.getElementById('nombreEmpresaView').innerText = window.db.nombre;
+        document.getElementById('footerNombre').innerText = window.db.nombre;
+        document.getElementById('heroTituloView').innerText = window.db.heroTitulo;
+        document.getElementById('heroSubtituloView').innerText = window.db.heroSubtitulo;
+        
+        const logoContainer = document.getElementById('headerLogoView');
+        const logoHomeUrl = `index.html${urlAdminParam}`;
+        if(window.db.logo) {
+            logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
+        } else {
+            logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre}</a>`;
+        }
+
+        const contenedor = document.getElementById('carruselContenedor');
+        const track = document.getElementById('carruselTrack');
+        const adminCarruselLista = document.getElementById('adminCarruselLista');
+        track.innerHTML = ''; adminCarruselLista.innerHTML = '';
+
+        if (window.db.carrusel && window.db.carrusel.length > 0) {
+            contenedor.style.display = 'block';
+            window.db.carrusel.forEach((imgSrc, index) => {
+                track.innerHTML += `<div class="carrusel-slide"><img src="${imgSrc}"></div>`;
+                adminCarruselLista.innerHTML += `<div class="admin-link-item"><span>🖼️ Foto ${index + 1}</span><button class="btn-mini-borrar" data-index="${index}">x</button></div>`;
+            });
+            
+            adminCarruselLista.querySelectorAll('.btn-mini-borrar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = e.target.getAttribute('data-index');
+                    window.db.carrusel.splice(idx, 1);
+                    slideIndex = 0;
+                    actualizarWeb();
+                });
+            });
+
+            iniciarAutoCarrusel();
+        } else {
+            contenedor.style.display = 'none';
+            clearInterval(carruselInterval);
+        }
+
+        const barra = document.getElementById('carpetasBarra');
+        barra.innerHTML = '';
+
+        if (!carpetaSeleccionada) {
+            carpetaSeleccionada = CARPETAS_DEFINIDAS[0];
+        }
+
+        CARPETAS_DEFINIDAS.forEach(c => {
+            const btnC = document.createElement('button');
+            const esActiva = (carpetaSeleccionada.id === c.id);
+            btnC.className = `btn-carpeta ${esActiva ? 'active' : ''}`;
+            btnC.innerHTML = `${c.icono} ${c.nombre}`;
+            
+            btnC.addEventListener('click', (e) => {
                 e.preventDefault();
-                const email = document.getElementById('emailInput').value.trim();
-                const password = document.getElementById('passwordInput').value.trim();
-
-                if (!email || !password) {
-                    alert("Ingresa correo y contraseña.");
+                if (c.id === "Área de capacitación") {
+                    window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
                     return;
                 }
 
-                try {
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    alert("¡Bienvenido al panel!");
-                } catch (error) {
-                    console.error("Error al iniciar sesión:", error.code, error.message);
-                    alert("Error de Firebase [" + error.code + "]: " + error.message);
-                }
+                carpetaSeleccionada = c; 
+                mostrarTodosLosCursos = false;
+                actualizarWeb();         
             });
-        }
-
-        const btnLogout = document.getElementById('btnLogout');
-        if (btnLogout) {
-            btnLogout.addEventListener('click', () => {
-                signOut(auth).then(() => alert("Sesión cerrada"));
-            });
-        }
-
-        onAuthStateChanged(auth, (user) => {
-            const loginSection = document.getElementById('loginSection');
-            const userSection = document.getElementById('userSection');
-            const userEmailSpan = document.getElementById('userEmailSpan');
-
-            if (user) {
-                if (loginSection) loginSection.style.display = 'none';
-                if (userSection) userSection.style.display = 'block';
-                if (userEmailSpan) userEmailSpan.innerText = user.email;
-            } else {
-                if (loginSection) loginSection.style.display = 'block';
-                if (userSection) userSection.style.display = 'none';
-            }
+            barra.appendChild(btnC);
         });
 
-        const CARPETAS_DEFINIDAS = [
-            { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
-            { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
-        ];
+        renderizarOfertas();
 
-        const defectoDB = {
-            nombre: "Punto Clave Formación", 
-            heroTitulo: "Impulsamos tu crecimiento profesional",
-            heroSubtitulo: "Capacitación práctica, actualizada y de calidad para personas y empresas.",
-            logo: "",
-            email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030",
-            ofertas: [],
-            enlacesVecinos: [], carrusel: []
-        };
-
-        window.db = defectoDB;
-        let carpetaSeleccionada = CARPETAS_DEFINIDAS[0]; 
-        let slideIndex = 0;
-        let carruselInterval;
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const esAdmin = urlParams.get('modo') === 'editar';
-        const urlAdminParam = esAdmin ? '?modo=editar' : '';
+        const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
+        const adminEnlacesLista = document.getElementById('adminEnlacesLista');
+        enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
         
-        if (esAdmin) {
-            document.body.classList.add('es-admin');
-            document.getElementById('adminPanel').style.display = 'block';
-        }
-
-        document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
-        document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
-
-        async function cargarDatosFirebase() {
-            try {
-                const docRef = doc(dbFirestore, "configuracion", "general");
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    window.db = docSnap.data();
-                    if(!window.db.ofertas) window.db.ofertas = [];
-                    if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
-                    if(!window.db.carrusel) window.db.carrusel = [];
-                    if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
-                    if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
-                } else {
-                    await setDoc(docRef, defectoDB);
-                    window.db = defectoDB;
-                }
-            } catch (error) {
-                console.error("Error cargando desde Firebase:", error);
-            } finally {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                inicializarInputs();
-                actualizarWeb();
-            }
-        }
-
-        function inicializarInputs() {
-            document.getElementById('inputNombre').value = window.db.nombre || '';
-            document.getElementById('inputHeroTitulo').value = window.db.heroTitulo || '';
-            document.getElementById('inputHeroSubtitulo').value = window.db.heroSubtitulo || '';
-            document.getElementById('inputEmail').value = window.db.email || '';
-            document.getElementById('inputTel').value = window.db.tel || '';
-            document.getElementById('inputWsp').value = window.db.wsp || '';
-
-            const selectCarpeta = document.getElementById('ofertaCarpetaSelect');
-            selectCarpeta.innerHTML = '';
-            CARPETAS_DEFINIDAS.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.innerText = c.nombre;
-                selectCarpeta.appendChild(opt);
-            });
-        }
-
-        document.getElementById('ofertaCarpetaSelect').addEventListener('change', (e) => {
-            const seccionSelect = document.getElementById('ofertaSeccionSelect');
-            if (e.target.value === "Área de capacitación") {
-                seccionSelect.value = "catalogo";
-            } else {
-                seccionSelect.value = "servicios";
-            }
+        window.db.enlacesVecinos.forEach(link => {
+            enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
+            
+            const itemL = document.createElement('div');
+            itemL.className = "admin-link-item";
+            itemL.innerHTML = `<span><i class="${link.icono}"></i> ${link.nombre}</span><button class="btn-mini-borrar">x</button>`;
+            itemL.querySelector('.btn-mini-borrar').addEventListener('click', () => eliminarEnlace(link.id));
+            adminEnlacesLista.appendChild(itemL);
         });
 
-        async function guardarDatos() {
-            try {
-                const docRef = doc(dbFirestore, "configuracion", "general");
-                await setDoc(docRef, window.db, { merge: true });
-            } catch (e) {
-                console.error("Error al guardar en Firebase: ", e);
-            }
-        }
+        mostrarSlide(slideIndex);
+    }
 
-        function actualizarWeb() {
-            guardarDatos();
-            
-            document.getElementById('nombreEmpresaView').innerText = window.db.nombre;
-            document.getElementById('footerNombre').innerText = window.db.nombre;
-            document.getElementById('heroTituloView').innerText = window.db.heroTitulo;
-            document.getElementById('heroSubtituloView').innerText = window.db.heroSubtitulo;
-            
-            const logoContainer = document.getElementById('headerLogoView');
-            const logoHomeUrl = `index.html${urlAdminParam}`;
-            if(window.db.logo) {
-                logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
-            } else {
-                logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre}</a>`;
-            }
+    function irAExploraServicios() {
+        document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
+    }
 
-            const contenedor = document.getElementById('carruselContenedor');
-            const track = document.getElementById('carruselTrack');
-            const adminCarruselLista = document.getElementById('adminCarruselLista');
-            track.innerHTML = ''; adminCarruselLista.innerHTML = '';
+    document.getElementById('btnNavCursos').addEventListener('click', irAExploraServicios);
+    document.getElementById('btnExplorarCursos').addEventListener('click', irAExploraServicios);
 
-            if (window.db.carrusel && window.db.carrusel.length > 0) {
-                contenedor.style.display = 'block';
-                window.db.carrusel.forEach((imgSrc, index) => {
-                    track.innerHTML += `<div class="carrusel-slide"><img src="${imgSrc}"></div>`;
-                    adminCarruselLista.innerHTML += `<div class="admin-link-item"><span>🖼️ Foto ${index + 1}</span><button class="btn-mini-borrar" data-index="${index}">x</button></div>`;
-                });
-                
-                adminCarruselLista.querySelectorAll('.btn-mini-borrar').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const idx = e.target.getAttribute('data-index');
-                        window.db.carrusel.splice(idx, 1);
-                        slideIndex = 0;
-                        actualizarWeb();
-                    });
-                });
+    function mostrarSlide(index) {
+        const track = document.getElementById('carruselTrack');
+        const slides = document.querySelectorAll('.carrusel-slide');
+        if (slides.length === 0) return;
+        if (index >= slides.length) slideIndex = 0;
+        if (index < 0) slideIndex = slides.length - 1;
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+    
+    window.cambiarSlide = function(direccion) { slideIndex += direccion; mostrarSlide(slideIndex); iniciarAutoCarrusel(); }
+    
+    function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
 
-                iniciarAutoCarrusel();
-            } else {
-                contenedor.style.display = 'none';
-                clearInterval(carruselInterval);
-            }
+    function comprimirImagen(file, maxWidth, quality, callback) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
 
-            const barra = document.getElementById('carpetasBarra');
-            barra.innerHTML = '';
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                canvas.width = width;
+                canvas.height = height;
 
-            if (!carpetaSeleccionada) {
-                carpetaSeleccionada = CARPETAS_DEFINIDAS[0];
-            }
-
-            CARPETAS_DEFINIDAS.forEach(c => {
-                const btnC = document.createElement('button');
-                const esActiva = (carpetaSeleccionada.id === c.id);
-                btnC.className = `btn-carpeta ${esActiva ? 'active' : ''}`;
-                btnC.innerHTML = `${c.icono} ${c.nombre}`;
-                
-                btnC.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (c.id === "Área de capacitación") {
-                        window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
-                        return;
-                    }
-
-                    carpetaSeleccionada = c; 
-                    actualizarWeb();         
-                });
-                barra.appendChild(btnC);
-            });
-
-            const ofertasContainer = document.getElementById('ofertasContainer'); 
-            ofertasContainer.innerHTML = '';
-            
-            const carpetaActualId = carpetaSeleccionada ? carpetaSeleccionada.id : CARPETAS_DEFINIDAS[0].id;
-
-            const ofertasFiltradas = window.db.ofertas.filter(o => {
-                const seccion = o.seccion ? o.seccion : "servicios";
-                const carpetaOferta = o.carpeta ? o.carpeta : CARPETAS_DEFINIDAS[0].id;
-                return seccion === "servicios" && carpetaOferta === carpetaActualId;
-            });
-
-            if (ofertasFiltradas.length === 0) {
-                ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
-            } else {
-                ofertasFiltradas.forEach(o => {
-                    const card = document.createElement('div'); 
-                    card.className = 'oferta-card';
-                    card.style.cursor = 'pointer'; 
-                    
-                    const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
-
-                    card.innerHTML = `
-                        <img src="${imgSrc}" alt="${o.titulo}">
-                        <div class="oferta-content">
-                            <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">
-                                ${o.titulo}
-                            </h3>
-                            <button class="btn-eliminar">Borrar</button>
-                        </div>
-                    `;
-                    
-                    card.addEventListener('click', (e) => {
-                        if(e.target.classList.contains('btn-eliminar')) return;
-                        const paramAdmin = esAdmin ? '&modo=editar' : '';
-                        window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
-                    });
-
-                    card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
-                    ofertasContainer.appendChild(card);
-                });
-            }
-
-            const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
-            const adminEnlacesLista = document.getElementById('adminEnlacesLista');
-            enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
-            
-            window.db.enlacesVecinos.forEach(link => {
-                enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
-                
-                const itemL = document.createElement('div');
-                itemL.className = "admin-link-item";
-                itemL.innerHTML = `<span><i class="${link.icono}"></i> ${link.nombre}</span><button class="btn-mini-borrar">x</button>`;
-                itemL.querySelector('.btn-mini-borrar').addEventListener('click', () => eliminarEnlace(link.id));
-                adminEnlacesLista.appendChild(itemL);
-            });
-
-            mostrarSlide(slideIndex);
-        }
-
-        function irAExploraServicios() {
-            document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        document.getElementById('btnNavCursos').addEventListener('click', irAExploraServicios);
-        document.getElementById('btnExplorarCursos').addEventListener('click', irAExploraServicios);
-
-        function mostrarSlide(index) {
-            const track = document.getElementById('carruselTrack');
-            const slides = document.querySelectorAll('.carrusel-slide');
-            if (slides.length === 0) return;
-            if (index >= slides.length) slideIndex = 0;
-            if (index < 0) slideIndex = slides.length - 1;
-            track.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
-        
-        window.cambiarSlide = function(direccion) { slideIndex += direccion; mostrarSlide(slideIndex); iniciarAutoCarrusel(); }
-        
-        function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
-
-        function comprimirImagen(file, maxWidth, quality, callback) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > maxWidth) {
-                        height = (height * maxWidth) / width;
-                        width = maxWidth;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', quality));
-                };
-                img.src = event.target.result;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL('image/jpeg', quality));
             };
-            reader.readAsDataURL(file);
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
+    document.getElementById('inputHeroTitulo').addEventListener('input', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
+    document.getElementById('inputHeroSubtitulo').addEventListener('input', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
+    
+    document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; guardarDatos(); });
+    document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; guardarDatos(); });
+    document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
+
+    document.getElementById('inputLogo').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            comprimirImagen(file, 600, 0.9, (base64) => {
+                window.db.logo = base64;
+                actualizarWeb();
+            });
+        }
+    });
+
+    document.getElementById('inputCarrusel').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            comprimirImagen(file, 600, 0.5, (base64) => {
+                if(!window.db.carrusel) window.db.carrusel = [];
+                window.db.carrusel.push(base64);
+                actualizarWeb();
+            });
+        }
+    });
+
+    let ofertaImgBase64 = "";
+    document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            comprimirImagen(file, 500, 0.5, (base64) => {
+                ofertaImgBase64 = base64;
+            });
+        }
+    });
+
+    document.getElementById('ofertaForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const descCorta = document.getElementById('ofertaDesc').value;
+        const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
+        const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
+        
+        let seccionDestino = document.getElementById('ofertaSeccionSelect').value;
+        if (carpetaSelec === "Área de capacitación") {
+            seccionDestino = "catalogo";
         }
 
-        document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
-        document.getElementById('inputHeroTitulo').addEventListener('input', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
-        document.getElementById('inputHeroSubtitulo').addEventListener('input', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
-        
-        document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; guardarDatos(); });
-        document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; guardarDatos(); });
-        document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
-
-        document.getElementById('inputLogo').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(file) {
-                comprimirImagen(file, 600, 0.9, (base64) => {
-                    window.db.logo = base64;
-                    actualizarWeb();
-                });
-            }
+        window.db.ofertas.push({ 
+            id: Date.now(), 
+            titulo: document.getElementById('ofertaTitulo').value, 
+            descripcion: descCorta, 
+            detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
+            seccion: seccionDestino,
+            carpeta: carpetaSelec, 
+            img: ofertaImgBase64 
         });
+        ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
+    });
 
-        document.getElementById('inputCarrusel').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(file) {
-                comprimirImagen(file, 600, 0.5, (base64) => {
-                    if(!window.db.carrusel) window.db.carrusel = [];
-                    window.db.carrusel.push(base64);
-                    actualizarWeb();
-                });
-            }
-        });
+    document.getElementById('enlaceForm').addEventListener('submit', (e) => {
+        e.preventDefault(); 
+        window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
+        document.getElementById('enlaceForm').reset(); actualizarWeb();
+    });
 
-        let ofertaImgBase64 = "";
-        document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                comprimirImagen(file, 500, 0.5, (base64) => {
-                    ofertaImgBase64 = base64;
-                });
-            }
-        });
+    function eliminarOferta(id) { if(confirm('¿Eliminar elemento?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
+    function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
 
-        document.getElementById('ofertaForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const descCorta = document.getElementById('ofertaDesc').value;
-            const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
-            const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
-            
-            let seccionDestino = document.getElementById('ofertaSeccionSelect').value;
-            if (carpetaSelec === "Área de capacitación") {
-                seccionDestino = "catalogo";
-            }
-
-            window.db.ofertas.push({ 
-                id: Date.now(), 
-                titulo: document.getElementById('ofertaTitulo').value, 
-                descripcion: descCorta, 
-                detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
-                seccion: seccionDestino,
-                carpeta: carpetaSelec, 
-                img: ofertaImgBase64 
-            });
-            ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
-        });
-
-        document.getElementById('enlaceForm').addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
-            document.getElementById('enlaceForm').reset(); actualizarWeb();
-        });
-
-        function eliminarOferta(id) { if(confirm('¿Eliminar elemento?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
-        function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
-
-        cargarDatosFirebase();
-    </script>
+    cargarDatosFirebase();
+</script>
 </body>
 </html>
