@@ -30,15 +30,95 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 0.8rem;
         }
 
         .header-logo { display: flex; align-items: center; max-height: 50px; }
         .header-logo img { max-height: 45px; object-fit: contain; }
-        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; }
+        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; white-space: nowrap; }
 
-        .header-nav { display: flex; gap: 2rem; align-items: center; }
-        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .header-nav { display: flex; gap: 1.5rem; align-items: center; transition: all 0.3s ease-in-out; }
+        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; white-space: nowrap; }
         .header-nav a:hover, .header-nav a.active { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
+
+        /* Lupa de Búsqueda */
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.4rem 0.8rem 0.4rem 2rem;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            font-size: 0.9rem;
+            width: 170px;
+            transition: width 0.3s ease;
+            background-color: #ffffff;
+            color: var(--texto-titulos);
+        }
+
+        .search-input:focus {
+            width: 220px;
+            border-color: var(--accent-orange);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        .search-results-dropdown {
+            position: absolute;
+            top: 115%;
+            right: 0;
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 2000;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--texto-titulos);
+            text-decoration: none;
+        }
+
+        .search-result-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .search-result-item img {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
 
         .btn-cotizar {
             background-color: var(--accent-orange);
@@ -49,6 +129,7 @@
             font-weight: bold;
             font-size: 0.95rem;
             transition: background 0.2s ease;
+            white-space: nowrap;
         }
         .btn-cotizar:hover { background-color: #ea580c; }
 
@@ -108,10 +189,9 @@
 
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
 
-        /* --- Estilos para la sección: ¿Por qué capacitarte con nosotros? --- */
         .features-banner {
-            background-color: #f0f9ff; /* Fondo azul muy suave */
-            border: 1px solid #bae6fd; /* Borde sutil a juego */
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
             border-radius: 12px;
             padding: 2rem;
             margin-bottom: 3rem;
@@ -147,15 +227,28 @@
             font-size: 1.3rem;
         }
 
-        /* Ajuste para pantallas pequeñas */
-        @media (max-width: 768px) {
+        @media (max-width: 868px) {
             .features-list {
                 flex-direction: column;
                 align-items: center;
                 gap: 1rem;
             }
+            .menu-toggle { display: block; }
+            .header-nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary);
+                padding: 1rem 0;
+                border-top: 1px solid #334155;
+                gap: 1rem;
+            }
+            .header-nav.active { display: flex; }
+            .search-box { width: 100%; justify-content: center; }
+            .search-input { width: 90%; }
+            .search-input:focus { width: 95%; }
+            .search-results-dropdown { width: 90%; left: 5%; right: 5%; }
         }
-        
     </style>
 </head>
 <body>
@@ -166,17 +259,29 @@
         <div class="header-logo" id="headerLogoView">
             <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
         </div>
-        <nav class="header-nav">
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="header-nav" id="headerNav">
             <a id="btnNavInicio" href="index.html">Inicio</a>
             <a id="btnNavCatalogo" href="catalogo.html" class="active">Catálogo de Cursos</a>
+            
+            <!-- Buscador Lupa -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
+                <div id="searchResults" class="search-results-dropdown"></div>
+            </div>
+
+            <a id="btnCotizarFooter" href="index.html#contacto" class="btn-cotizar">Solicitar cotización</a>
         </nav>
-        <a id="btnCotizarFooter" href="index.html#contacto" class="btn-cotizar">Solicitar cotización</a>
     </header>
 
     <div class="container">
         <h2 class="section-title-center">Catálogo General de Cursos</h2>
         
-        <!-- INICIO: Sección ¿Por qué capacitarte con nosotros? -->
         <div class="features-banner">
             <h3 class="features-title">¿Por qué capacitarte con nosotros?</h3>
             <div class="features-list">
@@ -194,7 +299,6 @@
                 </div>
             </div>
         </div>
-        <!-- FIN: Sección ¿Por qué capacitarte con nosotros? -->
 
         <div class="ofertas-grid" id="ofertasCatalogoContainer"></div>
     </div>
@@ -256,6 +360,21 @@
         const dbFirestore = getFirestore(app);
         const auth = getAuth(app);
 
+        // Toggle Menú Hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const headerNav = document.getElementById('headerNav');
+
+        if (menuToggle && headerNav) {
+            menuToggle.addEventListener('click', () => {
+                headerNav.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-xmark');
+                }
+            });
+        }
+
         let usuarioAutenticado = null;
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -292,7 +411,59 @@
             } finally {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 renderizarCatalogo();
+                configurarBuscador();
             }
+        }
+
+        function configurarBuscador() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+
+            if (!searchInput || !searchResults) return;
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                const resultados = (window.db.ofertas || []).filter(o => 
+                    o.titulo.toLowerCase().includes(query) || 
+                    (o.descripcion && o.descripcion.toLowerCase().includes(query))
+                );
+
+                searchResults.innerHTML = '';
+
+                if (resultados.length === 0) {
+                    searchResults.innerHTML = `<div style="padding: 0.8rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No se encontraron cursos</div>`;
+                } else {
+                    resultados.forEach(o => {
+                        const item = document.createElement('a');
+                        item.className = 'search-result-item';
+                        const paramAdmin = esAdmin ? '&modo=editar' : '';
+                        item.href = `detalle.html?id=${o.id}${paramAdmin}`;
+                        
+                        const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
+
+                        item.innerHTML = `
+                            <img src="${imgSrc}" alt="${o.titulo}">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${o.titulo}</div>
+                                <span style="font-size: 0.75rem; color: #0284c7; font-weight: bold;">${o.carpeta || 'Catálogo'}</span>
+                            </div>
+                        `;
+                        searchResults.appendChild(item);
+                    });
+                }
+                searchResults.style.display = 'block';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
         }
 
         async function guardarDatos() {
