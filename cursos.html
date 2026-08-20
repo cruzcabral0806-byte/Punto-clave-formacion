@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Impulsamos tu crecimiento profesional. Capacitación práctica, actualizada y de calidad para personas y empresas.">
+    <title>Nuestros Cursos - Punto Clave Formación</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --accent-orange: #f97316;
+            --secondary: #122750;
+            --light: #f8fafc; 
+            --texto-titulos: #0f172a;
+            --texto-parrafos: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--light); color: var(--texto-titulos); line-height: 1.6; }
+
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .header-logo { display: flex; align-items: center; max-height: 50px; }
+        .header-logo img { max-height: 45px; object-fit: contain; }
+        .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; white-space: nowrap; }
+
+        /* Botón Hamburguesa Móvil */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .header-nav { display: flex; gap: 1.5rem; align-items: center; transition: all 0.3s ease-in-out; }
+        .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; white-space: nowrap; }
+        .header-nav a:hover, .header-nav a.active { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
+
+        /* --- Barra y Lupa de Búsqueda --- */
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.4rem 0.8rem 0.4rem 2rem;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            font-size: 0.9rem;
+            width: 170px;
+            transition: width 0.3s ease;
+            background-color: #ffffff;
+            color: var(--texto-titulos);
+        }
+
+        .search-input:focus {
+            width: 220px;
+            border-color: var(--accent-orange);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        .search-results-dropdown {
+            position: absolute;
+            top: 115%;
+            right: 0;
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 2000;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--texto-titulos);
+            text-decoration: none;
+        }
+
+        .search-result-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .search-result-item img {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .btn-cotizar {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-cotizar:hover { background-color: #ea580c; }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .page-header { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 3rem; text-align: center; }
+        .page-header h1 { color: var(--secondary); font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .page-header p { color: var(--texto-parrafos); font-size: 1.1rem; }
+
+        .categoria-section { margin-bottom: 3.5rem; }
+        .categoria-titulo { font-size: 1.5rem; color: var(--primary-dark); border-bottom: 2px solid var(--accent-orange); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: inline-block; }
+
+        .ofertas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .oferta-card { background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: transform 0.2s; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; text-decoration: none; color: inherit; }
+        .oferta-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
+        .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
+        
+        .btn-volver { display: inline-block; margin-bottom: 1.5rem; color: var(--secondary); text-decoration: none; font-weight: bold; }
+        .btn-volver:hover { color: var(--primary); }
+
+        footer { background-color: var(--secondary); color: #cbd5e1; padding: 3rem 1rem 1.5rem 1rem; margin-top: 4rem; border-top: 4px solid var(--primary); }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left; font-size: 0.95rem; }
+        .footer-box h4 { color: white; font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; }
+        .footer-box p { margin-bottom: 0.5rem; color: #94a3b8; }
+        .footer-box i { color: var(--primary); margin-right: 8px; }
+        .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #334155; font-size: 0.85rem; color: #64748b; }
+        .buttons-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+        .btn-contacto { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; }
+        .btn-dinamico { background-color: #475569; }
+
+        #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+
+        @media (max-width: 868px) {
+            .menu-toggle { display: block; }
+            .header-nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary);
+                padding: 1rem 0;
+                border-top: 1px solid #334155;
+                gap: 1rem;
+            }
+            .header-nav.active { display: flex; }
+            .search-box { width: 100%; justify-content: center; }
+            .search-input { width: 90%; }
+            .search-input:focus { width: 95%; }
+            .search-results-dropdown { width: 90%; left: 5%; right: 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando cursos...</div>
+
+    <header>
+        <div class="header-logo" id="headerLogoView">
+            <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="header-nav" id="headerNav">
+            <a id="btnNavInicio" href="index.html">Inicio</a>
+            <a id="btnNavCursos" href="cursos.html" class="active">Cursos</a>
+            <a id="btnNavCatalogo" href="catalogo.html">Catálogo de cursos</a>
+            <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
+                <div id="searchResults" class="search-results-dropdown"></div>
+            </div>
+
+            <a href="index.html#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="btn-volver" id="btnVolver"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+
+        <div class="page-header">
+            <h1>Nuestros Cursos</h1>
+            <p>Explora nuestra oferta educativa organizada por áreas de especialización para impulsar tu desarrollo profesional.</p>
+        </div>
+
+        <div id="cursosContainer">
+            </div>
+    </div>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-box">
+                <h4>📍 Dónde Estamos</h4>
+                <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, 45080</p>
+                <p style="margin-bottom: 10px;">Zapopan, Jal.</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10463.634299083964!2d-103.41990379999994!3d20.619324799999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af59d114bd4d%3A0xe5e1900985aad461!2sCasa%20Monochrome%20!5e1!3m2!1ses-419!2smx!4v1783747707397!5m2!1ses-419!2smx" width="100%" height="150" style="border:0; border-radius: 8px;" loading="lazy"></iframe>
+            </div>
+
+            <div class="footer-box">
+                <h4>⏰ Horario de Atención</h4>
+                <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
+                <p><i class=" "></i></p>
+	    </div>
+ 	<div class="footer-box">
+                <h4> Contactos</h4>
+                <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
+                <p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
+            </div>
+        </div>
+
+        <div style="max-width: 1100px; margin: 2rem auto 0 auto; padding: 1.5rem 1rem 0 1rem; border-top: 1px solid #334155; text-align: center;">
+            <h4 style="color: white; font-size: 1.2rem; margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Redes</h4>
+            <div class="buttons-list" id="enlacesDinamicosContainer"></div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
+            authDomain: "punto-clave-formacion.firebaseapp.com",
+            projectId: "punto-clave-formacion",
+            storageBucket: "punto-clave-formacion.firebasestorage.app",
+            messagingSenderId: "469116413284",
+            appId: "1:469116413284:web:55552558b94235f62e4671"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const dbFirestore = getFirestore(app);
+
+        // Menú hamburguesa responsive
+        const menuToggle = document.getElementById('menuToggle');
+        const headerNav = document.getElementById('headerNav');
+
+        if (menuToggle && headerNav) {
+            menuToggle.addEventListener('click', () => {
+                headerNav.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-xmark');
+                }
+            });
+        }
+
+        // Constante de categorías
+        const CARPETAS_DEFINIDAS = [
+            { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
+            { id: "Informatica", nombre: "💻 Informática y Microsoft Office", icono: "" },
+            { id: "Autodesk", nombre: "🏗️ Autodesk y Diseño Digital", icono: "" },
+            { id: "Costos", nombre: "💰 Especialización en Costos y Presupuestos", icono: "" },
+            { id: "Construccion", nombre: "👷 Cursos Técnicos en Construcción", icono: "" },
+            { id: "Desarrollo", nombre: "📈 Desarrollo Profesional y Empresarial", icono: "" },
+            { id: "Oficios", nombre: "🔧 Cursos de Oficios", icono: "" },
+            { id: "Maquinaria", nombre: "🚜 Maquinaria Pesada y Operación de Equipo", icono: "" }
+        ];
+
+        let datosDB = {};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const esAdmin = urlParams.get('modo') === 'editar';
+        const urlAdminParam = esAdmin ? '?modo=editar' : '';
+        
+        if(esAdmin) {
+            document.getElementById('btnVolver').href = `index.html${urlAdminParam}`;
+        }
+
+        document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+        document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
+
+        async function cargarDatos() {
+            try {
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    datosDB = docSnap.data();
+                    if(datosDB.nombre) {
+                        document.getElementById('nombreEmpresaView').innerText = datosDB.nombre;
+                        document.getElementById('footerNombre').innerText = datosDB.nombre;
+                    }
+                    if(datosDB.logo) {
+                        document.getElementById('headerLogoView').innerHTML = `<a href="index.html${urlAdminParam}"><img src="${datosDB.logo}" alt="${datosDB.nombre}"></a>`;
+                    }
+                    
+                    renderizarCursos();
+                    renderizarEnlacesVecinos();
+                    configurarBuscador();
+                }
+            } catch (error) {
+                console.error("Error cargando cursos:", error);
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        }
+
+        function renderizarCursos() {
+            const contenedor = document.getElementById('cursosContainer');
+            contenedor.innerHTML = '';
+            const ofertas = datosDB.ofertas || [];
+
+            CARPETAS_DEFINIDAS.forEach(carpeta => {
+                const cursosDeEstaCarpeta = ofertas.filter(o => (o.carpeta || CARPETAS_DEFINIDAS[0].id) === carpeta.id);
+
+                if (cursosDeEstaCarpeta.length > 0) {
+                    const seccion = document.createElement('div');
+                    seccion.className = 'categoria-section';
+
+                    const titulo = document.createElement('h2');
+                    titulo.className = 'categoria-titulo';
+                    titulo.innerHTML = `${carpeta.icono} ${carpeta.nombre}`;
+                    seccion.appendChild(titulo);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'ofertas-grid';
+
+                    cursosDeEstaCarpeta.forEach(o => {
+                        const card = document.createElement('a');
+                        card.className = 'oferta-card';
+                        card.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`;
+                        
+                        const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
+
+                        card.innerHTML = `
+                            <img src="${imgSrc}" alt="${o.titulo}">
+                            <div class="oferta-content">
+                                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600;">${o.titulo}</h3>
+                                <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+
+                    seccion.appendChild(grid);
+                    contenedor.appendChild(seccion);
+                }
+            });
+
+            if (contenedor.innerHTML === '') {
+                contenedor.innerHTML = '<p style="text-align: center; color: #64748b;">Aún no hay cursos publicados.</p>';
+            }
+        }
+
+        function renderizarEnlacesVecinos() {
+            const enlacesContainer = document.getElementById('enlacesDinamicosContainer');
+            if (!enlacesContainer) return;
+            enlacesContainer.innerHTML = '';
+            
+            if (datosDB.enlacesVecinos && datosDB.enlacesVecinos.length > 0) {
+                datosDB.enlacesVecinos.forEach(link => {
+                    enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
+                });
+            }
+        }
+
+        function configurarBuscador() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+
+            if (!searchInput || !searchResults) return;
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                const resultados = (datosDB.ofertas || []).filter(o => 
+                    o.titulo.toLowerCase().includes(query) || 
+                    (o.descripcion && o.descripcion.toLowerCase().includes(query))
+                );
+
+                searchResults.innerHTML = '';
+
+                if (resultados.length === 0) {
+                    searchResults.innerHTML = `<div style="padding: 0.8rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No se encontraron cursos</div>`;
+                } else {
+                    resultados.forEach(o => {
+                        const item = document.createElement('a');
+                        item.className = 'search-result-item';
+                        item.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`;
+                        
+                        const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
+
+                        item.innerHTML = `
+                            <img src="${imgSrc}" alt="${o.titulo}">
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${o.titulo}</div>
+                                <span style="font-size: 0.75rem; color: #0284c7; font-weight: bold;">${o.carpeta || 'Próximos Cursos'}</span>
+                            </div>
+                        `;
+                        searchResults.appendChild(item);
+                    });
+                }
+                searchResults.style.display = 'block';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        cargarDatos();
+    </script>
+</body>
+</html>
