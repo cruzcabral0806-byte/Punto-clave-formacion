@@ -237,6 +237,7 @@
             align-items: center;
             gap: 0.5rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-decoration: none;
         }
 
         .btn-ver-mas:hover {
@@ -307,19 +308,19 @@
         </button>
 
         <nav class="header-nav" id="headerNav">
-    <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
-    <a id="btnNavCursos" href="cursos.html" target="_blank">Cursos</a>
-    <a id="btnNavCatalogo" href="catalogo.html">Catálogo de cursos</a>
-    <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
-    
-    <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
-        <div id="searchResults" class="search-results-dropdown"></div>
-    </div>
+            <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
+            <a id="btnNavCursos" href="cursos.html">Cursos</a>
+            <a id="btnNavCatalogo" href="catalogo.html">Catálogo de cursos</a>
+            <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
+                <div id="searchResults" class="search-results-dropdown"></div>
+            </div>
 
-    <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
-</nav>
+            <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
+        </nav>
     </header>
 
     <div class="container">
@@ -341,7 +342,7 @@
                     <div class="hero-feature-item">
                         <i class="fa-solid fa-shield-halved"></i> Capacitación práctica
                     </div>
-		    <div class="hero-feature-item">
+                    <div class="hero-feature-item">
                         <i class="fa-solid fa-shield-halved"></i> Cursos para empresas
                     </div>
                     <div class="hero-feature-item">
@@ -357,17 +358,17 @@
             </div>
         </div>
 
-        <h2 class="section-title-center" id="secServicios">Explora nuestros proximos cursos</h2>
+        <h2 class="section-title-center" id="secServicios">Explora nuestros próximos cursos</h2>
         <div class="carpetas-container" id="carpetasBarra"></div>
         
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
         <!-- Botón Ver Más -->
         <div class="ver-mas-container" id="verMasContainer" style="display: none;">
-    <a href="cursos.html" target="_blank" class="btn-ver-mas">
-        Ver más cursos <i class="fa-solid fa-arrow-right"></i>
-    </a>
-</div>
+            <a href="cursos.html" class="btn-ver-mas" id="enlaceVerMasCursos">
+                Ver más cursos <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
 
         <div class="admin-panel" id="adminPanel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
@@ -428,7 +429,7 @@
                         <div class="form-group">
                             <label>Sección de destino:</label>
                             <select id="ofertaSeccionSelect">
-                                <option value="servicios">Explora nuestros servicios (Inicio)</option>
+                                <option value="servicios">Explora nuestros próximos cursos (Inicio)</option>
                                 <option value="catalogo">Catálogo de Cursos</option>
                             </select>
                         </div>
@@ -478,9 +479,8 @@
             <div class="footer-box">
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
-                <p><i class=" "></i></p>
-	    </div>
- 	<div class="footer-box">
+            </div>
+            <div class="footer-box">
                 <h4> Contactos</h4>
                 <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
@@ -576,9 +576,15 @@
     });
 
     const CARPETAS_DEFINIDAS = [
-    { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
-    
-];
+        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
+        { id: "Informatica", nombre: "💻 Informática y Microsoft Office", icono: "" },
+        { id: "Autodesk", nombre: "🏗️ Autodesk y Diseño Digital", icono: "" },
+        { id: "Costos", nombre: "💰 Especialización en Costos y Presupuestos", icono: "" },
+        { id: "Construccion", nombre: "👷 Cursos Técnicos en Construcción", icono: "" },
+        { id: "Desarrollo", nombre: "📈 Desarrollo Profesional y Empresarial", icono: "" },
+        { id: "Oficios", nombre: "🔧 Cursos de Oficios", icono: "" },
+        { id: "Maquinaria", nombre: "🚜 Maquinaria Pesada y Operación de Equipo", icono: "" }
+    ];
 
     const defectoDB = {
         nombre: "Punto Clave Formación", 
@@ -594,7 +600,6 @@
     let carpetaSeleccionada = CARPETAS_DEFINIDAS[0]; 
     let slideIndex = 0;
     let carruselInterval;
-    let mostrarTodosLosCursos = false;
 
     const urlParams = new URLSearchParams(window.location.search);
     const esAdmin = urlParams.get('modo') === 'editar';
@@ -606,16 +611,10 @@
     }
 
     document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+    document.getElementById('btnNavCursos').href = `cursos.html${urlAdminParam}`;
     document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
-
-    const btnVerMas = document.getElementById('btnVerMas');
-    if (btnVerMas) {
-        btnVerMas.addEventListener('click', (e) => {
-            e.preventDefault();
-            mostrarTodosLosCursos = !mostrarTodosLosCursos;
-            renderizarOfertas();
-        });
-    }
+    document.getElementById('btnNavNosotros').href = `nosotros.html${urlAdminParam}`;
+    document.getElementById('enlaceVerMasCursos').href = `cursos.html${urlAdminParam}`;
 
     async function cargarDatosFirebase() {
         try {
@@ -712,15 +711,6 @@
         });
     }
 
-    document.getElementById('ofertaCarpetaSelect').addEventListener('change', (e) => {
-        const seccionSelect = document.getElementById('ofertaSeccionSelect');
-        if (e.target.value === "Área de capacitación") {
-            seccionSelect.value = "catalogo";
-        } else {
-            seccionSelect.value = "servicios";
-        }
-    });
-
     async function guardarDatos() {
         try {
             const docRef = doc(dbFirestore, "configuracion", "general");
@@ -749,6 +739,7 @@
             return;
         }
 
+        // Seleccionar máximo 4 cursos para la vista principal del index
         const ofertasAMostrar = ofertasFiltradas.slice(0, 4);
 
         ofertasAMostrar.forEach(o => {
@@ -761,9 +752,10 @@
             card.innerHTML = `
                 <img src="${imgSrc}" alt="${o.titulo}">
                 <div class="oferta-content">
-                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">
-                        ${o.titulo}
-                    </h3>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">${o.titulo}</h3>
+                        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
+                    </div>
                     <button class="btn-eliminar">Borrar</button>
                 </div>
             `;
@@ -845,13 +837,7 @@
             
             btnC.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (c.id === "Área de capacitación") {
-                    window.location.href = `catalogo.html${esAdmin ? '?modo=editar' : ''}`;
-                    return;
-                }
-
                 carpetaSeleccionada = c; 
-                mostrarTodosLosCursos = false;
                 actualizarWeb();         
             });
             barra.appendChild(btnC);
@@ -880,7 +866,10 @@
         document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
     }
 
-    document.getElementById('btnNavCursos').addEventListener('click', irAExploraServicios);
+    document.getElementById('btnNavCursos').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = `cursos.html${urlAdminParam}`;
+    });
     document.getElementById('btnExplorarCursos').addEventListener('click', irAExploraServicios);
 
     function mostrarSlide(index) {
@@ -965,11 +954,7 @@
         const descCorta = document.getElementById('ofertaDesc').value;
         const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
         const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
-        
-        let seccionDestino = document.getElementById('ofertaSeccionSelect').value;
-        if (carpetaSelec === "Área de capacitación") {
-            seccionDestino = "catalogo";
-        }
+        const seccionDestino = document.getElementById('ofertaSeccionSelect').value;
 
         window.db.ofertas.push({ 
             id: Date.now(), 
