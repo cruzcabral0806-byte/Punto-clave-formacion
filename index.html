@@ -173,7 +173,7 @@
         .section-title-center { 
             text-align: center;
             font-size: 2rem; 
-            margin-bottom: 1.5rem; 
+            margin-bottom: 2rem; 
             color: var(--texto-titulos); 
             position: relative;
             font-weight: 700;
@@ -190,9 +190,8 @@
             border-radius: 2px;
         }
 
-        .carpetas-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-        .btn-carpeta { background: white; border: 1px solid #cbd5e1; padding: 0.6rem 1.4rem; border-radius: 50px; cursor: pointer; font-weight: 600; color: var(--secondary); display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; font-size: 0.95rem; }
-        .btn-carpeta:hover, .btn-carpeta.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+        /* Ocultar barra de carpetas visualmente en el index */
+        .carpetas-container { display: none; }
 
         .ofertas-grid { 
             display: grid; 
@@ -422,7 +421,7 @@
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
                         <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
                         <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;">
                             <label>Categoría / Carpeta:</label>
                             <select id="ofertaCarpetaSelect"></select>
                         </div>
@@ -576,14 +575,7 @@
     });
 
     const CARPETAS_DEFINIDAS = [
-        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
-        { id: "Informatica", nombre: "💻 Informática y Microsoft Office", icono: "" },
-        { id: "Autodesk", nombre: "🏗️ Autodesk y Diseño Digital", icono: "" },
-        { id: "Costos", nombre: "💰 Especialización en Costos y Presupuestos", icono: "" },
-        { id: "Construccion", nombre: "👷 Cursos Técnicos en Construcción", icono: "" },
-        { id: "Desarrollo", nombre: "📈 Desarrollo Profesional y Empresarial", icono: "" },
-        { id: "Oficios", nombre: "🔧 Cursos de Oficios", icono: "" },
-        { id: "Maquinaria", nombre: "🚜 Maquinaria Pesada y Operación de Equipo", icono: "" }
+        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }
     ];
 
     const defectoDB = {
@@ -597,7 +589,6 @@
     };
 
     window.db = defectoDB;
-    let carpetaSeleccionada = CARPETAS_DEFINIDAS[0]; 
     let slideIndex = 0;
     let carruselInterval;
 
@@ -717,6 +708,7 @@
             await setDoc(docRef, window.db, { merge: true });
         } catch (e) {
             console.error("Error al guardar en Firebase: ", e);
+            alert("Error al guardar cambios: " + e.message);
         }
     }
 
@@ -725,12 +717,9 @@
         const verMasContainer = document.getElementById('verMasContainer');
         ofertasContainer.innerHTML = '';
 
-        const carpetaActualId = carpetaSeleccionada ? carpetaSeleccionada.id : CARPETAS_DEFINIDAS[0].id;
-
         const ofertasFiltradas = window.db.ofertas.filter(o => {
             const seccion = o.seccion || "servicios";
-            const carpetaOferta = o.carpeta || CARPETAS_DEFINIDAS[0].id;
-            return seccion === "servicios" && carpetaOferta === carpetaActualId;
+            return seccion === "servicios";
         });
 
         if (ofertasFiltradas.length === 0) {
@@ -821,27 +810,6 @@
             contenedor.style.display = 'none';
             clearInterval(carruselInterval);
         }
-
-        const barra = document.getElementById('carpetasBarra');
-        barra.innerHTML = '';
-
-        if (!carpetaSeleccionada) {
-            carpetaSeleccionada = CARPETAS_DEFINIDAS[0];
-        }
-
-        CARPETAS_DEFINIDAS.forEach(c => {
-            const btnC = document.createElement('button');
-            const esActiva = (carpetaSeleccionada.id === c.id);
-            btnC.className = `btn-carpeta ${esActiva ? 'active' : ''}`;
-            btnC.innerHTML = `${c.icono} ${c.nombre}`;
-            
-            btnC.addEventListener('click', (e) => {
-                e.preventDefault();
-                carpetaSeleccionada = c; 
-                actualizarWeb();         
-            });
-            barra.appendChild(btnC);
-        });
 
         renderizarOfertas();
 
@@ -953,7 +921,6 @@
         e.preventDefault();
         const descCorta = document.getElementById('ofertaDesc').value;
         const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
-        const carpetaSelec = document.getElementById('ofertaCarpetaSelect').value;
         const seccionDestino = document.getElementById('ofertaSeccionSelect').value;
 
         window.db.ofertas.push({ 
@@ -962,7 +929,7 @@
             descripcion: descCorta, 
             detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
             seccion: seccionDestino,
-            carpeta: carpetaSelec, 
+            carpeta: "Próximos Cursos", 
             img: ofertaImgBase64 
         });
         ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
