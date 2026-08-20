@@ -262,7 +262,7 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-	import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+		import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         
 	const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
