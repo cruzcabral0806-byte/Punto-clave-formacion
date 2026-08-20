@@ -146,11 +146,14 @@
         .categoria-titulo { font-size: 1.5rem; color: var(--primary-dark); border-bottom: 2px solid var(--accent-orange); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: inline-block; }
 
         .ofertas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-        .oferta-card { background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: transform 0.2s; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; text-decoration: none; color: inherit; }
+        .oferta-card { background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: transform 0.2s; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; }
         .oferta-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); border-color: var(--primary); }
         .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
         .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         
+        .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
+        body:not(.es-admin) .btn-eliminar { display: none !important; }
+
         .btn-volver { display: inline-block; margin-bottom: 1.5rem; color: var(--secondary); text-decoration: none; font-weight: bold; }
         .btn-volver:hover { color: var(--primary); }
 
@@ -222,8 +225,7 @@
             <p>Explora nuestra oferta educativa organizada por áreas de especialización para impulsar tu desarrollo profesional.</p>
         </div>
 
-        <div id="cursosContainer">
-            </div>
+        <div id="cursosContainer"></div>
     </div>
 
     <footer id="contacto">
@@ -238,7 +240,6 @@
             <div class="footer-box">
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
-                <p><i class=" "></i></p>
 	    </div>
  	<div class="footer-box">
                 <h4> Contactos</h4>
@@ -260,7 +261,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
@@ -308,11 +309,13 @@
         const urlAdminParam = esAdmin ? '?modo=editar' : '';
         
         if(esAdmin) {
+            document.body.classList.add('es-admin');
             document.getElementById('btnVolver').href = `index.html${urlAdminParam}`;
         }
 
         document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
         document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
+        document.getElementById('btnNavNosotros').href = `nosotros.html${urlAdminParam}`;
 
         async function cargarDatos() {
             try {
@@ -320,6 +323,8 @@
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     datosDB = docSnap.data();
+                    if(!datosDB.ofertas) datosDB.ofertas = [];
+
                     if(datosDB.nombre) {
                         document.getElementById('nombreEmpresaView').innerText = datosDB.nombre;
                         document.getElementById('footerNombre').innerText = datosDB.nombre;
@@ -333,9 +338,21 @@
                     configurarBuscador();
                 }
             } catch (error) {
-                console.error("Error cargando cursos:", error);
+                console.eror("Error cargando cursos:", error);
             } finally {
                 document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        }
+
+        async function guardarDatos() {
+            try {
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                await setDoc(docRef, datosDB, { merge: true });
+                return true;
+            } catch (e) {
+                console.error("Error al actualizar datos en Firestore:", e);
+                alert("Error al guardar cambios: " + e.message);
+                return false;
             }
         }
 
@@ -360,19 +377,40 @@
                     grid.className = 'ofertas-grid';
 
                     cursosDeEstaCarpeta.forEach(o => {
-                        const card = document.createElement('a');
+                        const card = document.createElement('div');
                         card.className = 'oferta-card';
-                        card.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`;
+                        card.style.cursor = 'pointer';
                         
                         const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
 
                         card.innerHTML = `
                             <img src="${imgSrc}" alt="${o.titulo}">
                             <div class="oferta-content">
-                                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600;">${o.titulo}</h3>
-                                <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600;">${o.titulo}</h3>
+                                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
+                                </div>
+                                <button class="btn-eliminar">Borrar</button>
                             </div>
                         `;
+
+                        card.addEventListener('click', (e) => {
+                            if(e.target.classList.contains('btn-eliminar')) return;
+                            window.location.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`;
+                        });
+
+                        card.querySelector('.btn-eliminar').addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            if (confirm('¿Eliminar curso permanentemente?')) {
+                                datosDB.ofertas = datosDB.ofertas.filter(item => item.id !== o.id);
+                                const exito = await guardarDatos();
+                                if (exito) {
+                                    alert("Curso eliminado con éxito.");
+                                    renderizarCursos();
+                                }
+                            }
+                        });
+
                         grid.appendChild(card);
                     });
 
