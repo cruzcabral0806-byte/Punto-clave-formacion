@@ -254,7 +254,7 @@
 </head>
 <body>
 
-    <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando catálogo...</div>
+    <div id="loadingOverlay"><i class="fa-solid fa-spinner fa-spin"></i> &nbsp; Cargando catálogo</div>
 
     <header>
         <div class="header-logo" id="headerLogoView">
@@ -267,7 +267,9 @@
 
         <nav class="header-nav" id="headerNav">
             <a id="btnNavInicio" href="index.html">Inicio</a>
+            <a id="btnNavCursos" href="cursos.html">Cursos</a>
             <a id="btnNavCatalogo" href="catalogo.html" class="active">Catálogo de Cursos</a>
+            <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
             
             <!-- Buscador Lupa -->
             <div class="search-box">
@@ -307,15 +309,6 @@
     <footer id="contacto">
         <div class="footer-content">
             <div class="footer-box">
-                <h4>Sobre Nosotros</h4>
-                <p>Centro especializado en formación profesional y capacitación continua.</p>
-                <p><strong>Misión</strong></p>
-                <p>Brindar soluciones de formación y capacitación empresarial de alta calidad, desarrollando las competencias de personas y organizaciones para impulsar su crecimiento y productividad.</p>
-                <p><strong>Visión</strong></p>
-                <p>Ser el aliado estratégico en el desarrollo del talento, impulsando el crecimiento de personas y empresas mediante capacitación e innovación.</p>
-            </div>
-
-            <div class="footer-box">
                 <h4>📍 Dónde Estamos</h4>
                 <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, 45080</p>
                 <p style="margin-bottom: 10px;">Zapopan, Jal.</p>
@@ -326,6 +319,8 @@
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
                 <p><i class=" "></i></p>
+	    </div>
+ 	<div class="footer-box">
                 <h4> Contactos</h4>
                 <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
@@ -396,7 +391,9 @@
         }
 
         document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
+        document.getElementById('btnNavCursos').href = `cursos.html${urlAdminParam}`;
         document.getElementById('btnNavCatalogo').href = `catalogo.html${urlAdminParam}`;
+        document.getElementById('btnNavNosotros').href = `nosotros.html${urlAdminParam}`;
         document.getElementById('btnCotizarFooter').href = `index.html${urlAdminParam}#contacto`;
 
         async function cargarDatosCatalogo() {
