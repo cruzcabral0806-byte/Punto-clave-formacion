@@ -371,13 +371,14 @@
                         const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
 
                         card.innerHTML = `
-                            <img src="${imgSrc}" alt="${o.titulo}">
-                            <div class="oferta-content">
-                                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600;">${o.titulo}</h3>
-                                <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
-                                <button class="btn-eliminar" onclick="eliminarOferta('${o.id}'); event.preventDefault();"><i class="fa-solid fa-trash"></i> Borrar</button>
-                            </div>
-                        `;
+                <img src="${imgSrc}" alt="${o.titulo}">
+                <div class="oferta-content">
+                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">
+                        ${o.titulo}
+                    </h3>
+                    <button class="btn-eliminar">Borrar</button>
+                </div>
+            `;
                         grid.appendChild(card);
                     });
 
