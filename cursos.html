@@ -151,7 +151,7 @@
         .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
         .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
-body:not(.es-admin) .btn-eliminar { display: none !important; }
+        body:not(.es-admin) .btn-eliminar { display: none !important; }
         .btn-volver { display: inline-block; margin-bottom: 1.5rem; color: var(--secondary); text-decoration: none; font-weight: bold; }
         .btn-volver:hover { color: var(--primary); }
 
@@ -240,8 +240,8 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
                 <p><i class=" "></i></p>
-	    </div>
- 	<div class="footer-box">
+        </div>
+    <div class="footer-box">
                 <h4> Contactos</h4>
                 <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
@@ -261,10 +261,10 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-		import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         
-	const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyAA_oi-Y-TVU6OT-ti6CPms8-1Rsvn5DH8",
             authDomain: "punto-clave-formacion.firebaseapp.com",
             projectId: "punto-clave-formacion",
@@ -275,7 +275,7 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
 
         const app = initializeApp(firebaseConfig);
         const dbFirestore = getFirestore(app);
-	const auth = getAuth(app);
+        const auth = getAuth(app);
 
         // Menú hamburguesa responsive
         const menuToggle = document.getElementById('menuToggle');
@@ -312,6 +312,7 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
         
         if(esAdmin) {
             document.getElementById('btnVolver').href = `index.html${urlAdminParam}`;
+            document.body.classList.add('es-admin');
         }
 
         document.getElementById('btnNavInicio').href = `index.html${urlAdminParam}`;
@@ -374,6 +375,7 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
                             <div class="oferta-content">
                                 <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600;">${o.titulo}</h3>
                                 <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
+                                <button class="btn-eliminar" onclick="eliminarOferta('${o.id}'); event.preventDefault();"><i class="fa-solid fa-trash"></i> Borrar</button>
                             </div>
                         `;
                         grid.appendChild(card);
@@ -449,6 +451,25 @@ body:not(.es-admin) .btn-eliminar { display: none !important; }
                     searchResults.style.display = 'none';
                 }
             });
+        }
+
+        window.eliminarOferta = async function(id) {
+            if(confirm("¿Estás seguro de eliminar este curso de la base de datos?")) {
+                datosDB.ofertas = datosDB.ofertas.filter(o => o.id !== id);
+                await guardarDatos();
+                renderizarCursos();
+            }
+        };
+
+        async function guardarDatos() {
+            try {
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                await setDoc(docRef, datosDB, { merge: true });
+                console.log("Cambios guardados en Firebase");
+            } catch (error) {
+                console.error("Error al guardar:", error);
+                alert("Error al guardar cambios: " + error.message);
+            }
         }
 
         cargarDatos();
