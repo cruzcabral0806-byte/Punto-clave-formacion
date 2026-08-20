@@ -307,19 +307,19 @@
         </button>
 
         <nav class="header-nav" id="headerNav">
-            <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
-            <a id="btnNavCursos">Cursos</a>
-            <a id="btnNavCatalogo" href="catalogo.html">Catálogo de Cursos</a>
-            
-            <!-- Buscador Lupa -->
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
-                <div id="searchResults" class="search-results-dropdown"></div>
-            </div>
+    <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
+    <a id="btnNavCursos" href="cursos.html" target="_blank">Cursos</a>
+    <a id="btnNavCatalogo" href="catalogo.html">Catálogo de cursos</a>
+    <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
+    
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
+        <div id="searchResults" class="search-results-dropdown"></div>
+    </div>
 
-            <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
-        </nav>
+    <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
+</nav>
     </header>
 
     <div class="container">
@@ -331,7 +331,7 @@
                 
                 <div class="hero-buttons">
                     <a id="btnExplorarCursos" class="btn-hero-primary">Ver cursos</a>
-                    <a href="#contacto" class="btn-hero-secondary">Capacitación para empresas</a>
+                    <a href="#contacto" class="btn-hero-secondary">Solicitar capacitación empresarial</a>
                 </div>
 
                 <div class="hero-features">
@@ -339,10 +339,13 @@
                         <i class="fa-solid fa-user-tie"></i> Instructores especializados
                     </div>
                     <div class="hero-feature-item">
-                        <i class="fa-solid fa-shield-halved"></i> Cursos actualizados y prácticos
+                        <i class="fa-solid fa-shield-halved"></i> Capacitación práctica
+                    </div>
+		    <div class="hero-feature-item">
+                        <i class="fa-solid fa-shield-halved"></i> Cursos para empresas
                     </div>
                     <div class="hero-feature-item">
-                        <i class="fa-solid fa-file-certificate"></i> Constancia de participación
+                        <i class="fa-solid fa-file-certificate"></i> 🎓 Constancia de participación
                     </div>
                 </div>
             </div>
@@ -354,18 +357,17 @@
             </div>
         </div>
 
-        <h2 class="section-title-center" id="secServicios">Explora nuestros servicios</h2>
-
+        <h2 class="section-title-center" id="secServicios">Explora nuestros proximos cursos</h2>
         <div class="carpetas-container" id="carpetasBarra"></div>
         
         <div class="ofertas-grid" id="ofertasContainer"></div>
 
         <!-- Botón Ver Más -->
         <div class="ver-mas-container" id="verMasContainer" style="display: none;">
-            <button id="btnVerMas" class="btn-ver-mas">
-                Ver más cursos <i class="fa-solid fa-chevron-down"></i>
-            </button>
-        </div>
+    <a href="cursos.html" target="_blank" class="btn-ver-mas">
+        Ver más cursos <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</div>
 
         <div class="admin-panel" id="adminPanel">
             <h2><i class="fa-solid fa-sliders"></i> Panel de Configuración En Vivo</h2>
@@ -467,15 +469,6 @@
     <footer id="contacto">
         <div class="footer-content">
             <div class="footer-box">
-                <h4>Sobre Nosotros</h4>
-                <p>Centro especializado en formación profesional y capacitación continua.</p>
-                <p><strong>Misión</strong></p>
-                <p>Brindar soluciones de formación y capacitación empresarial de alta calidad, desarrollando las competencias de personas y organizaciones para impulsar su crecimiento y productividad.</p>
-                <p><strong>Visión</strong></p>
-                <p>Ser el aliado estratégico en el desarrollo del talento, impulsando el crecimiento de personas y empresas mediante capacitación e innovación.</p>
-            </div>
-
-            <div class="footer-box">
                 <h4>📍 Dónde Estamos</h4>
                 <p><i class="fa-solid fa-map-marker-alt"></i> Tlatelolco 3242, Unidad, Díaz Ordaz, 45080</p>
                 <p style="margin-bottom: 10px;">Zapopan, Jal.</p>
@@ -486,6 +479,8 @@
                 <h4>⏰ Horario de Atención</h4>
                 <p><i class="fa-solid fa-clock"></i> Lunes a Viernes: 10:30 - 17:30</p>
                 <p><i class=" "></i></p>
+	    </div>
+ 	<div class="footer-box">
                 <h4> Contactos</h4>
                 <p><i class="fa-solid fa-phone"></i> Tel: 33 1365 7617; 33 3106 0030</p>
                 <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: 33 1365 7617; 33 3106 0030</p>
@@ -581,9 +576,9 @@
     });
 
     const CARPETAS_DEFINIDAS = [
-        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
-        { id: "Área de capacitación", nombre: "Área de capacitación", icono: "🎓" }
-    ];
+    { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" },
+    
+];
 
     const defectoDB = {
         nombre: "Punto Clave Formación", 
@@ -754,7 +749,7 @@
             return;
         }
 
-        const ofertasAMostrar = (!mostrarTodosLosCursos) ? ofertasFiltradas.slice(0, 4) : ofertasFiltradas;
+        const ofertasAMostrar = ofertasFiltradas.slice(0, 4);
 
         ofertasAMostrar.forEach(o => {
             const card = document.createElement('div'); 
@@ -786,12 +781,6 @@
         if (verMasContainer) {
             if (ofertasFiltradas.length > 4) {
                 verMasContainer.style.display = 'block';
-                const restantes = ofertasFiltradas.length - 4;
-                if (mostrarTodosLosCursos) {
-                    btnVerMas.innerHTML = 'Ver menos <i class="fa-solid fa-chevron-up"></i>';
-                } else {
-                    btnVerMas.innerHTML = `Ver más cursos (${restantes}) <i class="fa-solid fa-chevron-down"></i>`;
-                }
             } else {
                 verMasContainer.style.display = 'none';
             }
