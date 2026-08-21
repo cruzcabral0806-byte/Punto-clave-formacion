@@ -421,10 +421,13 @@
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
                         <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
                         <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
-                        <div class="form-group" style="display: none;">
+                        
+                        <!-- Selector de Categoría Visible -->
+                        <div class="form-group">
                             <label>Categoría / Carpeta:</label>
                             <select id="ofertaCarpetaSelect"></select>
                         </div>
+
                         <div class="form-group">
                             <label>Sección de destino:</label>
                             <select id="ofertaSeccionSelect">
@@ -574,8 +577,16 @@
         }
     });
 
+    // Categorías del Instituto
     const CARPETAS_DEFINIDAS = [
-        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }
+        { id: "Informática y Microsoft Office", nombre: "Informática y Microsoft Office", icono: "💻" },
+        { id: "Autodesk y Diseño Digital", nombre: "Autodesk y Diseño Digital", icono: "🎨" },
+        { id: "Especialización en Costos y Presupuestos", nombre: "Especialización en Costos y Presupuestos", icono: "📊" },
+        { id: "Cursos Técnicos en Construcción", nombre: "Cursos Técnicos en Construcción", icono: "🏗️" },
+        { id: "Desarrollo Profesional y Empresarial", nombre: "Desarrollo Profesional y Empresarial", icono: "📈" },
+        { id: "Seguridad Industrial y Construcción", nombre: "Seguridad Industrial y Construcción", icono: "🦺" },
+        { id: "Cursos de Oficios", nombre: "Cursos de Oficios", icono: "🔧" },
+        { id: "Maquinaria Pesada y Operación de Equipo", nombre: "Maquinaria Pesada y Operación de Equipo", icono: "🚜" }
     ];
 
     const defectoDB = {
@@ -702,9 +713,7 @@
         });
     }
 
-    // Aquí está la función guardarDatos corregida adecuadamente
     async function guardarDatos() {
-        // Evita intentar guardar si el administrador no ha iniciado sesión
         if (!auth.currentUser) {
             return; 
         }
@@ -734,7 +743,6 @@
             return;
         }
 
-        // Seleccionar máximo 4 cursos para la vista principal del index
         const ofertasAMostrar = ofertasFiltradas.slice(0, 4);
 
         ofertasAMostrar.forEach(o => {
@@ -748,6 +756,7 @@
                 <img src="${imgSrc}" alt="${o.titulo}">
                 <div class="oferta-content">
                     <div>
+                        <span style="display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: bold; padding: 0.2rem 0.6rem; border-radius: 12px; margin-bottom: 0.5rem; text-align: left;">${o.carpeta || 'General'}</span>
                         <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">${o.titulo}</h3>
                         <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
                     </div>
@@ -884,7 +893,6 @@
         reader.readAsDataURL(file);
     }
 
-    // Aquí están los eventos cambiados a 'change' para optimizar peticiones
     document.getElementById('inputNombre').addEventListener('change', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
     document.getElementById('inputHeroTitulo').addEventListener('change', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
     document.getElementById('inputHeroSubtitulo').addEventListener('change', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
@@ -929,6 +937,7 @@
         const descCorta = document.getElementById('ofertaDesc').value;
         const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
         const seccionDestino = document.getElementById('ofertaSeccionSelect').value;
+        const categoriaSeleccionada = document.getElementById('ofertaCarpetaSelect').value;
 
         window.db.ofertas.push({ 
             id: Date.now(), 
@@ -936,7 +945,7 @@
             descripcion: descCorta, 
             detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
             seccion: seccionDestino,
-            carpeta: "Próximos Cursos", 
+            carpeta: categoriaSeleccionada, 
             img: ofertaImgBase64 
         });
         ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
