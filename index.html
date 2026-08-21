@@ -703,13 +703,38 @@
     }
 
     async function guardarDatos() {
-        try {
+// NUEVO: Detiene la función si no hay un administrador logueado
+    if (!auth.currentUser) {
+        return; 
+    }
+       try {
             const docRef = doc(dbFirestore, "configuracion", "general");
-            await setDoc(docRef, window.db, { merge: true });
-        } catch (e) {
-            console.error("Error al guardar en Firebase: ", e);
-            alert("Error al guardar cambios: " + e.message);
-        }
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                window.db = docSnap.data();
+                if(!window.db.ofertas) window.db.ofertas = [];
+                if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
+                if(!window.db.carrusel) window.db.carrusel = [];
+                if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
+                if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
+            } else {
+                window.db = defectoDB;
+                // NUEVO: Intentar guardar el documento por defecto silenciosamente
+                try {
+                    await setDoc(docRef, defectoDB);
+                } catch (e) {
+                    console.warn("Modo visitante: No se forzó la creación del documento.");
+                }
+            }
+        } catch (error) {
+            console.error("Error cargando desde Firebase:", error);
+        } finally {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            inicializarInputs();
+            actualizarWeb();
+            configurarBuscador();
+}
     }
 
     function renderizarOfertas() {
