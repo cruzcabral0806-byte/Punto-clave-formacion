@@ -702,39 +702,20 @@
         });
     }
 
+    // Aquí está la función guardarDatos corregida adecuadamente
     async function guardarDatos() {
-// NUEVO: Detiene la función si no hay un administrador logueado
-    if (!auth.currentUser) {
-        return; 
-    }
-       try {
-            const docRef = doc(dbFirestore, "configuracion", "general");
-            const docSnap = await getDoc(docRef);
+        // Evita intentar guardar si el administrador no ha iniciado sesión
+        if (!auth.currentUser) {
+            return; 
+        }
 
-            if (docSnap.exists()) {
-                window.db = docSnap.data();
-                if(!window.db.ofertas) window.db.ofertas = [];
-                if(!window.db.enlacesVecinos) window.db.enlacesVecinos = [];
-                if(!window.db.carrusel) window.db.carrusel = [];
-                if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
-                if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
-            } else {
-                window.db = defectoDB;
-                // NUEVO: Intentar guardar el documento por defecto silenciosamente
-                try {
-                    await setDoc(docRef, defectoDB);
-                } catch (e) {
-                    console.warn("Modo visitante: No se forzó la creación del documento.");
-                }
-            }
-        } catch (error) {
-            console.error("Error cargando desde Firebase:", error);
-        } finally {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            inicializarInputs();
-            actualizarWeb();
-            configurarBuscador();
-}
+        try {
+            const docRef = doc(dbFirestore, "configuracion", "general");
+            await setDoc(docRef, window.db, { merge: true });
+        } catch (e) {
+            console.error("Error al guardar en Firebase: ", e);
+            alert("No se pudo guardar en la base de datos: " + e.message); 
+        }
     }
 
     function renderizarOfertas() {
@@ -903,13 +884,14 @@
         reader.readAsDataURL(file);
     }
 
-    document.getElementById('inputNombre').addEventListener('input', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
-    document.getElementById('inputHeroTitulo').addEventListener('input', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
-    document.getElementById('inputHeroSubtitulo').addEventListener('input', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
+    // Aquí están los eventos cambiados a 'change' para optimizar peticiones
+    document.getElementById('inputNombre').addEventListener('change', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
+    document.getElementById('inputHeroTitulo').addEventListener('change', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
+    document.getElementById('inputHeroSubtitulo').addEventListener('change', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
     
-    document.getElementById('inputEmail').addEventListener('input', (e) => { window.db.email = e.target.value; guardarDatos(); });
-    document.getElementById('inputTel').addEventListener('input', (e) => { window.db.tel = e.target.value; guardarDatos(); });
-    document.getElementById('inputWsp').addEventListener('input', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
+    document.getElementById('inputEmail').addEventListener('change', (e) => { window.db.email = e.target.value; guardarDatos(); });
+    document.getElementById('inputTel').addEventListener('change', (e) => { window.db.tel = e.target.value; guardarDatos(); });
+    document.getElementById('inputWsp').addEventListener('change', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
 
     document.getElementById('inputLogo').addEventListener('change', (e) => {
         const file = e.target.files[0];
