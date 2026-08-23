@@ -40,7 +40,6 @@
         .header-logo img { max-height: 45px; object-fit: contain; }
         .header-logo-text { font-size: 1.4rem; font-weight: bold; color: white; text-decoration: none; white-space: nowrap; }
 
-        /* Botón Hamburguesa Móvil */
         .menu-toggle {
             display: none;
             background: none;
@@ -54,109 +53,26 @@
         .header-nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s ease; cursor: pointer; white-space: nowrap; }
         .header-nav a:hover, .header-nav a.active { color: white; border-bottom: 2px solid var(--accent-orange); padding-bottom: 2px; }
 
-        /* --- Barra y Lupa de Búsqueda --- */
-        .search-box {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+        .search-box { position: relative; display: flex; align-items: center; }
+        .search-input { padding: 0.4rem 0.8rem 0.4rem 2rem; border-radius: 20px; border: 1px solid #cbd5e1; outline: none; font-size: 0.9rem; width: 170px; transition: width 0.3s ease; background-color: #ffffff; color: var(--texto-titulos); }
+        .search-input:focus { width: 220px; border-color: var(--accent-orange); }
+        .search-icon { position: absolute; left: 10px; color: #94a3b8; font-size: 0.85rem; pointer-events: none; }
+        .search-results-dropdown { position: absolute; top: 115%; right: 0; width: 280px; background: white; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; max-height: 280px; overflow-y: auto; z-index: 2000; display: none; }
+        .search-result-item { padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; border-bottom: 1px solid #f1f5f9; color: var(--texto-titulos); text-decoration: none; }
+        .search-result-item:hover { background-color: #f8fafc; }
+        .search-result-item img { width: 36px; height: 36px; border-radius: 4px; object-fit: cover; }
 
-        .search-input {
-            padding: 0.4rem 0.8rem 0.4rem 2rem;
-            border-radius: 20px;
-            border: 1px solid #cbd5e1;
-            outline: none;
-            font-size: 0.9rem;
-            width: 170px;
-            transition: width 0.3s ease;
-            background-color: #ffffff;
-            color: var(--texto-titulos);
-        }
-
-        .search-input:focus {
-            width: 220px;
-            border-color: var(--accent-orange);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            color: #94a3b8;
-            font-size: 0.85rem;
-            pointer-events: none;
-        }
-
-        .search-results-dropdown {
-            position: absolute;
-            top: 115%;
-            right: 0;
-            width: 280px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border: 1px solid #e2e8f0;
-            max-height: 280px;
-            overflow-y: auto;
-            z-index: 2000;
-            display: none;
-        }
-
-        .search-result-item {
-            padding: 0.6rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            cursor: pointer;
-            border-bottom: 1px solid #f1f5f9;
-            color: var(--texto-titulos);
-            text-decoration: none;
-        }
-
-        .search-result-item:hover {
-            background-color: #f8fafc;
-        }
-
-        .search-result-item img {
-            width: 36px;
-            height: 36px;
-            border-radius: 4px;
-            object-fit: cover;
-        }
-
-        .btn-cotizar {
-            background-color: var(--accent-orange);
-            color: white;
-            padding: 0.6rem 1.4rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: background 0.2s ease;
-            white-space: nowrap;
-        }
+        .btn-cotizar { background-color: var(--accent-orange); color: white; padding: 0.6rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 0.95rem; transition: background 0.2s ease; white-space: nowrap; }
         .btn-cotizar:hover { background-color: #ea580c; }
 
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
 
-        .hero-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            align-items: center;
-            margin-bottom: 4rem;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        }
-
+        .hero-section { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; margin-bottom: 4rem; background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
         .hero-content h1 { font-size: 2.5rem; color: var(--secondary); line-height: 1.2; margin-bottom: 1rem; font-weight: 800; }
         .hero-content p { font-size: 1.15rem; color: var(--texto-parrafos); margin-bottom: 2rem; }
-
         .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
         .btn-hero-primary { background-color: var(--accent-orange); color: white; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; cursor: pointer; }
         .btn-hero-secondary { border: 2px solid var(--secondary); color: var(--secondary); padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: bold; }
-
         .hero-features { display: flex; gap: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; font-size: 0.85rem; color: var(--texto-parrafos); font-weight: 600; flex-wrap: wrap; }
         .hero-feature-item { display: flex; align-items: center; gap: 0.5rem; }
         .hero-feature-item i { color: var(--primary); font-size: 1.2rem; }
@@ -170,79 +86,22 @@
         .carrusel-btn.prev { left: 10px; }
         .carrusel-btn.next { right: 10px; }
 
-        .section-title-center { 
-            text-align: center;
-            font-size: 2rem; 
-            margin-bottom: 2rem; 
-            color: var(--texto-titulos); 
-            position: relative;
-            font-weight: 700;
-            scroll-margin-top: 100px;
-        }
+        .section-title-center { text-align: center; font-size: 2rem; margin-bottom: 2rem; color: var(--texto-titulos); position: relative; font-weight: 700; scroll-margin-top: 100px; }
+        .section-title-center::after { content: ''; display: block; width: 80px; height: 4px; background: var(--accent-orange); margin: 0.5rem auto 0 auto; border-radius: 2px; }
 
-        .section-title-center::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--accent-orange);
-            margin: 0.5rem auto 0 auto;
-            border-radius: 2px;
-        }
-
-        /* Ocultar barra de carpetas visualmente en el index */
         .carpetas-container { display: none; }
 
-        .ofertas-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 1.5rem; 
-            margin-bottom: 1.5rem; 
-            min-height: 120px;
-        }
-        .oferta-card { 
-            background: white; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s, box-shadow 0.2s;
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-        }
+        .ofertas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; min-height: 120px; }
+        .oferta-card { background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; display: flex; flex-direction: column; }
         .oferta-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); border-color: var(--primary); }
         .oferta-card img { width: 100%; height: 160px; object-fit: cover; background-color: #cbd5e1; }
         .oferta-content { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; text-align: center; }
         .btn-eliminar { background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.8rem; width: 100%; }
         body:not(.es-admin) .btn-eliminar { display: none !important; }
 
-        /* Botón Ver Más */
-        .ver-mas-container {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .btn-ver-mas {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 0.7rem 2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-decoration: none;
-        }
-
-        .btn-ver-mas:hover {
-            background-color: var(--primary);
-            transform: translateY(-2px);
-        }
+        .ver-mas-container { text-align: center; margin-bottom: 3rem; }
+        .btn-ver-mas { background-color: var(--secondary); color: white; border: none; padding: 0.7rem 2rem; border-radius: 50px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-decoration: none; }
+        .btn-ver-mas:hover { background-color: var(--primary); transform: translateY(-2px); }
 
         .admin-panel { display: none; background: #f1f5f9; padding: 2rem; border-radius: 12px; margin-bottom: 3rem; border: 2px dashed #cbd5e1; color: #1e293b; }
         .admin-panel h2 { margin-bottom: 1rem; font-size: 1.4rem; }
@@ -269,23 +128,11 @@
 
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
 
-        /* Media Queries Responsivos */
         @media (max-width: 868px) {
             .hero-section { grid-template-columns: 1fr; padding: 1.5rem; }
             .menu-toggle { display: block; }
-
-            .header-nav {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: var(--secondary);
-                padding: 1rem 0;
-                border-top: 1px solid #334155;
-                gap: 1rem;
-            }
-
+            .header-nav { display: none; flex-direction: column; width: 100%; background-color: var(--secondary); padding: 1rem 0; border-top: 1px solid #334155; gap: 1rem; }
             .header-nav.active { display: flex; }
-
             .search-box { width: 100%; justify-content: center; }
             .search-input { width: 90%; }
             .search-input:focus { width: 95%; }
@@ -301,23 +148,17 @@
         <div class="header-logo" id="headerLogoView">
             <a href="index.html" class="header-logo-text" id="nombreEmpresaView">Punto Clave Formación</a>
         </div>
-
-        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
         <nav class="header-nav" id="headerNav">
             <a id="btnNavInicio" href="index.html" class="active">Inicio</a>
             <a id="btnNavCursos" href="cursos.html">Cursos</a>
             <a id="btnNavCatalogo" href="catalogo.html">Catálogo de cursos</a>
             <a id="btnNavNosotros" href="nosotros.html">Nosotros</a>
-            
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="searchInput" class="search-input" placeholder="Buscar curso...">
                 <div id="searchResults" class="search-results-dropdown"></div>
             </div>
-
             <a href="#contacto" class="btn-cotizar" id="btnCotizarView">Solicitar cotización</a>
         </nav>
     </header>
@@ -328,25 +169,15 @@
             <div class="hero-content">
                 <h1 id="heroTituloView">Impulsamos tu crecimiento profesional</h1>
                 <p id="heroSubtituloView">Capacitación práctica, actualizada y de calidad para personas y empresas.</p>
-                
                 <div class="hero-buttons">
                     <a id="btnExplorarCursos" class="btn-hero-primary">Ver cursos</a>
                     <a href="#contacto" class="btn-hero-secondary">Solicitar capacitación empresarial</a>
                 </div>
-
                 <div class="hero-features">
-                    <div class="hero-feature-item">
-                        <i class="fa-solid fa-user-tie"></i> Instructores especializados
-                    </div>
-                    <div class="hero-feature-item">
-                        <i class="fa-solid fa-shield-halved"></i> Capacitación práctica
-                    </div>
-                    <div class="hero-feature-item">
-                        <i class="fa-solid fa-shield-halved"></i> Cursos para empresas
-                    </div>
-                    <div class="hero-feature-item">
-                        <i class="fa-solid fa-file-certificate"></i> 🎓 Constancia de participación
-                    </div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-user-tie"></i> Instructores especializados</div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-shield-halved"></i> Capacitación práctica</div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-shield-halved"></i> Cursos para empresas</div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-file-certificate"></i> 🎓 Constancia de participación</div>
                 </div>
             </div>
 
@@ -359,14 +190,9 @@
 
         <h2 class="section-title-center" id="secServicios">Explora nuestros próximos cursos</h2>
         <div class="carpetas-container" id="carpetasBarra"></div>
-        
         <div class="ofertas-grid" id="ofertasContainer"></div>
-
-        <!-- Botón Ver Más -->
         <div class="ver-mas-container" id="verMasContainer" style="display: none;">
-            <a href="cursos.html" class="btn-ver-mas" id="enlaceVerMasCursos">
-                Ver más cursos <i class="fa-solid fa-arrow-right"></i>
-            </a>
+            <a href="cursos.html" class="btn-ver-mas" id="enlaceVerMasCursos">Ver más cursos <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
         <div class="admin-panel" id="adminPanel">
@@ -377,20 +203,12 @@
                     <div>
                         <h3>0. Acceso Administrador</h3>
                         <div id="loginSection">
-                            <div class="form-group">
-                                <label>Correo:</label>
-                                <input type="email" id="emailInput" placeholder="admin@ejemplo.com">
-                            </div>
-                            <div class="form-group">
-                                <label>Contraseña:</label>
-                                <input type="password" id="passwordInput" placeholder="••••••••">
-                            </div>
+                            <div class="form-group"><label>Correo:</label><input type="email" id="emailInput" placeholder="admin@ejemplo.com"></div>
+                            <div class="form-group"><label>Contraseña:</label><input type="password" id="passwordInput" placeholder="••••••••"></div>
                             <button id="btnLogin" class="btn-panel">Iniciar Sesión</button>
                         </div>
                         <div id="userSection" style="display: none;">
-                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #16a34a; font-weight: bold;">
-                                <i class="fa-solid fa-circle-check"></i> Sesión activa: <span id="userEmailSpan"></span>
-                            </p>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #16a34a; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Sesión activa: <span id="userEmailSpan"></span></p>
                             <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
                         </div>
                     </div>
@@ -420,11 +238,24 @@
                         <h3>3. Publicar Elemento</h3>
                         <div class="form-group"><input type="text" id="ofertaTitulo" placeholder="Título" required></div>
                         <div class="form-group"><textarea id="ofertaDesc" rows="2" placeholder="Descripción corta" required></textarea></div>
-                        <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (opcional)"></textarea></div>
-                        <div class="form-group" style="display: none;">
-                            <label>Categoría / Carpeta:</label>
-                            <select id="ofertaCarpetaSelect"></select>
-                        </div>
+                        
+                        <!-- NUEVO: Acordeón para Infografía -->
+                        <details style="margin-bottom: 1rem; background: #f8fafc; padding: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                            <summary style="font-weight:bold; cursor:pointer; font-size: 0.9rem; color: var(--primary-dark);">📊 Añadir formato Infografía (Opcional)</summary>
+                            <div style="margin-top: 10px;">
+                                <div class="form-group"><input type="text" id="ofertaFechas" placeholder="Fechas (ej. 28 sep al 07 oct)"></div>
+                                <div class="form-group"><input type="text" id="ofertaHorario" placeholder="Horario (ej. L, M y V 16:30 a 20:30 h)"></div>
+                                <div class="form-group"><input type="text" id="ofertaModalidad" placeholder="Modalidad (ej. Virtual Zoom)"></div>
+                                <div class="form-group"><input type="text" id="ofertaDuracion" placeholder="Duración (ej. 20 horas)"></div>
+                                <div class="form-group"><input type="text" id="ofertaInversion" placeholder="Inversión (ej. $2,700.00)"></div>
+                                <div class="form-group"><textarea id="ofertaAprenderas" rows="2" placeholder="¿Qué aprenderás?"></textarea></div>
+                                <div class="form-group"><textarea id="ofertaParaQuien" rows="2" placeholder="¿Para quién es? (Separar por enter)"></textarea></div>
+                                <div class="form-group"><textarea id="ofertaTemario" rows="3" placeholder="Temario (Separar por enter)"></textarea></div>
+                            </div>
+                        </details>
+
+                        <div class="form-group"><textarea id="ofertaDetalleCompleto" rows="3" placeholder="Detalle extendido (Solo si NO usas la infografía)"></textarea></div>
+                        <div class="form-group" style="display: none;"><label>Categoría / Carpeta:</label><select id="ofertaCarpetaSelect"></select></div>
                         <div class="form-group">
                             <label>Sección de destino:</label>
                             <select id="ofertaSeccionSelect">
@@ -486,12 +317,10 @@
                 <p><i class="fa-solid fa-envelope"></i> Correo: puntoclaveformacion@gmail.com</p>
             </div>
         </div>
-
         <div style="max-width: 1100px; margin: 2rem auto 0 auto; padding: 1.5rem 1rem 0 1rem; border-top: 1px solid #334155; text-align: center;">
             <h4 style="color: white; font-size: 1.2rem; margin-bottom: 1rem;"><i class="fa-solid fa-network-wired"></i> Redes</h4>
             <div class="buttons-list" id="enlacesDinamicosContainer"></div>
         </div>
-
         <div class="footer-bottom">
             <p>© 2026 <span id="footerNombre">Punto Clave Formación</span>. Todos los derechos reservados.</p>
         </div>
@@ -515,7 +344,6 @@
     const dbFirestore = getFirestore(app);
     const auth = getAuth(app);
 
-    // Toggle Menú Hamburguesa
     const menuToggle = document.getElementById('menuToggle');
     const headerNav = document.getElementById('headerNav');
 
@@ -536,34 +364,19 @@
             e.preventDefault();
             const email = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
-
-            if (!email || !password) {
-                alert("Ingresa correo y contraseña.");
-                return;
-            }
-
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                alert("¡Bienvenido al panel!");
-            } catch (error) {
-                console.error("Error al iniciar sesión:", error.code, error.message);
-                alert("Error de Firebase [" + error.code + "]: " + error.message);
-            }
+            if (!email || !password) return alert("Ingresa correo y contraseña.");
+            try { await signInWithEmailAndPassword(auth, email, password); alert("¡Bienvenido al panel!"); }
+            catch (error) { alert("Error de Firebase [" + error.code + "]: " + error.message); }
         });
     }
 
     const btnLogout = document.getElementById('btnLogout');
-    if (btnLogout) {
-        btnLogout.addEventListener('click', () => {
-            signOut(auth).then(() => alert("Sesión cerrada"));
-        });
-    }
+    if (btnLogout) btnLogout.addEventListener('click', () => signOut(auth).then(() => alert("Sesión cerrada")));
 
     onAuthStateChanged(auth, (user) => {
         const loginSection = document.getElementById('loginSection');
         const userSection = document.getElementById('userSection');
         const userEmailSpan = document.getElementById('userEmailSpan');
-
         if (user) {
             if (loginSection) loginSection.style.display = 'none';
             if (userSection) userSection.style.display = 'block';
@@ -574,19 +387,8 @@
         }
     });
 
-    const CARPETAS_DEFINIDAS = [
-        { id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }
-    ];
-
-    const defectoDB = {
-        nombre: "Punto Clave Formación", 
-        heroTitulo: "Impulsamos tu crecimiento profesional",
-        heroSubtitulo: "Capacitación práctica, actualizada y de calidad para personas y empresas.",
-        logo: "",
-        email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030",
-        ofertas: [],
-        enlacesVecinos: [], carrusel: []
-    };
+    const CARPETAS_DEFINIDAS = [{ id: "Próximos Cursos", nombre: "Próximos Cursos", icono: "🚀" }];
+    const defectoDB = { nombre: "Punto Clave Formación", heroTitulo: "Impulsamos tu crecimiento profesional", heroSubtitulo: "Capacitación práctica, actualizada y de calidad para personas y empresas.", logo: "", email: "puntoclaveformacion@gmail.com", tel: "+3347106338", wsp: "3331060030", ofertas: [], enlacesVecinos: [], carrusel: [] };
 
     window.db = defectoDB;
     let slideIndex = 0;
@@ -611,7 +413,6 @@
         try {
             const docRef = doc(dbFirestore, "configuracion", "general");
             const docSnap = await getDoc(docRef);
-
             if (docSnap.exists()) {
                 window.db = docSnap.data();
                 if(!window.db.ofertas) window.db.ofertas = [];
@@ -619,69 +420,33 @@
                 if(!window.db.carrusel) window.db.carrusel = [];
                 if(!window.db.heroTitulo) window.db.heroTitulo = defectoDB.heroTitulo;
                 if(!window.db.heroSubtitulo) window.db.heroSubtitulo = defectoDB.heroSubtitulo;
-            } else {
-                await setDoc(docRef, defectoDB);
-                window.db = defectoDB;
-            }
-        } catch (error) {
-            console.error("Error cargando desde Firebase:", error);
-        } finally {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            inicializarInputs();
-            actualizarWeb();
-            configurarBuscador();
-        }
+            } else { await setDoc(docRef, defectoDB); window.db = defectoDB; }
+        } catch (error) { console.error("Error cargando desde Firebase:", error); }
+        finally { document.getElementById('loadingOverlay').style.display = 'none'; inicializarInputs(); actualizarWeb(); configurarBuscador(); }
     }
 
     function configurarBuscador() {
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
-
         if (!searchInput || !searchResults) return;
-
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
-            if (!query) {
-                searchResults.style.display = 'none';
-                return;
-            }
-
-            const resultados = (window.db.ofertas || []).filter(o => 
-                o.titulo.toLowerCase().includes(query) || 
-                (o.descripcion && o.descripcion.toLowerCase().includes(query))
-            );
-
+            if (!query) return searchResults.style.display = 'none';
+            const resultados = (window.db.ofertas || []).filter(o => o.titulo.toLowerCase().includes(query) || (o.descripcion && o.descripcion.toLowerCase().includes(query)));
             searchResults.innerHTML = '';
-
-            if (resultados.length === 0) {
-                searchResults.innerHTML = `<div style="padding: 0.8rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No se encontraron cursos</div>`;
-            } else {
+            if (resultados.length === 0) searchResults.innerHTML = `<div style="padding: 0.8rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No se encontraron cursos</div>`;
+            else {
                 resultados.forEach(o => {
-                    const item = document.createElement('a');
-                    item.className = 'search-result-item';
-                    const paramAdmin = esAdmin ? '&modo=editar' : '';
-                    item.href = `detalle.html?id=${o.id}${paramAdmin}`;
-                    
+                    const item = document.createElement('a'); item.className = 'search-result-item';
+                    item.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`;
                     const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Curso</text></svg>';
-
-                    item.innerHTML = `
-                        <img src="${imgSrc}" alt="${o.titulo}">
-                        <div>
-                            <div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${o.titulo}</div>
-                            <span style="font-size: 0.75rem; color: #0284c7; font-weight: bold;">${o.carpeta || 'Próximos Cursos'}</span>
-                        </div>
-                    `;
+                    item.innerHTML = `<img src="${imgSrc}" alt="${o.titulo}"><div><div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${o.titulo}</div><span style="font-size: 0.75rem; color: #0284c7; font-weight: bold;">${o.carpeta || 'Próximos Cursos'}</span></div>`;
                     searchResults.appendChild(item);
                 });
             }
             searchResults.style.display = 'block';
         });
-
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                searchResults.style.display = 'none';
-            }
-        });
+        document.addEventListener('click', (e) => { if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) searchResults.style.display = 'none'; });
     }
 
     function inicializarInputs() {
@@ -691,104 +456,48 @@
         document.getElementById('inputEmail').value = window.db.email || '';
         document.getElementById('inputTel').value = window.db.tel || '';
         document.getElementById('inputWsp').value = window.db.wsp || '';
-
         const selectCarpeta = document.getElementById('ofertaCarpetaSelect');
         selectCarpeta.innerHTML = '';
-        CARPETAS_DEFINIDAS.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c.id;
-            opt.innerText = c.nombre;
-            selectCarpeta.appendChild(opt);
-        });
+        CARPETAS_DEFINIDAS.forEach(c => { const opt = document.createElement('option'); opt.value = c.id; opt.innerText = c.nombre; selectCarpeta.appendChild(opt); });
     }
 
-    // Aquí está la función guardarDatos corregida adecuadamente
     async function guardarDatos() {
-        // Evita intentar guardar si el administrador no ha iniciado sesión
-        if (!auth.currentUser) {
-            return; 
-        }
-
-        try {
-            const docRef = doc(dbFirestore, "configuracion", "general");
-            await setDoc(docRef, window.db, { merge: true });
-        } catch (e) {
-            console.error("Error al guardar en Firebase: ", e);
-            alert("No se pudo guardar en la base de datos: " + e.message); 
-        }
+        if (!auth.currentUser) return; 
+        try { const docRef = doc(dbFirestore, "configuracion", "general"); await setDoc(docRef, window.db, { merge: true }); }
+        catch (e) { console.error(e); alert("No se pudo guardar: " + e.message); }
     }
 
     function renderizarOfertas() {
         const ofertasContainer = document.getElementById('ofertasContainer'); 
         const verMasContainer = document.getElementById('verMasContainer');
         ofertasContainer.innerHTML = '';
-
-        const ofertasFiltradas = window.db.ofertas.filter(o => {
-            const seccion = o.seccion || "servicios";
-            return seccion === "servicios";
-        });
-
+        const ofertasFiltradas = window.db.ofertas.filter(o => (o.seccion || "servicios") === "servicios");
         if (ofertasFiltradas.length === 0) {
             ofertasContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem;">No hay publicaciones disponibles en esta sección por el momento.</div>`;
             if (verMasContainer) verMasContainer.style.display = 'none';
             return;
         }
-
-        // Seleccionar máximo 4 cursos para la vista principal del index
-        const ofertasAMostrar = ofertasFiltradas.slice(0, 4);
-
-        ofertasAMostrar.forEach(o => {
-            const card = document.createElement('div'); 
-            card.className = 'oferta-card';
-            card.style.cursor = 'pointer'; 
-            
+        ofertasFiltradas.slice(0, 4).forEach(o => {
+            const card = document.createElement('div'); card.className = 'oferta-card'; card.style.cursor = 'pointer'; 
             const imgSrc = o.img || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23cbd5e1"/><text x="50%" y="50%" fill="%2394a3b8" dominant-baseline="middle" text-anchor="middle">Sin Imagen</text></svg>';
-
-            card.innerHTML = `
-                <img src="${imgSrc}" alt="${o.titulo}">
-                <div class="oferta-content">
-                    <div>
-                        <h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">${o.titulo}</h3>
-                        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p>
-                    </div>
-                    <button class="btn-eliminar">Borrar</button>
-                </div>
-            `;
-            
-            card.addEventListener('click', (e) => {
-                if(e.target.classList.contains('btn-eliminar')) return;
-                const paramAdmin = esAdmin ? '&modo=editar' : '';
-                window.location.href = `detalle.html?id=${o.id}${paramAdmin}`;
-            });
-
+            card.innerHTML = `<img src="${imgSrc}" alt="${o.titulo}"><div class="oferta-content"><div><h3 style="margin: 0; font-size: 1.05rem; color: var(--texto-titulos); font-weight: 600;">${o.titulo}</h3><p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${o.descripcion || ''}</p></div><button class="btn-eliminar">Borrar</button></div>`;
+            card.addEventListener('click', (e) => { if(e.target.classList.contains('btn-eliminar')) return; window.location.href = `detalle.html?id=${o.id}${esAdmin ? '&modo=editar' : ''}`; });
             card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarOferta(o.id));
             ofertasContainer.appendChild(card);
         });
-
-        if (verMasContainer) {
-            if (ofertasFiltradas.length > 4) {
-                verMasContainer.style.display = 'block';
-            } else {
-                verMasContainer.style.display = 'none';
-            }
-        }
+        if (verMasContainer) verMasContainer.style.display = ofertasFiltradas.length > 4 ? 'block' : 'none';
     }
 
     function actualizarWeb() {
         guardarDatos();
-        
         document.getElementById('nombreEmpresaView').innerText = window.db.nombre;
         document.getElementById('footerNombre').innerText = window.db.nombre;
         document.getElementById('heroTituloView').innerText = window.db.heroTitulo;
         document.getElementById('heroSubtituloView').innerText = window.db.heroSubtitulo;
         
         const logoContainer = document.getElementById('headerLogoView');
-        const logoHomeUrl = `index.html${urlAdminParam}`;
-        if(window.db.logo) {
-            logoContainer.innerHTML = `<a href="${logoHomeUrl}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
-        } else {
-            logoContainer.innerHTML = `<a href="${logoHomeUrl}" class="header-logo-text">${window.db.nombre}</a>`;
-        }
+        if(window.db.logo) logoContainer.innerHTML = `<a href="index.html${urlAdminParam}"><img src="${window.db.logo}" alt="${window.db.nombre}"></a>`;
+        else logoContainer.innerHTML = `<a href="index.html${urlAdminParam}" class="header-logo-text">${window.db.nombre}</a>`;
 
         const contenedor = document.getElementById('carruselContenedor');
         const track = document.getElementById('carruselTrack');
@@ -801,62 +510,38 @@
                 track.innerHTML += `<div class="carrusel-slide"><img src="${imgSrc}"></div>`;
                 adminCarruselLista.innerHTML += `<div class="admin-link-item"><span>🖼️ Foto ${index + 1}</span><button class="btn-mini-borrar" data-index="${index}">x</button></div>`;
             });
-            
             adminCarruselLista.querySelectorAll('.btn-mini-borrar').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const idx = e.target.getAttribute('data-index');
-                    window.db.carrusel.splice(idx, 1);
-                    slideIndex = 0;
-                    actualizarWeb();
-                });
+                btn.addEventListener('click', (e) => { window.db.carrusel.splice(e.target.getAttribute('data-index'), 1); slideIndex = 0; actualizarWeb(); });
             });
-
             iniciarAutoCarrusel();
-        } else {
-            contenedor.style.display = 'none';
-            clearInterval(carruselInterval);
-        }
+        } else { contenedor.style.display = 'none'; clearInterval(carruselInterval); }
 
         renderizarOfertas();
-
         const enlacesContainer = document.getElementById('enlacesDinamicosContainer'); 
         const adminEnlacesLista = document.getElementById('adminEnlacesLista');
         enlacesContainer.innerHTML = ''; adminEnlacesLista.innerHTML = '';
         
         window.db.enlacesVecinos.forEach(link => {
             enlacesContainer.innerHTML += `<a class="btn-contacto btn-dinamico" href="${link.url}" target="_blank"><i class="${link.icono}"></i> ${link.nombre}</a>`;
-            
-            const itemL = document.createElement('div');
-            itemL.className = "admin-link-item";
+            const itemL = document.createElement('div'); itemL.className = "admin-link-item";
             itemL.innerHTML = `<span><i class="${link.icono}"></i> ${link.nombre}</span><button class="btn-mini-borrar">x</button>`;
             itemL.querySelector('.btn-mini-borrar').addEventListener('click', () => eliminarEnlace(link.id));
             adminEnlacesLista.appendChild(itemL);
         });
-
         mostrarSlide(slideIndex);
     }
 
-    function irAExploraServicios() {
-        document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    document.getElementById('btnNavCursos').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = `cursos.html${urlAdminParam}`;
-    });
-    document.getElementById('btnExplorarCursos').addEventListener('click', irAExploraServicios);
+    document.getElementById('btnNavCursos').addEventListener('click', (e) => { e.preventDefault(); window.location.href = `cursos.html${urlAdminParam}`; });
+    document.getElementById('btnExplorarCursos').addEventListener('click', () => document.getElementById('secServicios').scrollIntoView({ behavior: 'smooth' }));
 
     function mostrarSlide(index) {
-        const track = document.getElementById('carruselTrack');
         const slides = document.querySelectorAll('.carrusel-slide');
         if (slides.length === 0) return;
         if (index >= slides.length) slideIndex = 0;
         if (index < 0) slideIndex = slides.length - 1;
-        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        document.getElementById('carruselTrack').style.transform = `translateX(-${slideIndex * 100}%)`;
     }
-    
     window.cambiarSlide = function(direccion) { slideIndex += direccion; mostrarSlide(slideIndex); iniciarAutoCarrusel(); }
-    
     function iniciarAutoCarrusel() { clearInterval(carruselInterval); carruselInterval = setInterval(() => { slideIndex++; mostrarSlide(slideIndex); }, 4000); }
 
     function comprimirImagen(file, maxWidth, quality, callback) {
@@ -865,18 +550,10 @@
             const img = new Image();
             img.onload = function () {
                 const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-
-                if (width > maxWidth) {
-                    height = (height * maxWidth) / width;
-                    width = maxWidth;
-                }
-                canvas.width = width;
-                canvas.height = height;
-
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
+                let width = img.width, height = img.height;
+                if (width > maxWidth) { height = (height * maxWidth) / width; width = maxWidth; }
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
                 callback(canvas.toDataURL('image/jpeg', quality));
             };
             img.src = event.target.result;
@@ -884,69 +561,50 @@
         reader.readAsDataURL(file);
     }
 
-    // Aquí están los eventos cambiados a 'change' para optimizar peticiones
     document.getElementById('inputNombre').addEventListener('change', (e) => { window.db.nombre = e.target.value; actualizarWeb(); });
     document.getElementById('inputHeroTitulo').addEventListener('change', (e) => { window.db.heroTitulo = e.target.value; actualizarWeb(); });
     document.getElementById('inputHeroSubtitulo').addEventListener('change', (e) => { window.db.heroSubtitulo = e.target.value; actualizarWeb(); });
-    
     document.getElementById('inputEmail').addEventListener('change', (e) => { window.db.email = e.target.value; guardarDatos(); });
     document.getElementById('inputTel').addEventListener('change', (e) => { window.db.tel = e.target.value; guardarDatos(); });
     document.getElementById('inputWsp').addEventListener('change', (e) => { window.db.wsp = e.target.value; guardarDatos(); });
 
-    document.getElementById('inputLogo').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if(file) {
-            comprimirImagen(file, 600, 0.9, (base64) => {
-                window.db.logo = base64;
-                actualizarWeb();
-            });
-        }
-    });
-
-    document.getElementById('inputCarrusel').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if(file) {
-            comprimirImagen(file, 600, 0.5, (base64) => {
-                if(!window.db.carrusel) window.db.carrusel = [];
-                window.db.carrusel.push(base64);
-                actualizarWeb();
-            });
-        }
-    });
+    document.getElementById('inputLogo').addEventListener('change', (e) => { if(e.target.files[0]) comprimirImagen(e.target.files[0], 600, 0.9, (base64) => { window.db.logo = base64; actualizarWeb(); }); });
+    document.getElementById('inputCarrusel').addEventListener('change', (e) => { if(e.target.files[0]) comprimirImagen(e.target.files[0], 600, 0.5, (base64) => { window.db.carrusel.push(base64); actualizarWeb(); }); });
 
     let ofertaImgBase64 = "";
-    document.getElementById('ofertaImgInput').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            comprimirImagen(file, 500, 0.5, (base64) => {
-                ofertaImgBase64 = base64;
-            });
-        }
-    });
+    document.getElementById('ofertaImgInput').addEventListener('change', (e) => { if (e.target.files[0]) comprimirImagen(e.target.files[0], 500, 0.5, (base64) => ofertaImgBase64 = base64); });
 
     document.getElementById('ofertaForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const descCorta = document.getElementById('ofertaDesc').value;
         const descLarga = document.getElementById('ofertaDetalleCompleto').value.trim();
-        const seccionDestino = document.getElementById('ofertaSeccionSelect').value;
+        
+        // Objeto de la infografía
+        const datosCurso = {
+            fechas: document.getElementById('ofertaFechas').value.trim(),
+            horario: document.getElementById('ofertaHorario').value.trim(),
+            modalidad: document.getElementById('ofertaModalidad').value.trim(),
+            duracion: document.getElementById('ofertaDuracion').value.trim(),
+            inversion: document.getElementById('ofertaInversion').value.trim(),
+            aprenderas: document.getElementById('ofertaAprenderas').value.trim(),
+            paraQuien: document.getElementById('ofertaParaQuien').value.trim(),
+            temario: document.getElementById('ofertaTemario').value.trim()
+        };
 
         window.db.ofertas.push({ 
             id: Date.now(), 
             titulo: document.getElementById('ofertaTitulo').value, 
             descripcion: descCorta, 
             detalleCompleto: descLarga !== "" ? descLarga : descCorta, 
-            seccion: seccionDestino,
+            datosCurso: datosCurso, // Guardamos los datos estructurados
+            seccion: document.getElementById('ofertaSeccionSelect').value,
             carpeta: "Próximos Cursos", 
             img: ofertaImgBase64 
         });
         ofertaImgBase64 = ""; document.getElementById('ofertaForm').reset(); actualizarWeb();
     });
 
-    document.getElementById('enlaceForm').addEventListener('submit', (e) => {
-        e.preventDefault(); 
-        window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value });
-        document.getElementById('enlaceForm').reset(); actualizarWeb();
-    });
+    document.getElementById('enlaceForm').addEventListener('submit', (e) => { e.preventDefault(); window.db.enlacesVecinos.push({ id: Date.now(), nombre: document.getElementById('enlaceNombre').value, url: document.getElementById('enlaceUrl').value, icono: document.getElementById('enlaceIcono').value }); document.getElementById('enlaceForm').reset(); actualizarWeb(); });
 
     function eliminarOferta(id) { if(confirm('¿Eliminar elemento?')) { window.db.ofertas = window.db.ofertas.filter(o => o.id !== id); actualizarWeb(); } }
     function eliminarEnlace(id) { window.db.enlacesVecinos = window.db.enlacesVecinos.filter(l => l.id !== id); actualizarWeb(); }
