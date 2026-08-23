@@ -193,11 +193,29 @@
         }
 
         .detalle-descripcion {
-            font-size: 1.rem;
+            font-size: 1rem;
             color: var(--texto-parrafos);
             margin-bottom: 1.8rem;
-            white-space: pre-line;
             line-height: 1.5;
+        }
+
+        .detalle-descripcion p {
+            margin-bottom: 1rem;
+        }
+
+        .detalle-descripcion ul, .detalle-descripcion ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .detalle-descripcion li {
+            margin-bottom: 0.4rem;
+            color: var(--texto-parrafos);
+        }
+
+        .detalle-descripcion strong, .detalle-descripcion b {
+            color: var(--secondary);
+            font-weight: 700;
         }
 
         .contacto-box {
@@ -260,6 +278,128 @@
             .search-input:focus { width: 95%; }
             .search-results-dropdown { width: 90%; left: 5%; right: 5%; }
         }
+
+        /* ----- ESTILOS PARA EL DETALLE TIPO INFOGRAFÍA ----- */
+        .curso-info-container { margin-top: 1rem; }
+        
+        .info-cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 1rem; 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .info-card { 
+            background: white; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 1.5rem 0.5rem; 
+            text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+        }
+        
+        .info-card i { font-size: 2rem; margin-bottom: 0.8rem; }
+        .icon-blue { color: var(--secondary); }
+        
+        .icon-green-bg { 
+            color: #10b981; 
+            background: #d1fae5; 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            display: inline-flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-bottom: 0.8rem;
+        }
+        
+        .info-card strong { 
+            display: block; 
+            color: var(--secondary); 
+            margin-bottom: 0.5rem; 
+            font-size: 0.95rem; 
+            text-transform: uppercase; 
+        }
+        
+        .info-card p { font-size: 0.9rem; color: var(--texto-titulos); margin: 0; }
+        
+        .card-inversion strong { color: #10b981; }
+        .card-inversion .precio { font-size: 1.4rem; font-weight: bold; color: #10b981; }
+        .card-inversion .iva { font-size: 0.8rem; font-weight: bold; color: var(--texto-parrafos); }
+        
+        .info-banner { 
+            background: #f8fafc; 
+            color: var(--secondary); 
+            text-align: center; 
+            padding: 1rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            margin-bottom: 2.5rem; 
+            border: 1px solid #e2e8f0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .curso-detalles-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 3rem; 
+        }
+        
+        @media (max-width: 768px) { 
+            .curso-detalles-grid { grid-template-columns: 1fr; gap: 2rem; } 
+        }
+        
+        .seccion-titulo { 
+            color: var(--secondary); 
+            font-size: 1.2rem; 
+            margin-bottom: 1rem; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem; 
+            font-weight: 800;
+        }
+        
+        .seccion-titulo i { font-size: 1.6rem; }
+        
+        .lista-check { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+        .lista-check li { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 0.8rem; 
+            margin-bottom: 1rem !important; 
+            font-size: 0.95rem; 
+            font-weight: 600;
+        }
+        .lista-check li i { color: var(--secondary); font-size: 1.2rem; margin-top: 2px; }
+        
+        .lista-temario { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+        .lista-temario li { 
+            background: #f8fafc; 
+            margin-bottom: 0.5rem !important; 
+            padding: 0.8rem 1rem; 
+            border-radius: 6px; 
+            display: flex; 
+            align-items: center; 
+            gap: 1.5rem; 
+            font-size: 0.95rem; 
+            font-weight: 500;
+        }
+        .lista-temario li span { 
+            color: var(--secondary); 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+        }
     </style>
 </head>
 <body>
@@ -304,7 +444,9 @@
             <div class="detalle-body">
                 <span class="badge-carpeta" id="detalleCarpeta">Categoría</span>
                 <h1 class="detalle-titulo" id="detalleTitulo">Título de la oferta</h1>
-                <p class="detalle-descripcion" id="detalleTexto">Descripción completa...</p>
+                
+                <!-- ID de la descripción donde ahora inyectaremos HTML -->
+                <div class="detalle-descripcion" id="detalleTexto">Descripción completa...</div>
 
                 <div class="contacto-box">
                     <p>¿Te interesa esta capacitación para ti o tu empresa?</p>
@@ -508,7 +650,8 @@
             const carpetaObj = CARPETAS_DEFINIDAS.find(c => c.id === ofertaActual.carpeta);
             document.getElementById('detalleCarpeta').innerText = carpetaObj ? carpetaObj.nombre : (ofertaActual.carpeta || 'Próximos Cursos');
             
-            document.getElementById('detalleTexto').innerText = ofertaActual.detalleCompleto || ofertaActual.descripcion;
+            // --- CAMBIO IMPORTANTE: innerHTML EN LUGAR DE innerText ---
+            document.getElementById('detalleTexto').innerHTML = ofertaActual.detalleCompleto || ofertaActual.descripcion;
 
             if (ofertaActual.img) {
                 document.getElementById('detalleImg').src = ofertaActual.img;
