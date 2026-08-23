@@ -195,6 +195,7 @@
     </div>
 
     <footer id="contacto">
+        <!-- (Aquí va el mismo footer de siempre sin cambios) -->
         <div class="footer-content">
             <div class="footer-box">
                 <h4>📍 Dónde Estamos</h4>
@@ -271,29 +272,16 @@
 
         async function cargarDetalle() {
             try {
-                // 1. Cargamos la configuración general (nombre, logo, WhatsApp, enlaces)
-                const docRefGen = doc(dbFirestore, "configuracion", "general");
-                const docSnapGen = await getDoc(docRefGen);
-                if (docSnapGen.exists()) {
-                    datosDB = docSnapGen.data();
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    datosDB = docSnap.data();
+                    ofertaActual = datosDB.ofertas.find(o => o.id === idOferta);
+                    if (ofertaActual) renderizarDetalle();
+                    else document.getElementById('detalleCard').innerHTML = `<div style="padding: 3rem; text-align: center;"><h2>Oferta no encontrada</h2><a href="index.html${urlAdminParam}" class="btn-volver">Volver</a></div>`;
                 }
-
-                // 2. Cargamos la oferta directamente desde su documento independiente en la subcolección "ofertas"
-                const docRefOferta = doc(dbFirestore, "ofertas", String(idOferta));
-                const docSnapOferta = await getDoc(docRefOferta);
-
-                if (docSnapOferta.exists()) {
-                    ofertaActual = docSnapOferta.data();
-                    renderizarDetalle();
-                } else {
-                    document.getElementById('detalleCard').innerHTML = `<div style="padding: 3rem; text-align: center;"><h2>Oferta no encontrada</h2><a href="index.html${urlAdminParam}" class="btn-volver">Volver</a></div>`;
-                }
-            } catch (e) { 
-                console.error("Error:", e); 
-            } finally { 
-                document.getElementById('loadingOverlay').style.display = 'none'; 
-                configurarBuscador(); 
-            }
+            } catch (e) { console.error("Error:", e); } 
+            finally { document.getElementById('loadingOverlay').style.display = 'none'; configurarBuscador(); }
         }
 
         function configurarBuscador() {
@@ -406,16 +394,16 @@
         }
 
         document.getElementById('btnGuardarCambios').addEventListener('click', async () => {
-            if (!ofertaActual && !idOferta) return alert("No se localizó la oferta actual para actualizar.");
+            if (!ofertaActual && idOferta) return alert("No se localizó la oferta actual para actualizar.");
 
-            const carpetaSeleccionada = document.getElementById('editCarpeta').value;
-            
-            // Preparamos el objeto con los datos actualizados
-            const datosActualizados = {
-                titulo: document.getElementById('editTitulo').value.trim(),
-                carpeta: carpetaSeleccionada,
-                detalleCompleto: document.getElementById('editDetalle').value.trim(),
-                datosCurso: {
+            const index = datosDB.ofertas.findIndex(o => Number(o.id) === Number(idOferta));
+            if (index !== -1) {
+                datosDB.ofertas[index].titulo = document.getElementById('editTitulo').value.trim();
+                datosDB.ofertas[index].carpeta = document.getElementById('editCarpeta').value;
+                datosDB.ofertas[index].detalleCompleto = document.getElementById('editDetalle').value.trim();
+                
+                // Actualizamos o creamos la infografía 
+                datosDB.ofertas[index].datosCurso = {
                     fechas: document.getElementById('editFechas').value.trim(),
                     horario: document.getElementById('editHorario').value.trim(),
                     modalidad: document.getElementById('editModalidad').value.trim(),
@@ -424,24 +412,18 @@
                     aprenderas: document.getElementById('editAprenderas').value.trim(),
                     paraQuien: document.getElementById('editParaQuien').value.trim(),
                     temario: document.getElementById('editTemario').value.trim()
-                },
-                seccion: (carpetaSeleccionada === "Área de capacitación") ? "catalogo" : "servicios"
-            };
+                };
+
+                datosDB.ofertas[index].seccion = (datosDB.ofertas[index].carpeta === "Área de capacitación") ? "catalogo" : "servicios";
+                ofertaActual = datosDB.ofertas[index];
+            }
 
             try {
-                // Guardamos directamente en el documento individual dentro de la subcolección "ofertas"
-                const docRefOferta = doc(dbFirestore, "ofertas", String(idOferta));
-                await setDoc(docRefOferta, datosActualizados, { merge: true });
-                
-                // Actualizamos la variable local para reflejar los cambios en pantalla sin recargar
-                ofertaActual = { ...ofertaActual, ...datosActualizados };
-                
+                const docRef = doc(dbFirestore, "configuracion", "general");
+                await setDoc(docRef, { ofertas: datosDB.ofertas }, { merge: true });
                 alert('¡Detalle actualizado correctamente!');
                 renderizarDetalle();
-            } catch (e) { 
-                console.error(e); 
-                alert("Error al guardar los cambios."); 
-            }
+            } catch (e) { console.error(e); alert("Error al guardar."); }
         });
 
         cargarDetalle();
